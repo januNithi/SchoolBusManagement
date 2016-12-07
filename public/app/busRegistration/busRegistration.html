@@ -1,0 +1,46 @@
+<script src="../template/navbar.js"></script>
+
+
+<div ng-include="'../template/menu.html'"></div>
+<br>
+<br>
+<div style="font-family: 'Britannic Bold';color: black;"><center><h2>Buses Registration</h2></center></div>
+
+<div class="main" style="margin-top: 1%">
+    <!-- Content Here -->
+    <button type="button" class="btn btn-info btn-lg" style="float: right;"  data-toggle="modal" data-target="#myModal">New Bus</button>
+      <br>
+      <br>
+      <br>
+    <table class="table table-bordered">
+        <thead style="font-family: 'Britannic Bold';color: black;background-color: #89bfb9">
+        <tr>
+            <th>ID</th>
+            <th>Registration No</th>
+            <th>Bus No</th>
+            <th>Gps Unit</th>
+            <th>Option</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td>@mdo</td>
+            <td>
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="row" style="float: right">
+        <div class="col-sm-5"><input class="form-control" type="text" placeholder="Registration Number"></div>
+        <div class="col-sm-5"><input class="form-control" type="text" placeholder="Bus Number"></div>
+        <button class="btn btn-info">Update</button>
+    </div>
+
+
+</div>

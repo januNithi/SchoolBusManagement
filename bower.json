@@ -1,0 +1,22 @@
+{
+  "name": "School Bus Tracking System",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.9",
+    "jquery": "^3.1.1",
+    "bootstrap": "^3.3.7",
+    "select2": "^4.0.3",
+    "font-awesome": "^4.7.0",
+    "angular-route": "^1.5.9"
+  }
+}
