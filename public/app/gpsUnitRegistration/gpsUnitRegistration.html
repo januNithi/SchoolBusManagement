@@ -1,0 +1,73 @@
+<script src="../template/navbar.js"></script>
+<div ng-include="'../template/menu.html'"></div>
+<br>
+<br>
+<div style="font-family: 'Britannic Bold';color: black;"><center><h2>GpsUnit Registry</h2></center></div>
+
+<div class="main" style="margin-top: 1%">
+    <!-- Content Here -->
+    <span class="fa fa-plus-circle fa-1x pull-right" style="color: red" data-toggle="modal" data-target="#myModal"  aria-hidden="true">ADD</span>
+    <!--<button type="button" class="btn btn-info btn-lg" style="float: right;"  data-toggle="modal" data-target="#myModal">New Bus</button>-->
+    <br>
+
+    <table class="table table-bordered">
+        <thead style="font-family: 'Britannic Bold';color: black;background-color: #89bfb9">
+        <tr>
+            <th>ID</th>
+            <th>Gps Name</th>
+            <th>Option</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>
+                <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true"></span>
+                <span class="fa fa-window-close"  style="color: red" aria-hidden="true"></span>
+                <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
+                <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
+
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">New Registration</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputName3" class="col-sm-4 control-label">Gps Name:</label>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="inputName3" placeholder="Gps Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-6 col-sm-10">
+                                <button type="submit" class="btn btn-danger">Update</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Modal -->
+
+</div>
+
+</div>
