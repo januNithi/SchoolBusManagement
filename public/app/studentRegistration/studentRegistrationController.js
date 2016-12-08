@@ -13,6 +13,14 @@
 
     function studentRegistrationController($scope,$window,studentRegistrationService){
 
+        $scope.showSelectable = function (value) {
+
+            if(value == 'student'){
+                return 'selected';
+            }
+
+        }
+
     }
 })();
 

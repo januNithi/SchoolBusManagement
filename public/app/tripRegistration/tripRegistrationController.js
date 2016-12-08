@@ -13,6 +13,14 @@
 
     function tripRegistrationController($scope,$window,tripRegistrationService){
 
+        $scope.showSelectable = function (value) {
+
+            if(value == 'trip'){
+                return 'selected';
+            }
+
+        }
+
     }
 })();
 

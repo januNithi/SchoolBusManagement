@@ -13,6 +13,14 @@
 
     function gpsUnitRegistrationController($scope,$window,gpsUnitRegistrationservice){
 
+        $scope.showSelectable = function (value) {
+
+            if(value == 'gps'){
+                return 'selected';
+            }
+
+        }
+
     }
 })();
 

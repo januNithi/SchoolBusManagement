@@ -13,6 +13,14 @@
 
     function driverRegistrationController($scope,$window,driverRegistrationService){
 
+        $scope.showSelectable = function (value) {
+
+            if(value == 'driver'){
+                return 'selected';
+            }
+
+        }
+
     }
 })();
 

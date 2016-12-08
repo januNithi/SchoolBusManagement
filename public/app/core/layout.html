@@ -4,53 +4,59 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link rel="stylesheet" href="../css/style.css">
 
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link href='css/openSansCondensed300.css' rel='stylesheet' type='text/css'>
-    <link href="bower_components/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <!--<link rel='stylesheet' href='css/openSansCondensed300.css' type='text/css'>-->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="bower_components/select2/dist/css/select2.css">
+
+    <link rel="stylesheet" href="css/dark-bootstrap.all.min.css">
+    <link rel="stylesheet" href="css/light-bootstrap.all.min.css">
+
+    <link rel="stylesheet" type="text/css" href="css/local.css" />
 
     <base href="/">
 
 </head>
 <body ng-app="myApp">
 
-<ng-view></ng-view>
+    <ng-view></ng-view>
 
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/angular/angular.min.js"></script>
-<script src="bower_components/angular-route/angular-route.min.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="bower_components/select2/dist/js/select2.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/select2/dist/js/select2.min.js"></script>
+
+    <!-- CORE -->
+    <script src="app/core/module.js"></script>
+    <script src="app/core/config.js"></script>
+
+    <!-- Layout -->
+    <script src="app/login/loginService.js"></script>
+    <script src="app/login/loginController.js"></script>
+
+    <!--Bus Registry-->
+    <script src="app/busRegistration/busRegistrationService.js"></script>
+    <script src="app/busRegistration/busRegistrationController.js"></script>
+
+    <script src="app/driverRegistration/driverRegistrationService.js"></script>
+    <script src="app/driverRegistration/driverRegistrationController.js"></script>
+
+    <script src="app/gpsUnitRegistration/gpsUnitRegistrationservice.js"></script>
+    <script src="app/gpsUnitRegistration/gpsUnitRegistrationController.js"></script>
+
+    <script src="app/studentRegistration/studentRegistrationService.js"></script>
+    <script src="app/studentRegistration/studentRegistrationController.js"></script>
+
+    <script src="app/tripRegistration/tripRegistrationService.js"></script>
+    <script src="app/tripRegistration/tripRegistrationController.js"></script>
 
 
-<!-- CORE -->
-<script src="app/core/module.js"></script>
-<script src="app/core/config.js"></script>
-
-<!-- Layout -->
-<script src="app/login/loginService.js"></script>
-<script src="app/login/loginController.js"></script>
-
-
-<script src="app/busRegistration/busRegistrationService.js"></script>
-<script src="app/busRegistration/busRegistrationController.js"></script>
-
-<script src="app/driverRegistration/driverRegistrationService.js"></script>
-<script src="app/driverRegistration/driverRegistrationController.js"></script>
-
-<script src="app/gpsUnitRegistration/gpsUnitRegistrationservice.js"></script>
-<script src="app/gpsUnitRegistration/gpsUnitRegistrationController.js"></script>
-
-<script src="app/studentRegistration/studentRegistrationService.js"></script>
-<script src="app/studentRegistration/studentRegistrationController.js"></script>
-
-<script src="app/tripRegistration/tripRegistrationService.js"></script>
-<script src="app/tripRegistration/tripRegistrationController.js"></script>
-
-
+    <!--Home [Dashboard]-->
+    <script src="app/home/homeService.js"></script>
+    <script src="app/home/homeController.js"></script>
 
 </body>
 </html>

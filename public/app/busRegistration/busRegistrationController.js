@@ -14,7 +14,14 @@
     ];
 
     function busRegistrationController($scope,$window,busRegistrationService){
+        
+        $scope.showSelectable = function (value) {
 
+            if(value == 'bus'){
+                return 'selected';
+            }
+
+        }
     }
 })();
 
