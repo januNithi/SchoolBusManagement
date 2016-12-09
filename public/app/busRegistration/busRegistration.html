@@ -10,10 +10,26 @@
 
         <div class="main" style="margin-top: 1%">
             <!-- Content Here -->
-            <span class="fa fa-plus-circle fa-1x pull-right" style="color: red" data-toggle="modal" data-target="#myModal"  aria-hidden="true">ADD</span>
-            <!--<button type="button" class="btn btn-info btn-lg" style="float: right;"  data-toggle="modal" data-target="#myModal">New Bus</button>-->
-              <br>
 
+            <span class="fa fa-plus-circle fa-1x pull-right" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="add()" aria-hidden="true">ADD</span>
+            <!--<button type="button" class="btn btn-info btn-lg" style="float: right;"  data-toggle="modal" data-target="#myModal">New Bus</button>-->
+            <br>
+            <div class="modal fade" id="myModal1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> This alert box could indicate a warning that might need attention.<br><br>
+                        <button type="submit" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-disabled="myForm.$invalid" ng-click="update(busdata)" aria-hidden="true">Save</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Close</button>
+                    </div>
+
+                    <div ng-if="$scope.successMsg!=''" class="alert alert-success">
+                        <strong>Success!</strong> successfully Register.
+                    </div>
+                  </div>
+            </div>
+            <!--<div class="modal fade" id="myModal2" role="dialog">-->
+               <!---->
+            <!--</div>-->
             <table class="table table-bordered">
                 <thead style="background-color: #337ab7">
                 <tr>
@@ -25,14 +41,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                <tr ng-repeat="data in busRegData">
+                    <th scope="row">{{data.id}}</th>
+                    <td>{{data.regNo}}</td>
+                    <td>{{data.busCode}}</td>
+                    <td>{{data.gpsUnit}}</td>
                     <td>
-                        <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true"></span>
-                        <span class="fa fa-window-close"  style="color: red" aria-hidden="true"></span>
+                        <span class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="edit(data)" aria-hidden="true"></span>
+                        <span class="fa fa-window-close"  style="color: red" ng-click="delete(data)" aria-hidden="true"></span>
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
 
@@ -48,39 +64,36 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">New Registration</h4>
+                            <h4  ng-show="busdata.id==null" class="modal-title">New Registration</h4>
+                            <h4 ng-show="busdata.id!=null" class="modal-title">Edit Registration</h4>
                         </div>
-                        <div class="modal-body">
 
-                            <form class="form-horizontal" role="form">
+                        <div class="modal-body">
+                          <form class="form-horizontal" role="form" name="myForm">
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Registration Number:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName3" placeholder="Registration Number">
+                                        <input class="form-control" id="inputName3" ng-model="busdata.regNo"  placeholder="Registration Number" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-4 control-label">Bus Number:</label>
+                                    <label for="inputEmail3" class="col-sm-4 control-label" >Bus Number:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputEmail3" placeholder="Bus Number">
+                                        <input class="form-control" ng-model="busdata.busName" id="inputEmail3" placeholder="Bus Number" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-4 control-label">Gps Unit:</label>
+                                    <label for="inputPassword3" class="col-sm-4 control-label" >Gps Unit:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputPassword3" placeholder="Gps Unit">
+                                        <input type="text" ng-pattern="/^[0-9]{1,7}$/" class="form-control" ng-model="busdata.gpsUnit" id="inputPassword3" placeholder="Gps Unit" required>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-sm-offset-6 col-sm-10">
-                                        <button type="submit" class="btn btn-danger">Update</button>
-                                    </div>
-                                </div>
-                            </form>
+                          </form>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-disabled="myForm.$invalid" aria-hidden="true">Confirm</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
                         </div>
                     </div>
 
