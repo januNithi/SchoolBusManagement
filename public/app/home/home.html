@@ -64,16 +64,55 @@
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Track Buses </h3>
                     </div>
                     <div class="panel-body">
-                        <google-map
-                                center="centerProperty"
-                                zoom="zoomProperty"
-                                markers="markersProperty"
-                                latitude="clickedLatitudeProperty"
-                                longitude="clickedLongitudeProperty"
-                                mark-click="true"
-                                draggable="true"
-                                style="height: 450px; width: 100%">
-                        </google-map>
+
+                        <div class="form form-horizontal">
+
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+
+                                    <select class="form-control">
+
+                                        <option value="0">----SELECT BUS----</option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="col-xs-6">
+
+                                    <input
+                                            type="date"
+                                            id="test"
+                                            name="birthdate"
+                                            ng-model="birthDate"
+                                            popup="d MMM yyyy"
+                                            options="dateOptions"
+                                            opened="opened"
+                                            custom-datepicker
+                                    class="form-control"/>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <google-map
+                                        center="centerProperty"
+                                        zoom="zoomProperty"
+                                        markers="markersProperty"
+                                        latitude="clickedLatitudeProperty"
+                                        longitude="clickedLongitudeProperty"
+                                        mark-click="true"
+                                        draggable="true"
+                                        style="height: 450px; width: 100%">
+                                </google-map>
+
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
             </div>

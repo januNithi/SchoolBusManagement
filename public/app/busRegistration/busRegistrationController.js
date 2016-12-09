@@ -38,11 +38,7 @@
         $scope.getBusRegDetails();
         
         $scope.edit=function(data){
-            $scope.edittitle=true;
-            $scope.newtitle=false;
             $scope.busdata=data;
-            console.log(data);
-            
         };
 
         $scope.update=function(busdata){
@@ -51,10 +47,9 @@
 
                 $scope.successMsg='Successfully Data Register';
                 $scope.getBusRegDetails();
-                $scope.busdata='';
+                $scope.busdata={};
 
             },function(err){
-
                 $scope.errorsMsg=err;
                 $scope.getBusRegDetails();
             });
