@@ -1,13 +1,13 @@
 (function(){
     angular
         .module("myApp")
-        .factory("gpsUnitRegistrationservice",gpsUnitRegistrationservice);
+        .factory("gpsUnitRegistrationService",gpsUnitRegistrationService);
 
-    gpsUnitRegistrationservice.$inject=[
+    gpsUnitRegistrationService.$inject=[
         '$http'
     ];
 
-    function gpsUnitRegistrationservice($http){
+    function gpsUnitRegistrationService($http){
         return{
 
 

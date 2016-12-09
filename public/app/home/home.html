@@ -71,9 +71,15 @@
 
                                 <div class="col-xs-6">
 
-                                    <select class="form-control">
+                                    <select ng-model="currentBus" class="form-control">
 
                                         <option value="0">----SELECT BUS----</option>
+
+                                        <option value="{{bus.id}}" ng-repeat="bus in busData">
+
+                                            {{bus.regNo + ' - ' + bus.busCode}}
+
+                                        </option>
 
                                     </select>
 

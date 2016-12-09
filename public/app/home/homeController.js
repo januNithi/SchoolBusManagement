@@ -11,12 +11,16 @@
     homeController.$inject=[
         '$scope',
         '$window',
-        'homeService'
+        'homeService',
+        'busRegistrationService'
 
 
     ];
 
-    function homeController($scope,$window,homeService){
+    function homeController($scope,$window,homeService,busRegistrationService){
+
+        $scope.busData = [];
+        $scope.currentBus = 1;
 
         angular.extend($scope, {
             centerProperty: {
@@ -67,6 +71,16 @@
         $scope.myChartObject.options = {
             'title': 'Bus Travel Reports'
         };
+
+        $scope.getBusDetails = function () {
+            busRegistrationService.getBusRegData().then(function (result) {
+                $scope.busData = result.data;
+            },function (error) {
+                console.log(error);
+            });
+        };
+
+        $scope.getBusDetails();
 
     }
 })();

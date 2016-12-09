@@ -45,7 +45,7 @@
                     <th scope="row">{{data.id}}</th>
                     <td>{{data.regNo}}</td>
                     <td>{{data.busCode}}</td>
-                    <td>{{data.gpsUnit}}</td>
+                    <td>{{data.unitName}}</td>
                     <td>
                         <span class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="edit(data)" aria-hidden="true"></span>
                         <span class="fa fa-window-close"  style="color: red" ng-click="delete(data)" aria-hidden="true"></span>
@@ -83,9 +83,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-4 control-label" >Gps Unit:</label>
+                                    <label for="gps" class="col-sm-4 control-label" >Gps Unit:</label>
                                     <div class="col-sm-6">
-                                        <input type="text" ng-pattern="/^[0-9]{1,7}$/" class="form-control" ng-model="busdata.gpsUnit" id="inputPassword3" placeholder="Gps Unit" required>
+
+                                        <select ng-model="busdata.gpsUnit" class="form-control" id="gps">
+
+                                            <option value="0">------SELECT GPS------</option>
+
+                                            <option value="{{gps.id}}" ng-repeat="gps in gpsData">{{gps.unitName}}</option>
+
+                                        </select>
                                     </div>
                                 </div>
                           </form>
@@ -93,7 +100,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="submit" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-disabled="myForm.$invalid" aria-hidden="true">Confirm</button>
-                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Cancel</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Cancel</button>
                         </div>
                     </div>
 

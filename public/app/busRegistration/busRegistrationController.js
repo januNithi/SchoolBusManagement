@@ -8,15 +8,19 @@
     busRegistrationController.$inject=[
         '$scope',
         '$window',
-        'busRegistrationService'
+        'busRegistrationService',
+        'gpsUnitRegistrationService'
 
 
     ];
 
-    function busRegistrationController($scope,$window,busRegistrationService){
+    function busRegistrationController($scope,$window,busRegistrationService,gpsUnitRegistrationService){
 
         $scope.busRegData=[];
-        $scope.busdata={};
+        $scope.busdata={
+            gpsUnit:'0'
+        };
+        $scope.gpsData = [];
         $scope.successMsg='';
         $scope.errorsMsg='';
         
@@ -35,10 +39,22 @@
 
             });
         };
-        $scope.getBusRegDetails();
+
+        $scope.getGpsDetails = function () {
+
+            gpsUnitRegistrationService.getGpsUnitData().then(function (result) {
+
+                $scope.gpsData = result.data;
+
+            },function (error) {
+                $scope.errorsMsg=err;
+            });
+
+        };
         
         $scope.edit=function(data){
             $scope.busdata=data;
+            $scope.busdata.gpsUnit = data.gpsUnit.toString();
         };
 
         $scope.update=function(busdata){
@@ -54,15 +70,8 @@
                 $scope.getBusRegDetails();
             });
             
-            
-            
         };
 
-        $scope.cancel=function(){
-
-            $scope.busdata='';
-
-        };
         $scope.close=function(){
 
             $scope.busdata='';
@@ -79,7 +88,12 @@
 
             });
 
-        }
+        };
+
+        $scope.getBusRegDetails();
+        
+        $scope.getGpsDetails();
+        
     }
 })();
 

@@ -9,11 +9,11 @@ var con = mysql.createConnection(db);
 function getBusRegDetail() {
 
     var deferred = q.defer();
-    var RegInfo = "select id,regNo,busCode,gpsUnit from bus";
+    var RegInfo = "select b.id,b.regNo,b.busCode,b.gpsUnit,g.unitName from bus as b left join gpsunit as g on g.id = b.gpsUnit";
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);
-            deferred.reject(err);
+            return deferred.reject(err);
         } else {
 
             deferred.resolve(results);
@@ -30,7 +30,7 @@ function postBusRegDetail(data) {
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);
-            deferred.reject(err);
+            return deferred.reject(err);
         } else {
 
             deferred.resolve(results);
@@ -47,7 +47,7 @@ function deleteBusRegDetail(data) {
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);
-            deferred.reject(err);
+            return deferred.reject(err);
         } else {
 
             deferred.resolve(results);
@@ -64,7 +64,7 @@ function getGpsUnitRegDetail() {
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);
-            deferred.reject(err);
+            return deferred.reject(err);
         } else {
 
             deferred.resolve(results);
