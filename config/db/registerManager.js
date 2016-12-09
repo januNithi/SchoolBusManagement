@@ -60,7 +60,7 @@ function deleteBusRegDetail(data) {
 function getGpsUnitRegDetail() {
 
     var deferred = q.defer();
-    var RegInfo = "select id,unitName from gpsunit";
+    var RegInfo = "select id,unitName,uniqueid from gpsunit";
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);
@@ -74,11 +74,65 @@ function getGpsUnitRegDetail() {
 
 };
 
+function postGpsUnitRegDetail(data) {
+
+    var deferred = q.defer();
+    var RegInfo = "insert into gpsunit(unitName,uniqueid)values('"+data.unitName+"','"+data.uniqueid+"')";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+
+function deleteGpsUnitRegDetail(data) {
+
+    var deferred = q.defer();
+    var RegInfo = "delete from gpsunit where id='"+data+"'";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+function updateGpsUnitRegDetail(data) {
+
+    var deferred = q.defer();
+    var RegInfo = "update gpsunit set unitName='"+data.unitName+"',uniqueid='"+data.uniqueid+"' where id='"+data.id+"'";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+
+
 module.exports= {
 
     getBusRegDetail: getBusRegDetail,
     postBusRegDetail:postBusRegDetail,
     deleteBusRegDetail:deleteBusRegDetail,
-    getGpsUnitRegDetail: getGpsUnitRegDetail
+    getGpsUnitRegDetail: getGpsUnitRegDetail,
+    postGpsUnitRegDetail:postGpsUnitRegDetail,
+    deleteGpsUnitRegDetail:deleteGpsUnitRegDetail,
+    updateGpsUnitRegDetail:updateGpsUnitRegDetail
 
 };

@@ -19,16 +19,18 @@
                 <tr>
                     <th>ID</th>
                     <th>Gps Name</th>
+                    <th>UniqueId</th>
                     <th>Option</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="data in getGpsData">
-                    <th scope="row">{{data.id}}</th>
-                    <td>{{data.unitName}}</td>
+                <tr ng-repeat="Data in getGpsData">
+                    <th scope="row">{{Data.id}}</th>
+                    <td>{{Data.unitName}}</td>
+                    <td>{{Data.uniqueid}}</td>
                     <td>
-                        <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true"></span>
-                        <span class="fa fa-window-close"  style="color: red" aria-hidden="true"></span>
+                        <span class="fa fa-pencil-square fa-1x" data-dismiss="modal" ng-click="edit(Data)" data-toggle="modal" data-target="#myModal" style="color: red" aria-hidden="true"></span>
+                        <span class="fa fa-window-close"  style="color: red" ng-click="delete(Data)" aria-hidden="true"></span>
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
 
@@ -48,23 +50,28 @@
                         </div>
                         <div class="modal-body">
 
-                            <form class="form-horizontal" role="form">
+                            <form class="form-horizontal" role="form" name="myForm">
                                 <div class="form-group">
-                                    <label for="inputName3" class="col-sm-4 control-label">Gps Name:</label>
+                                    <label for="inputName3" class="col-sm-4 control-label">Unique Id:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName3" placeholder="Gps Name">
+                                        <input class="form-control" ng-pattern="/^[0-9]{1,7}$/" id="inputName" ng-model="data.uniqueid" placeholder="Unique Number" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="col-sm-offset-6 col-sm-10">
-                                        <button type="submit" class="btn btn-danger">Update</button>
+                                    <label for="inputName3" class="col-sm-4 control-label">Gps Name:</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" id="inputName3" ng-model="data.unitName" placeholder="Gps Name" required>
                                     </div>
                                 </div>
                             </form>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger" ng-if="!data.id" ng-click="add(data)" ng-disabled="myForm.$invalid" data-dismiss="modal">Save</button>
+                            <button type="submit" class="btn btn-danger" ng-if="data.id" ng-click="Update(data)" ng-disabled="myForm.$invalid" data-dismiss="modal">Update</button>
+
+
+                            <button type="button" class="btn btn-default" ng-click="close()" data-dismiss="modal">Close</button>
                         </div>
                     </div>
 

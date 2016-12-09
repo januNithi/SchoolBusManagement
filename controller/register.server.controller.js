@@ -42,3 +42,28 @@ exports.gpsUnitRegDetails=function (req,res) {
     });
 
 };
+
+exports.postGpsRegDetails=function (req,res) {
+    var data=req.body;
+    config.postGpsUnitRegDetail(data).then(function(result){
+        res.send(result);
+    });
+
+};
+
+exports.deleteGpsRegDetails=function (req,res) {
+    var data=req.body.data;
+    config.deleteGpsUnitRegDetail(data).then(function(result){
+        res.send(result);
+    });
+
+};
+
+
+exports.updateGpsRegDetails=function (req,res) {
+    var data=req.body;
+    config.updateGpsUnitRegDetail(data).then(function(result){
+        res.send(result);
+    });
+
+};
