@@ -10,6 +10,16 @@
     function gpsUnitRegistrationservice($http){
         return{
 
+
+            getGpsUnitData:function(){
+                
+                return $http({
+                    
+                    method:'post',
+                    url:'/get/gpsUnitData'
+                })
+            }
+            
         }
     }
 })();

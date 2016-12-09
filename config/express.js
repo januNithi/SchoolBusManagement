@@ -17,10 +17,10 @@ module.exports=function(){
     app.use(bodyParser.json());
     
     app.use(express.static('./public'));
-    
+
     require('../route/layout.server.route.js')(app);
     require('../route/busRegistration.server.route.js')(app);
-    
+    require('../route/gpsUnitRegistration.server.route.js')(app);
     
     return app;
 };
