@@ -1,5 +1,8 @@
 <script src="../template/navbar.js"></script>
 
+
+
+
 <div id="wrapper">
 
     <div ng-include="'../../template/menu.html'"></div>
@@ -29,18 +32,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Mark</td>
-                    <td>Mark</td>
-                    <td>Mark</td>
-                    <td>Mark</td>
-                    <td>Mark</td>
-                    <td>Mark</td>
+                <tr ng-repeat="data in tableData">
+                    <th scope="row">{{data.id}}</th>
+                    <td>{{data.trpName}}</td>
+                    <td>{{data.trpSession}}</td>
+                    <td>{{data.trpStart}}</td>
+                    <td>{{data.trpEnd}}</td>
+                    <td>{{data.rtId}}</td>
+                    <td>{{data.busId}}</td>
+                    <td>{{data.drvId}}</td>
                     <td>
-                        <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true"></span>
-                        <span class="fa fa-window-close"  style="color: red" aria-hidden="true"></span>
+                        <span class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="Edit(data)" aria-hidden="true"></span>
+                        <span class="fa fa-window-close"  style="color: red" ng-click="delete(data)" aria-hidden="true"></span>
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
 
@@ -48,6 +51,7 @@
                 </tr>
                 </tbody>
             </table>
+
             <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">
                 <div class="modal-dialog">
@@ -56,63 +60,82 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">New Registration</h4>
+                            <h4 class="modal-title" ng-if="!trip.id">New Registration</h4>
+                            <h4 class="modal-title" ng-if="trip.id">Edit Registration</h4>
                         </div>
                         <div class="modal-body">
 
-                            <form class="form-horizontal" role="form">
+                            <form class="form-horizontal" role="form" name="myForm">
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Trip:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName3" placeholder="Gps Name">
+                                        <input class="form-control" id="inputName3" ng-model="trip.trpName" placeholder="Route Name" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Session:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName4" placeholder="Session">
+                                        <select class="form-control" ng-model="trip.trpSession" id="inputName4" placeholder="Session" required>
+                                            <option value="">---SELECT---</option>
+                                            <option ng-repeat="data in session">{{data}}</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Start:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName5" placeholder="Start">
+                                        <input type="time" class="form-control" ng-model="trip.trpStart"
+                                               placeholder="HH:mm:ss"  />
+
+                                        <!--<input class="form-control" ng-model="trip.trpStart"  placeholder="Start" required>-->
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputName3" class="col-sm-4 control-label">Dep:</label>
+                                    <label for="inputName3" class="col-sm-4 control-label">Destination:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName6" placeholder="Dep">
+                                        <input type="time" class="form-control"  ng-model="trip.trpEnd"
+                                               placeholder="HH:mm:ss" required />
+                                        <!--<input class="form-control" ng-model="trip.trpEnd"  placeholder="Dep" required>-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Route:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName9" placeholder="Route">
+                                        <select class="form-control" ng-model="trip.routeId"  placeholder="Route" required>
+                                            <option ng-value="">--SELECT--</option>
+                                            <option ng-repeat="data in tripData">{{data.routeId}}</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Bus:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName10" placeholder="Start">
+                                        <select class="form-control" ng-model="trip.busId" placeholder="Start" required>
+                                            <option ng-value="">--SELECT--</option>
+                                            <option ng-repeat="data in tripData">{{data.busId}}</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Driver:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName7" placeholder="Driver">
+                                        <select class="form-control" ng-model="trip.driverId" placeholder="Driver" required>
+                                            <option ng-value="">--SELECT--</option>
+                                            <option ng-repeat="data in tripData">{{data.driverId}}</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-6 col-sm-10">
-                                        <button type="submit" class="btn btn-danger">Update</button>
+                                        <button type="submit" ng-if="trip.id" ng-click="update(trip)" data-dismiss="modal" class="btn btn-danger">Update</button>
+                                        <button type="submit"  ng-click="add(trip)" ng-if="!trip.id" data-dismiss="modal" class="btn btn-danger">SAVE</button>
                                     </div>
                                 </div>
                             </form>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" ng-click="close()" data-dismiss="modal">Close</button>
                         </div>
                     </div>
 

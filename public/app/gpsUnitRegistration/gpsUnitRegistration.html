@@ -46,7 +46,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">New Registration</h4>
+                            <h4 class="modal-title" ng-if="!data.id">New Registration</h4>
+                            <h4 class="modal-title" ng-if="data.id">Edit Registration</h4>
                         </div>
                         <div class="modal-body">
 
@@ -69,8 +70,6 @@
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-danger" ng-if="!data.id" ng-click="add(data)" ng-disabled="myForm.$invalid" data-dismiss="modal">Save</button>
                             <button type="submit" class="btn btn-danger" ng-if="data.id" ng-click="Update(data)" ng-disabled="myForm.$invalid" data-dismiss="modal">Update</button>
-
-
                             <button type="button" class="btn btn-default" ng-click="close()" data-dismiss="modal">Close</button>
                         </div>
                     </div>

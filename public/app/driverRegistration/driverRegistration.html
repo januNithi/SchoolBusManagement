@@ -56,24 +56,34 @@
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Driver Name:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName3" placeholder="Driver Name">
+                                        <input class="form-control" ng-model="data.driverName" id="inputName3" placeholder="Driver Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-4 control-label">Driver Liscence:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputEmail3" placeholder="Driver Liscence">
+                                        <input type="file"  class="form-control" ng-model="data.driverLiscence" name="file" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedLiscence(this)"/>
+                                        <!--<input class="form-control" id="inputEmail3" ng-model="data.driverLiscence" placeholder="Driver Liscence">-->
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-4 control-label">Mobile No:</label>
+                                    <label for="inputEmail3" class="col-sm-4 control-label">Driver Photo:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputPassword3" placeholder="Mobile No">
+                                        <input type="file"  class="form-control"   ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB" id="fileInputs" onchange="angular.element(this).scope().uploadedFile(this)"/>
+                                        <!--<input type="file" class="form-control" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>-->
+                                        <!--<input class="form-control" id="inputEmail4" placeholder="Driver photo">-->
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword3"  class="col-sm-4 control-label">Mobile No:</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" ng-model="data.mobNo" id="inputPassword3" placeholder="Mobile No">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-6 col-sm-10">
                                         <button type="submit" class="btn btn-danger">Update</button>
+                                        <button type="submit" ng-click="Save(data)" class="btn btn-danger">Save</button>
                                     </div>
                                 </div>
                             </form>

@@ -124,6 +124,105 @@ function updateGpsUnitRegDetail(data) {
 
 };
 
+function getTripRegDatas() {
+
+    var deferred = q.defer();
+    var RegInfo = "SELECT a.id,r.id AS routeId,r.rtName ,b.id AS busId,b.busCode,d.id AS driverId,d.drvName from trips as a LEFT JOIN routes as r ON a.id=r.id LEFT JOIN bus as b ON a.id=b.id LEFT JOIN drivers as d on a.id=d.id";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+
+function getTableTripRegDatas() {
+
+    var deferred = q.defer();
+    var RegInfo = "SELECT id,trpName,trpSession,trpStart,trpEnd,rtId,busId,drvId from trips";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+
+function postTripRegDatas(data) {
+
+    var deferred = q.defer();
+    var RegInfo = "insert into trips(trpName,trpSession,trpStart,trpEnd,rtId,busId,drvId) values('"+data.trpName+"','"+data.trpSession+"','"+data.trpStart+"','"+data.trpEnd+"','"+data.routeId+"','"+data.busId+"','"+data.driverId+"')";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+function deleteTripRegDatas(data) {
+
+    var deferred = q.defer();
+    var RegInfo = "delete from trips where id='"+data+"'";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+function updateTripRegDatas(data) {
+
+    var deferred = q.defer();
+    var RegInfo = "update trips set trpName='"+data.trpName+"',trpSession='"+data.trpSession+"',trpStart='"+data.trpStart+"',trpEnd='"+data.trpEnd+"',rtId='"+data.routeId+"',busId='"+data.busId+"',drvId='"+data.driverId+"' where id='"+data.id+"'";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+
+function postDriverRegDatas(data) {
+
+    var deferred = q.defer();
+    var RegInfo = "insert into drivers(drvname,drvLicence,drvMob,drvPhoto)values('"+data.driverName+"','"+data.driverLiscence+"','"+data.mobNo+"','"+data.photo+"'); ";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
 
 module.exports= {
 
@@ -133,6 +232,12 @@ module.exports= {
     getGpsUnitRegDetail: getGpsUnitRegDetail,
     postGpsUnitRegDetail:postGpsUnitRegDetail,
     deleteGpsUnitRegDetail:deleteGpsUnitRegDetail,
-    updateGpsUnitRegDetail:updateGpsUnitRegDetail
+    updateGpsUnitRegDetail:updateGpsUnitRegDetail,
+    getTripRegDatas:getTripRegDatas,
+    postTripRegDatas:postTripRegDatas,
+    getTableTripRegDatas:getTableTripRegDatas,
+    deleteTripRegDatas:deleteTripRegDatas,
+    updateTripRegDatas:updateTripRegDatas,
+    postDriverRegDatas:postDriverRegDatas
 
 };
