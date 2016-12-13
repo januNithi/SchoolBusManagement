@@ -15,7 +15,7 @@
                 fd.append('driverLiscence', data.driverLiscence);
                 fd.append('mobNo', data.mobNo);
                 fd.append('file', data.file[0]);
-                fd.append('driverLiscence1',data.driverLiscence1[0]);
+                fd.append('file1',data.driverLiscence1[0]);
                 return $http({
 
                     method:'POST',

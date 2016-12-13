@@ -5,6 +5,8 @@ var config=require('../config/db/registerManager');
 var path = require('path');
 var multer=require('multer');
 var session = require('express-session');
+var formidable = require('formidable');
+var fs = require('fs');
 
 var storage=multer.diskStorage({
 
@@ -17,7 +19,7 @@ var storage=multer.diskStorage({
         req.session.Files=file.fieldname + '-' + file.originalname;
     }
 });
-var upload=multer({storage:storage}).single('file');
+var upload=multer({storage:storage}).array('file',2);
 
 
 var Filestorage=multer.diskStorage({
@@ -31,7 +33,7 @@ var Filestorage=multer.diskStorage({
         req.session.liscence=file.fieldname + '-' + file.originalname;
     }
 });
-var fileupload=multer({storage:Filestorage}).single('driverLiscence1');
+var fileupload=multer({storage:Filestorage}).single('file1');
 
 exports.busRegDetails=function (req,res) {
 
@@ -133,29 +135,71 @@ exports.updateTripRegDetail=function (req,res) {
 
 };
 exports.postDriverDetail=function (req,res) {
-    upload(req,res,function(err) {
-        if(err) {
-            console.log("err1"+err);
-            return res.end("Error uploading file.");
-        }
-        fileupload(req,res,function(err) {
-            if(err) {
-                console.log("error2"+err);
-                
-                return res.end("Error uploading file.");
-            }
-            var data=req.body;
-            data.photo= req.session.Files;
-            data.licencePhoto=req.session.liscence;
-            console.log(data);
 
-            config.postDriverRegDatas(data).then(function (result) {
-                res.send(result);
-            });
+    var form = new formidable.IncomingForm();
+
+    var data = {};
+
+    form.parse(req,function (err,fields,files) {
+
+        var driverLicense = files.file1;
+        var driverPhoto = files.file;
+
+        var rand = Math.floor(1000 + Math.random() * 9000);
+        data.driverLicense = 'DriverLicense'+rand+'.'+driverLicense.type.split('/')[1];
+
+        var is = fs.createReadStream(driverLicense.path);
+        var os = fs.createWriteStream('public/uploads/driverLicense/'+data.driverLicense);
+        is.pipe(os);
+        is.on('end', function () {
+            fs.unlinkSync(driverLicense.path, 'public/uploads/driverLicense/'+data.driverLicense);
         });
 
+        rand = Math.floor(1000 + Math.random() * 9000);
+        data.driverPhoto = 'DriverPhoto'+rand+'.'+driverPhoto.type.split('/')[1];
+
+        var is1 = fs.createReadStream(driverPhoto.path);
+        var os1 = fs.createWriteStream('public/uploads/driverPhoto/'+data.driverLicense);
+        is1.pipe(os1);
+        is1.on('end', function () {
+            fs.unlinkSync(driverPhoto.path, 'public/uploads/driverPhoto/'+data.driverLicense);
+        });
+        data.driverName = fields.driverName;
+        data.mobileNo = fields.mobNo;
+
+        config.postDriverRegDatas(data).then(function (result) {
+            res.send(result);
+        },function (err) {
+            res.send(500,{error:err});
+        });
 
     });
+
+    //
+    //
+    // upload(req,res,function(err) {
+    //     if(err) {
+    //         console.log("err1"+err);
+    //         return res.end("Error uploading file.");
+    //     }
+    //     fileupload(req,res,function(err) {
+    //         if(err) {
+    //             console.log("error2"+err);
+    //
+    //             return res.end("Error uploading file.");
+    //         }
+    //         var data=req.body;
+    //         data.photo= req.session.Files;
+    //         data.licencePhoto=req.session.liscence;
+    //         console.log(data);
+    //
+    //         config.postDriverRegDatas(data).then(function (result) {
+    //             res.send(result);
+    //         });
+    //     });
+
+
+    // });
     //
     // upload(req,res,function(err) {
     //     if (err) {
@@ -169,3 +213,17 @@ exports.postDriverDetail=function (req,res) {
 
 
 };
+
+function decodeBase64Image(dataString) {
+    var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/),
+        response = {};
+
+    if (matches.length !== 3) {
+        return new Error('Invalid input string');
+    }
+
+    response.type = matches[1];
+    response.data = new Buffer(matches[2], 'base64');
+
+    return response;
+}

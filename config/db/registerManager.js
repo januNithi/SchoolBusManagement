@@ -210,7 +210,7 @@ function updateTripRegDatas(data) {
 function postDriverRegDatas(data) {
 
     var deferred = q.defer();
-    var RegInfo = "insert into drivers(drvname,drvLicence,drvMob,drvPhoto)values('"+data.driverName+"','"+data.driverLiscence+"','"+data.mobNo+"','"+data.photo+"'); ";
+    var RegInfo = "insert into drivers(drvname,drvLicence,drvMob,drvPhoto)values('"+data.driverName+"','"+data.driverLicense+"','"+data.mobileNo+"','"+data.driverPhoto+"'); ";
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);

@@ -12,7 +12,13 @@
 
     function homeService($http){
         return{
-            
+
+            getBusPosition : function (id,date) {
+
+                return $http.get('/getMapPosition?id='+id+'&date='+date);
+
+            }
+
         }
     }
 })();
