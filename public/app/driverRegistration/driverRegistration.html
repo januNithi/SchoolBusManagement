@@ -20,19 +20,21 @@
                     <th>ID</th>
                     <th>Driver Name</th>
                     <th>Driver Liscence</th>
+                    <th>Driver Photo</th>
                     <th>Mobile No</th>
                     <th>Option</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                <tr ng-repeat="data in driveData">
+                    <th scope="row">{{data.id}}</th>
+                    <td>{{data.drvName}}</td>
+                    <td><img style='display:block;width:70px;' ng-src="{{'uploads/driverLicense/'+data.drvLicence}}" alt="Description"/></td>
+                    <td><img style='display:block;width:70px;' ng-src="{{'uploads/driverPhoto/'+data.drvPhoto}}" alt="Description"/></td>
+                    <td>{{data.drvMob}}</td>
                     <td>
-                        <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true"></span>
-                        <span class="fa fa-window-close"  style="color: red" aria-hidden="true"></span>
+                        <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true" data-toggle="modal" data-target="#myModal" ng-click="Edit(data)"  aria-hidden="true"></span>
+                        <span class="fa fa-window-close"  style="color: red" aria-hidden="true" ng-click="delete(data)"></span>
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
 
@@ -48,7 +50,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">New Registration</h4>
+                            <h4 class="modal-title" ng-if="!driverData.id">New Registration</h4>
+                            <h4 class="modal-title" ng-if="driverData.id">Edit Registration</h4>
                         </div>
                         <div class="modal-body">
 
@@ -56,41 +59,49 @@
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Driver Name:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="data.driverName" id="inputName3" placeholder="Driver Name">
+                                        <input class="form-control" ng-model="driverData.drvName" id="inputName3" placeholder="Driver Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-4 control-label">Driver Liscence:</label>
+                                    <label class="col-sm-4 control-label">Driver Photo:</label>
                                     <div class="col-sm-6">
-                                        <input type="file"  class="form-control" ng-model="data.driverLiscence" name="file1" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedLiscence(this)"/>
-                                        <!--<input class="form-control" id="inputEmail3" ng-model="data.driverLiscence" placeholder="Driver Liscence">-->
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-4 control-label">Driver Photo:</label>
-                                    <div class="col-sm-6">
-                                        <input type="file"  class="form-control"   ngf-pattern="'image/*'" name="file" accept="image/*" ngf-max-size="20MB" id="fileInputs" onchange="angular.element(this).scope().uploadedFile(this)"/>
+
+                                        <div ng-click="showFileDialog()">
+                                            <img style="height:50px;width:50px;" src="../../images/upload.png">
+                                        </div>
+
+                                        <input type="file" id="file" ng-hide="true" class="form-control" ngf-pattern="'image/*'" name="file" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedFile(this)"/>
                                         <!--<input type="file" class="form-control" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>-->
                                         <!--<input class="form-control" id="inputEmail4" placeholder="Driver photo">-->
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label class="col-sm-4 control-label">Driver Licence:</label>
+                                    <div class="col-sm-6">
+                                        <div ng-click="chooseDriverLicence()">
+                                            <img style="height:50px;width:50px;" src="../../images/upload.png">
+                                        </div>
+                                        <input type="file" id="file1" ng-hide="true" class="form-control"  name="file1" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedLiscence(this)"/>
+                                        <!--<input class="form-control" id="inputEmail3" ng-model="data.driverLiscence" placeholder="Driver Liscence">-->
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label for="inputPassword3"  class="col-sm-4 control-label">Mobile No:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="data.mobNo" id="inputPassword3" placeholder="Mobile No">
+                                        <input class="form-control" ng-model="driverData.drvMob" id="inputPassword3" placeholder="Mobile No">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="col-sm-offset-6 col-sm-10">
-                                        <button type="submit" class="btn btn-danger">Update</button>
-                                        <button type="submit" ng-click="Save(data)" class="btn btn-danger">Save</button>
+                                        <!--<button type="submit" ng-if="driverData.id" data-dismiss="modal" ng-click="update(driverData)" class="btn btn-danger">Update</button>-->
+                                        <button type="submit"  ng-click="Save(driverData)" class="btn btn-danger" data-dismiss="modal">Save</button>
                                     </div>
                                 </div>
                             </form>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Close</button>
                         </div>
                     </div>
 

@@ -208,9 +208,60 @@ function updateTripRegDatas(data) {
 };
 
 function postDriverRegDatas(data) {
+    var deferred = q.defer();
+
+    if(data.id=="undefined")
+    {
+        var RegInfo = "insert into drivers(drvName,drvLicence,drvMob,drvPhoto)values('" + data.driverName + "','" + data.driverLicence + "','" + data.mobileNo + "','" + data.driverPhoto + "'); ";
+        con.query(RegInfo, function (err,results) {
+            if (err) {
+                console.log(err);
+                deferred.reject(err);
+            } else {
+
+                deferred.resolve(results);
+            }
+        });
+        return deferred.promise;
+
+    }
+    else {
+
+        var RegInfo = "update drivers set drvname='"+data.driverName+"',drvLicence='"+data.driverLicence+"',drvMob='"+data.mobileNo+"',drvPhoto='"+data.driverPhoto+"' where id='"+data.id+"'";
+        con.query(RegInfo, function (err,results) {
+            if (err) {
+                console.log(err);
+                deferred.reject(err);
+            } else {
+
+                deferred.resolve(results);
+            }
+        });
+        return deferred.promise;
+    }
+
+
+
+};
+
+// function updateDriverRegData(data) {
+//     var deferred = q.defer();
+//     con.query(RegInfo, function (err,results) {
+//         if (err) {
+//             console.log(err);
+//             deferred.reject(err);
+//         } else {
+//
+//             deferred.resolve(results);
+//         }
+//     });
+//     return deferred.promise;
+//
+// };
+function getDriverRegData(){
 
     var deferred = q.defer();
-    var RegInfo = "insert into drivers(drvname,drvLicence,drvMob,drvPhoto)values('"+data.driverName+"','"+data.driverLicense+"','"+data.mobileNo+"','"+data.driverPhoto+"'); ";
+    var RegInfo = "select id,drvName,drvLicence,drvMob,drvPhoto from drivers";
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);
@@ -221,6 +272,25 @@ function postDriverRegDatas(data) {
         }
     });
     return deferred.promise;
+
+
+};
+
+function deleteDriverRegData(data){
+
+    var deferred = q.defer();
+    var RegInfo = "delete from drivers where id='"+data.data+"'";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
 
 };
 
@@ -238,6 +308,8 @@ module.exports= {
     getTableTripRegDatas:getTableTripRegDatas,
     deleteTripRegDatas:deleteTripRegDatas,
     updateTripRegDatas:updateTripRegDatas,
-    postDriverRegDatas:postDriverRegDatas
+    postDriverRegDatas:postDriverRegDatas,
+    getDriverRegData:getDriverRegData,
+    deleteDriverRegData:deleteDriverRegData
 
 };

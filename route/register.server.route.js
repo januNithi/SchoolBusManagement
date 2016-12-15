@@ -33,6 +33,10 @@ module.exports=function(app){
     //------------- DriverRegDetails--------------------//
     
     app.post('/post/DriverDetail',config.postDriverDetail);
+    app.post('/get/DriverDetail',config.getDriverDetails);
+    app.post('/delete/DriverDetail',config.deleteDriverDetails);
+    app.post('/post/updateDriverDetail',config.updateDriverDetails);
+    
     
     //------------- DriverRegDetails--------------------//
 };
