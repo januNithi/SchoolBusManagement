@@ -26,16 +26,7 @@
                
            });
 
-        }, 
-         getTripTableRegData:function()
-            {
-                return $http({
-                    method: 'post',
-                    url: '/get/postTableTripRegDetails'
-
-                });
-                
-            },
+        },
             deleteTripRegDetails:function (data) {
                 return $http({
                     method: 'post',

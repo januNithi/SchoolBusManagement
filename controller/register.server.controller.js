@@ -106,13 +106,6 @@ exports.getTripRegData=function (req,res) {
     });
 
 };
-exports.getTableTripRegData=function (req,res) {
-    var data=req.body;
-    config.getTableTripRegDatas(data).then(function(result){
-        res.send(result);
-    });
-
-};
 exports.postTripRegDetail=function (req,res) {
     var data=req.body;
     config.postTripRegDatas(data).then(function(result){

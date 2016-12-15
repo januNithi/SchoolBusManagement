@@ -24,7 +24,6 @@ module.exports=function(app){
 
     //------------- TripRegDetails--------------------//
     app.post('/get/tripRegDetails',config.getTripRegData);
-    app.post('/get/postTableTripRegDetails',config.getTableTripRegData);
     app.post('/get/postTripRegDetails',config.postTripRegDetail);
     app.post('/get/deleteTableTripRegDetails',config.deleteTripRegDetail);
     app.post('/get/updateTableTripRegDetails',config.updateTripRegDetail);
