@@ -208,26 +208,21 @@ function updateTripRegDatas(data) {
 };
 
 function postDriverRegDatas(data) {
+
+    var RegInfo='';
+
     var deferred = q.defer();
 
     if(data.id=="undefined")
     {
-        var RegInfo = "insert into drivers(drvName,drvLicence,drvMob,drvPhoto)values('" + data.driverName + "','" + data.driverLicence + "','" + data.mobileNo + "','" + data.driverPhoto + "'); ";
-        con.query(RegInfo, function (err,results) {
-            if (err) {
-                console.log(err);
-                deferred.reject(err);
-            } else {
-
-                deferred.resolve(results);
-            }
-        });
-        return deferred.promise;
+         RegInfo = "insert into drivers(drvName,drvLicence,drvMob,drvPhoto)values('" + data.driverName + "','" + data.driverLicence + "','" + data.mobileNo + "','" + data.driverPhoto + "'); ";
 
     }
     else {
 
-        var RegInfo = "update drivers set drvname='"+data.driverName+"',drvLicence='"+data.driverLicence+"',drvMob='"+data.mobileNo+"',drvPhoto='"+data.driverPhoto+"' where id='"+data.id+"'";
+        RegInfo = "update drivers set drvname='" + data.driverName + "',drvLicence='" + data.driverLicence + "',drvMob='" + data.mobileNo + "',drvPhoto='" + data.driverPhoto + "' where id='" + data.id + "'";
+    }
+
         con.query(RegInfo, function (err,results) {
             if (err) {
                 console.log(err);
@@ -238,7 +233,7 @@ function postDriverRegDatas(data) {
             }
         });
         return deferred.promise;
-    }
+
 
 
 
