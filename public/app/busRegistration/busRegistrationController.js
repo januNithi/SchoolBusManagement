@@ -36,6 +36,12 @@
             busRegistrationService.getBusRegData().then(function(result){
 
                 $scope.busRegData=result.data;
+                $scope.totalItems = $scope.busRegData.length;
+                $scope.$watch('curpage + itemspage', function() {
+                    var begin = (($scope.curpage - 1) * $scope.itemspage),
+                        end = begin + $scope.itemspage;
+                    $scope.filteredDoc = $scope.busRegData.slice(begin, end);
+                });
 
             });
         };

@@ -19,6 +19,11 @@
         $scope.session = ['MORNING', 'AFTER-NOON', 'EVENING'];
         $scope.busRegData=[];
         $scope.driveData=[];
+        $scope.curpage = 1;
+        $scope.itemspage = 10;
+        $scope.filteredDoc = [];
+        $scope.maxSize = 4;
+        $scope.totalItems = 0;
         
 
         $scope.showSelectable = function (value) {
@@ -33,7 +38,12 @@
             tripRegistrationService.getTripRegData().then(function (result) {
 
                 $scope.tripData = result.data;
-                console.log($scope.tripData);
+                $scope.totalItems = $scope.tripData.length;
+                $scope.$watch('curpage + itemspage', function() {
+                    var begin = (($scope.curpage - 1) * $scope.itemspage),
+                        end = begin + $scope.itemspage;
+                    $scope.filteredDoc = $scope.tripData.slice(begin, end);
+                });
 
             });
 

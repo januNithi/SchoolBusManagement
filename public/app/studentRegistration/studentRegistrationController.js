@@ -18,7 +18,7 @@
         $scope.tripData=[];
         $scope.stdentData=[];
         $scope.curpage = 1;
-        $scope.itemspage = 5;
+        $scope.itemspage = 10;
         $scope.filteredDoc = [];
         $scope.maxSize = 4;
         $scope.totalItems = 0;

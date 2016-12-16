@@ -44,6 +44,13 @@
             driverRegistrationService.getDriverDetails().then(function(result){
 
                 $scope.driveData=result.data;
+                $scope.totalItems = $scope.driveData.length;
+                $scope.$watch('curpage + itemspage', function() {
+                    var begin = (($scope.curpage - 1) * $scope.itemspage),
+                        end = begin + $scope.itemspage;
+                    $scope.filteredDoc = $scope.driveData.slice(begin, end);
+                });
+
 
             });
             

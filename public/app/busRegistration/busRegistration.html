@@ -41,7 +41,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="data in busRegData">
+                <tr ng-repeat="data in filteredDoc">
                     <th scope="row">{{data.id}}</th>
                     <td>{{data.regNo}}</td>
                     <td>{{data.busCode}}</td>
@@ -111,5 +111,18 @@
         </div>
 
     </div>
+
+    <div class="pager">
+        <!-- Pagination -->
+        <pagination class = "pager"
+                    ng-model="curpage"
+                    total-items="totalItems"
+                    items-per-page="itemspage"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+        <!-- Pagination -->
+    </div>
+
 
 </div>
