@@ -31,6 +31,6 @@ module.exports=function(){
     require('../route/mapPostion.server.route.js')(app);
     
 
-    require('../route/layout.server.route.js')(app);
+    
     return app;
 };

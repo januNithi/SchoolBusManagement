@@ -37,6 +37,10 @@
                 controller: 'homeController',
                 templateUrl: '../app/home/home.html'
             })
+            .when('/settings', {
+                controller: 'settingsController',
+                templateUrl: '../app/settings/settings.html'
+            })
         ;
 
         $locationProvider.html5Mode(true);

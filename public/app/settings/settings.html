@@ -1,10 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<script src="../template/navbar.js"></script>
 
-</body>
-</html>
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+
+        <div style="font-family: 'Britannic Bold';color: black;"><center><h2>Settings</h2></center></div>
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="panel panel-primary" ng-init=""panel4="true" ng-click="panel4=!panel4" ng-accordion-group options="accordionGroupOptions5">
+                    <div class="panel-heading" ng-accordion-heading>
+                        <label>Alerts</label>
+                        <b><span class="pull-right" ng-show="panel4" style="color:#1719dd"><a href="#">5%</a></span></b>
+                        <b><span class="pull-right" ng-show="!panel4" style="color:#1719dd"><a href="#"><u>Hide...</u></a></span></b>
+                    </div>
+                    <div class="panel-collapse collapse in" ng-accordion-body>
+                        <div class="panel-body" >
+                            <label>Project Completion Status : <span class="text-success"> {{totalPercentage}}%</span></label>
+                            <!-- chart types : column2d, column3d, line, area2d, bar2d, bar3d, pie2d, pie3d, doughnut2d, doughnut3d, pareto2d, pareto3d -->
+                            <div fusioncharts width="245" height="350" type="line" datasource="{{myDataSource}}">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="panel panel-primary" ng-init=""panel4="true" ng-click="panel4=!panel4" ng-accordion-group options="accordionGroupOptions5">
+                    <div class="panel-heading" ng-accordion-heading>
+                        <label>Alerts</label>
+                        <b><span class="pull-right" ng-show="panel4" style="color:#1719dd"><a href="#">5%</a></span></b>
+                        <b><span class="pull-right" ng-show="!panel4" style="color:#1719dd"><a href="#"><u>Hide...</u></a></span></b>
+                    </div>
+                    <div class="panel-collapse collapse in" ng-accordion-body>
+                        <div class="panel-body" >
+                            <label>Project Completion Status : <span class="text-success"> {{totalPercentage}}%</span></label>
+                            <!-- chart types : column2d, column3d, line, area2d, bar2d, bar3d, pie2d, pie3d, doughnut2d, doughnut3d, pareto2d, pareto3d -->
+                            <div fusioncharts width="245" height="350" type="line" datasource="{{myDataSource}}">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="panel panel-primary" ng-init=""panel4="true" ng-click="panel4=!panel4" ng-accordion-group options="accordionGroupOptions5">
+                    <div class="panel-heading" ng-accordion-heading>
+                        <label>Alerts</label>
+                        <b><span class="pull-right" ng-show="panel4" style="color:#1719dd"><a href="#">5%</a></span></b>
+                        <b><span class="pull-right" ng-show="!panel4" style="color:#1719dd"><a href="#"><u>Hide...</u></a></span></b>
+                    </div>
+                    <div class="panel-collapse collapse in" ng-accordion-body>
+                        <div class="panel-body" >
+                            <label>Project Completion Status : <span class="text-success"> {{totalPercentage}}%</span></label>
+                            <!-- chart types : column2d, column3d, line, area2d, bar2d, bar3d, pie2d, pie3d, doughnut2d, doughnut3d, pareto2d, pareto3d -->
+                            <div fusioncharts width="245" height="350" type="line" datasource="{{myDataSource}}">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="panel panel-primary" ng-init=""panel4="true" ng-click="panel4=!panel4" ng-accordion-group options="accordionGroupOptions5">
+                    <div class="panel-heading" ng-accordion-heading>
+                        <label>Alerts</label>
+                        <b><span class="pull-right" ng-show="panel4" style="color:#1719dd"><a href="#">5%</a></span></b>
+                        <b><span class="pull-right" ng-show="!panel4" style="color:#1719dd"><a href="#"><u>Hide...</u></a></span></b>
+                    </div>
+                    <div class="panel-collapse collapse in" ng-accordion-body>
+                        <div class="panel-body" >
+                            <label>Project Completion Status : <span class="text-success"> {{totalPercentage}}%</span></label>
+                            <!-- chart types : column2d, column3d, line, area2d, bar2d, bar3d, pie2d, pie3d, doughnut2d, doughnut3d, pareto2d, pareto3d -->
+                            <div fusioncharts width="245" height="350" type="line" datasource="{{myDataSource}}">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+    </div>
+
+</div>
+

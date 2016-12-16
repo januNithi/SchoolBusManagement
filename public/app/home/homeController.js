@@ -19,11 +19,14 @@
 
     function homeController($scope,$window,$filter,homeService,busRegistrationService){
 
+
+        var socket = io.connect();
+
         $scope.busData = [];
-        $scope.currentBus = 1;
+        $scope.currentBus = 0;
         $scope.paths = [];
         $scope.center = {};
-        $scope.markers = [];
+        $scope.markers = {};
         $scope.selectedDate = '---- SELECT DATE ----';
         $scope.busPosition = [];
 
@@ -82,79 +85,145 @@
         };
         
         $scope.getBusPositions = function (id,date) {
-          
+
+            $scope.busPosition = [];
+            $scope.paths = [];
+            $scope.center = {};
+
             homeService.getBusPosition(id,date).then(function (result) {
-                $scope.selectedDate = $filter('date')(result.data[0].date, "dd-MM-yyyy");
-                $scope.busPosition = result.data;
-                var latLng = [];
-
-                angular.forEach($scope.busPosition,function (value,index) {
-
-
-                    if((index+1) == $scope.busPosition.length){
-                        var points = {
-                            lat :value.lat,
-                            lng :value.lng,
-                            title:value.servertime,
-                            riseOnHover : true,
-                            opacity : 5,
-                            riseOffset : 250
-                        }
-                        latLng.push(points);
-                        $scope.paths = {
-                            p1 : {
-                                color: 'red',
-                                weight: 4,
-                                latlngs:latLng
-                            }
-
-                        };
-                        $scope.center = {
-                            lat : value.lat,
-                            lng : value.lng,
-                            zoom : 18
-                        };
-                        var mark = {
-                            lat :value.lat,
-                            lng :value.lng,
+                if(result.data.length > 0) {
+                    $scope.selectedDate = $filter('date')(result.data[0].date, "yyyy-MM-dd");
+                    $scope.busPosition = result.data;
+                    // $scope.updateMap();
+                    $scope.markers = {
+                        currentPosition: {
+                            lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
+                            lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
                             icon: {
                                 iconUrl: 'images/bus.png',
                             },
                             iconSize: [38, 95],
-                            title:value.devicetime,
-                            riseOnHover : true,
-                            opacity : 5,
-                            riseOffset : 250
+                            title: $scope.busPosition[$scope.busPosition.length - 1].devicetime,
+                            riseOnHover: true,
+                            opacity: 5,
+                            riseOffset: 250,
+                            move:true
                         }
-                        $scope.markers.push(mark);
+                    };
 
-                    }else{
-                        var points = {
-                            lat :value.lat,
-                            lng :value.lng,
-                            icon: {
-                                iconUrl: 'images/Circle_Blue.png',
-                            },
-                            title:value.devicetime,
-                            riseOnHover : true,
-                            opacity : 5,
-                            riseOffset : 250
-                        }
-                        latLng.push(points);
-                        $scope.markers.push(points);
-                    }
+                    $scope.center = {
+                        lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
+                        lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
+                        zoom: 18
+                    };
+                    $scope.currentBus = '1';
+                    var obj = {
+                        date: $scope.busPosition[$scope.busPosition.length - 1].date,
+                        gpsUnit: $scope.busPosition[$scope.busPosition.length - 1].deviceid
+                    };
 
-                });
-
+                    socket.emit('bus track', obj);
+                }
 
             },function (error) {
                console.log(error);
             });
             
         };
+        
+        $scope.updateMap = function () {
+            var latLng = [];
+            angular.forEach($scope.busPosition, function (value, index) {
+
+                if ((index + 1) == $scope.busPosition.length) {
+                    var points = {
+                        lat: value.lat,
+                        lng: value.lng,
+                        title: value.devicetime,
+                        riseOnHover: true,
+                        opacity: 5,
+                        riseOffset: 250
+                    }
+                    latLng.push(points);
+                    $scope.paths = {
+                        p1: {
+                            color: 'red',
+                            weight: 4,
+                            latlngs: latLng
+                        }
+
+                    };
+                    $scope.center = {
+                        lat: value.lat,
+                        lng: value.lng,
+                        zoom: 18
+                    };
+                    $scope.markers = {
+                        currentPosition: {
+                            lat: value.lat,
+                            lng: value.lng,
+                            icon: {
+                                iconUrl: 'images/bus.png',
+                            },
+                            iconSize: [38, 95],
+                            title: value.devicetime,
+                            riseOnHover: true,
+                            opacity: 5,
+                            riseOffset: 250,
+                            move:true
+                        }
+                    }
+
+                } else {
+                    var points = {
+                        lat: value.lat,
+                        lng: value.lng,
+                        icon: {
+                            iconUrl: 'images/Circle_Blue.png',
+                        },
+                        title: value.devicetime,
+                        riseOnHover: true,
+                        opacity: 5,
+                        riseOffset: 250
+                    }
+                    latLng.push(points);
+                }
+
+            });
+
+        }
 
         $scope.showDate = function () {
           console.log($scope.selectedDate);
+        };
+
+
+        socket.on('bus position',function (data) {
+
+            // var points = {
+            //     lat: data.lat,
+            //     lng: data.log,
+            //     icon: {
+            //         iconUrl: 'images/bus.png',
+            //     },
+            //     riseOnHover: true,
+            //     opacity: 5,
+            //     riseOffset: 250
+            // }
+            // $scope.busPosition.push(points);
+            $scope.markers.currentPosition.lat = data.lat;
+            $scope.markers.currentPosition.lng = data.log;
+
+            $scope.$apply();
+        });
+
+        $scope.searchForBusPosition = function () {
+            var obj = {
+                date: $scope.busPosition[$scope.busPosition.length - 1].date,
+                gpsUnit: $scope.busPosition[$scope.busPosition.length - 1].deviceid
+            };
+            socket.emit('stop track',obj);
+            $scope.getBusPositions($scope.currentBus,$filter('date')($scope.selectedDate, "yyyy-MM-dd"));
         };
 
         $scope.getBusPositions(null,null);
