@@ -112,7 +112,7 @@
                                     <div class="col-sm-6">
                                         <select class="form-control" ng-model="trip.busId" placeholder="Start" required>
                                             <option value="0">--SELECT--</option>
-                                            <option value="{{data.busId}}" ng-repeat="data in tripData">{{data.busCode}}</option>
+                                            <option value="{{data.busId}}" ng-repeat="data in busRegData">{{data.busCode}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -121,7 +121,7 @@
                                     <div class="col-sm-6">
                                         <select class="form-control" ng-model="trip.driverId" placeholder="Driver" required>
                                             <option value="0">--SELECT--</option>
-                                            <option value="{{data.drvId}}" ng-repeat="data in tripData">{{data.drvName}}</option>
+                                            <option value="{{data.drvId}}" ng-repeat="data in driveData">{{data.drvName}}</option>
                                         </select>
                                     </div>
                                 </div>
