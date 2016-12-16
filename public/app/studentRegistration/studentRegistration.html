@@ -26,15 +26,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                    <td>567</td>
+                <tr ng-repeat="data in filteredDoc">
+                    <th scope="row">{{data.id}}</th>
+                    <td>{{data.Name}}</td>
+                    <td>{{data.Gender}}</td>
+                    <td>{{data.MobileNo}}</td>
+                    <td>{{data.trpName}}</td>
                     <td>
-                        <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true"></span>
-                        <span class="fa fa-window-close"  style="color: red" aria-hidden="true"></span>
+                        <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true" data-toggle="modal" data-target="#myModal" ng-click="Edit(data) "></span>
+                        <span class="fa fa-window-close"  style="color: red" aria-hidden="true" ng-click="delete(data)"></span>
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
 
@@ -50,7 +50,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">New Registration</h4>
+                            <h4 class="modal-title" ng-if="!stdentData.id">New Registration</h4>
+                            <h4 class="modal-title" ng-if="stdentData.id">Edit Registration</h4>
                         </div>
                         <div class="modal-body">
 
@@ -58,39 +59,48 @@
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Name:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName3" placeholder="Name">
+                                        <input class="form-control" id="inputName3" ng-model="stdentData.Name" placeholder="Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-4 control-label">Gender:</label>
+                                    <label class="col-sm-4 control-label">Gender:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputEmail3" placeholder="Gender">
+                                        <input type="radio" id="radio1" ng-model="stdentData.Gender" value="Male" tabindex="1" />
+                                        <label for="radio1">Male</label>&nbsp;
+
+                                        <input type="radio" id="radio2" ng-model="stdentData.Gender" value="Female" tabindex="2"/>
+                                        <label for="radio1">Fe-Male</label>
+                                        <!--<input class="form-control" id="inputEmail3" ng-model="stdentData.Gender" placeholder="Gender">-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword3" class="col-sm-4 control-label">Parent MobileNo</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputPassword3" placeholder="Mobile No">
+                                        <input class="form-control" id="inputPassword3" ng-model="stdentData.MobileNo" placeholder="Mobile No">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword3" class="col-sm-4 control-label">Trip</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputPassword4" placeholder="Trip">
+                                        <select class="form-control" id="inputPassword4" ng-model="stdentData.tripId" placeholder="Trip">
+                                        <option value="0">---SELECT---</option>
+                                        <option value="{{data.tripId}}" ng-repeat="data in tripData">{{data.trpName}}</option>
+
+                                        </select>
                                     </div>
                                 </div>
 
 
                                 <div class="form-group">
                                     <div class="col-sm-offset-6 col-sm-10">
-                                        <button type="submit" class="btn btn-danger">Update</button>
+                                        <button type="submit" class="btn btn-danger" data-dismiss="modal" ng-click="save(stdentData)">Save</button>
                                     </div>
                                 </div>
                             </form>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Close</button>
                         </div>
                     </div>
 
@@ -102,4 +112,18 @@
 
     </div>
 
+    <!-- Pagination -->
+    <pagination class = "pager"
+
+                ng-model="curpage"
+                total-items="totalItems"
+                items-per-page="itemspage"
+                max-size="maxSize"
+                boundary-links="true">
+    </pagination>
+
+
+
+
+    <!-- Pagination -->
 </div>
