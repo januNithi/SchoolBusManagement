@@ -23,6 +23,11 @@
         $scope.gpsData = [];
         $scope.successMsg='';
         $scope.errorsMsg='';
+        $scope.curpage = 1;
+        $scope.itemspage = 10;
+        $scope.filteredDoc = [];
+        $scope.maxSize = 4;
+        $scope.totalItems = 0;
         
         $scope.showSelectable = function (value) {
 

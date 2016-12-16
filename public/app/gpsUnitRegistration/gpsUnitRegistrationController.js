@@ -16,6 +16,11 @@
         $scope.getGpsData=[];
         $scope.data={};
         $scope.addbtns=false;
+        $scope.curpage = 1;
+        $scope.itemspage = 10;
+        $scope.filteredDoc = [];
+        $scope.maxSize = 4;
+        $scope.totalItems = 0;
         $scope.showSelectable = function (value) {
 
             if(value == 'gps'){
@@ -29,6 +34,13 @@
             gpsUnitRegistrationService.getGpsUnitData().then(function(result){
 
                 $scope.getGpsData=result.data;
+                $scope.totalItems = $scope.getGpsData.length;
+                $scope.$watch('curpage + itemspage', function() {
+                    var begin = (($scope.curpage - 1) * $scope.itemspage),
+                        end = begin + $scope.itemspage;
+                    $scope.filteredDoc = $scope.getGpsData.slice(begin, end);
+                });
+
 
             });
 
