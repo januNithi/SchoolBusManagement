@@ -37,5 +37,15 @@ module.exports=function(app){
     app.post('/post/updateDriverDetail',config.updateDriverDetails);
     
     
+    
     //------------- DriverRegDetails--------------------//
+
+    //------------- StudentRegDetails--------------------//
+
+    app.post('/get/studentData',config.getStudentDetails);
+    app.post('/post/studentData',config.postStudentData);
+    app.post('/delete/studentData',config.deleteStudentData);
+
+    //------------- StudentRegDetails--------------------//
+    
 };
