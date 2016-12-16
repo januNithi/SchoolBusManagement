@@ -186,7 +186,7 @@ exports.postDriverDetail=function (req,res) {
 };
 
 exports.updateDriverDetails=function (req,res) {
-    var data=req.body;
+    var data=req.body.data;
 
     config.updateDriverRegData(data).then(function(result){
 
@@ -207,6 +207,27 @@ exports.deleteDriverDetails=function (req,res) {
     var data=req.body;
     config.deleteDriverRegData(data).then(function(result){
 
+        res.send(result);
+    });
+};
+
+
+exports.getStudentDetails=function (req,res) {
+    config.getStudentRegData().then(function(result){
+
+        res.send(result);
+    });
+};
+
+exports.postStudentData=function (req,res) {
+    var data=req.body;
+    config.postStudentRegData(data).then(function(result){
+        res.send(result);
+    });
+};
+exports.deleteStudentData=function (req,res) {
+    var data=req.body;
+    config.deleteStudentRegData(data).then(function(result){
         res.send(result);
     });
 };
