@@ -240,20 +240,6 @@ function postDriverRegDatas(data) {
 
 };
 
-// function updateDriverRegData(data) {
-//     var deferred = q.defer();
-//     con.query(RegInfo, function (err,results) {
-//         if (err) {
-//             console.log(err);
-//             deferred.reject(err);
-//         } else {
-//
-//             deferred.resolve(results);
-//         }
-//     });
-//     return deferred.promise;
-//
-// };
 function getDriverRegData(){
 
     var deferred = q.defer();
