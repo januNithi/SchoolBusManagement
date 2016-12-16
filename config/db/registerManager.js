@@ -290,6 +290,70 @@ function deleteDriverRegData(data){
 
 };
 
+function getStudentRegData()
+{
+    var deferred = q.defer();
+    var RegInfo = "select s.id,s.Name,s.Gender,s.MobileNo,s.trip,t.id AS tripId,t.trpName from student as s left join trips as t on t.id = s.trip";
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+}
+
+function postStudentRegData(data)
+{
+    var RegInfo='';
+    var deferred = q.defer();
+    if(data.id==undefined)
+    {
+         RegInfo = "INSERT INTO student(Name,Gender,MobileNo,trip) VALUES ('"+data.Name+"','"+data.Gender+"','"+data.MobileNo+"','"+data.tripId+"')";
+    }
+    else
+    {
+
+         RegInfo = "update student set Name='"+data.Name+"',Gender='"+data.Gender+"',MobileNo='"+data.MobileNo+"',trip='"+data.tripId+"' where id='"+data.id+"'";
+
+    }
+
+    console.log( RegInfo);
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            console.log(err);
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+};
+
+function deleteStudentRegData(data){
+
+    var deferred = q.defer();
+    var RegInfo = "delete from student where id='"+data.data+"'";
+    console.log(RegInfo);
+    con.query(RegInfo, function (err,results) {
+        if (err) {
+            deferred.reject(err);
+        } else {
+
+            deferred.resolve(results);
+        }
+    });
+    return deferred.promise;
+
+
+};
+
 module.exports= {
 
     getBusRegDetail: getBusRegDetail,
@@ -305,6 +369,9 @@ module.exports= {
     updateTripRegDatas:updateTripRegDatas,
     postDriverRegDatas:postDriverRegDatas,
     getDriverRegData:getDriverRegData,
-    deleteDriverRegData:deleteDriverRegData
+    deleteDriverRegData:deleteDriverRegData,
+    getStudentRegData:getStudentRegData,
+    postStudentRegData:postStudentRegData,
+    deleteStudentRegData:deleteStudentRegData
 
 };
