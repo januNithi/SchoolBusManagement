@@ -1,0 +1,140 @@
+
+<script src="'../../js/navbar.js'"></script>
+<style>
+    .angular-google-map {
+        display: block;
+    }
+
+
+</style>
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Routes </h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form form-horizontal">
+
+                            <div class="form-group">
+
+                                <div class="col-xs-6">
+
+                                    <select ng-model="currentBus" class="form-control">
+
+                                        <option value="0">----SELECT BUS----</option>
+
+                                        <option value="{{bus.id}}" ng-repeat="bus in busData">
+
+                                            {{bus.regNo + ' - ' + bus.busCode}}
+
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+
+                                <div class="col-xs-1">
+
+                                    <button class="btn btn-success" ng-click="searchForBusPosition()"><i class="fa fa-search" aria-hidden="true"></i></button>
+
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+
+                                <leaflet paths="paths" center="center" markers="markers" height="300px"></leaflet>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+          <div>
+            <button type="submit" data-target="#myModal" style="float: right" data-toggle="modal" data-dismiss="modal" class="btn btn-success" aria-hidden="true">New Route</button><br><br>
+          </div>
+            <table class="table table-bordered">
+                <thead style="background-color: #337ab7">
+                <tr>
+                    <th>#</th>
+                    <th>ID</th>
+                    <th>Route Name</th>
+                    <th>Stops</th>
+                    <th>Option</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th><input type="checkbox" ng-model="checkboxModel.value1"></th>
+                    <th scope="row">1</th>
+                    <td>Gandhipuram</td>
+                    <td>PN PALAYAM</td>
+                    <td>
+                        <span class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="edit(data)" aria-hidden="true"></span>
+                        <span class="fa fa-window-close"  style="color: red" ng-click="delete(data)" aria-hidden="true"></span>
+                        <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
+                        <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <div>
+                <button type="submit" style="float: left" class="btn btn-danger" aria-hidden="true">Delete Selected</button>
+            </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">New Registration</h4>
+                            <!--<h4 ng-show="" class="modal-title">Edit Registration</h4>-->
+                        </div>
+
+                        <div class="modal-body">
+                            <form class="form-horizontal" role="form" name="myForm">
+                                <div class="form-group">
+                                    <label for="inputName3" class="col-sm-4 control-label">Route Name:</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" id="inputName3" ng-model="route.name"  placeholder="Registration Number" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-4 control-label" >Stops:</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" ng-model="busdata.stops" id="inputEmail3" placeholder="Bus Number" required>
+                                    </div>
+                                </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-disabled="myForm.$invalid" aria-hidden="true">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Modal -->
+
+
+
+        </div>
+
+    </div>
+</div>
