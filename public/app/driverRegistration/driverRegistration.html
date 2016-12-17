@@ -29,8 +29,8 @@
                 <tr ng-repeat="data in filteredDoc">
                     <th scope="row">{{data.id}}</th>
                     <td>{{data.drvName}}</td>
-                    <td><img style='display:block;width:70px;' ng-src="{{'uploads/driverLicense/'+data.drvLicence}}" alt="Description"/></td>
-                    <td><img style='display:block;width:70px;' ng-src="{{'uploads/driverPhoto/'+data.drvPhoto}}" alt="Description"/></td>
+                    <td><img  class="img-responsive"  alt="Chania" width="70" height="30" ng-src="{{'uploads/driverLicense/'+data.drvLicence}}" alt="Description"/></td>
+                    <td><img  class="img-responsive"  alt="Chania" width="70" height="30" ng-src="{{'uploads/driverPhoto/'+data.drvPhoto}}" alt="Description"/></td>
                     <td>{{data.drvMob}}</td>
                     <td>
                         <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true" data-toggle="modal" data-target="#myModal" ng-click="Edit(data)"  aria-hidden="true"></span>
