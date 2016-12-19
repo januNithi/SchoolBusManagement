@@ -89,9 +89,16 @@
 
                                 <div class="col-xs-5">
 
-                                    <datepicker date-format="yyyy-MM-dd">
-                                        <input ng-model="selectedDate" class="form-control" type="text"/>
-                                    </datepicker>
+                                    <!--<datepicker date-format="yyyy-MM-dd">-->
+                                        <!--<input ng-model="selectedDate" class="form-control" type="text"/>-->
+                                    <!--</datepicker>-->
+
+                                    <p class="input-group">
+                                        <input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                    </p>
 
                                 </div>
 

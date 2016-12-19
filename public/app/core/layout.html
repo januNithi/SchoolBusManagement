@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="css/dark-bootstrap.all.min.css">
     <link rel="stylesheet" href="css/light-bootstrap.all.min.css">
 
+    <link rel="stylesheet" href="css/leaflet.css">
+
     <link rel="stylesheet" type="text/css" href="css/local.css">
 
     <base href="/">
@@ -34,12 +36,15 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/select2/dist/js/select2.min.js"></script>
     <script src="bower_components/angular-google-chart/ng-google-chart.js"></script>
-    <script src="bower_components/angularjs-datepicker/dist/angular-datepicker.min.js"></script>
+    <!--<script src="bower_components/angularjs-datepicker/dist/angular-datepicker.min.js"></script>-->
     <script src="bower_components/leaflet/dist/leaflet.js"></script>
     <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
-    <script src="bower_components/ui-accordion/dist/scripts/ui-accordion.js"></script>
-    <script src="js/ui-bootstrap-tpls-0.3.0.js"></script>
 
+    <!--<script src="js/angular-leaflet.js"></script>-->
+    <!--<script src="js/leaflet.js"></script>-->
+
+
+    <script src="js/ui-bootstrap-tpls-0.3.0.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
     <!-- CORE -->
@@ -73,6 +78,10 @@
     <!--Route Registry-->
     <script src="app/routeRegistration/routeRegistrationController.js"></script>
     <script src="app/routeRegistration/routeRegistrationService.js"></script>
+
+    <!--Settings-->
+    <script src="app/settings/settingsService.js"></script>
+    <script src="app/settings/settingsController.js"></script>
 
     <!--Home [Dashboard]-->
     <script src="app/home/homeService.js"></script>

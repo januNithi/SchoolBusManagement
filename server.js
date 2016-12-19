@@ -6,6 +6,11 @@ var buses=[];
 
 var socketDup;
 
+var obj = {
+    lat : 11.01503823,
+    log : 76.96040946
+}
+
 var server=app.listen(3000,function(){
 
     var port=server.address().port;
@@ -44,11 +49,20 @@ app.get('/busPositionChange',function (req,res) {
 
     console.log(req.query);
 
+    // obj.lat+=0.2;
+    // buses.forEach(function (value,index) {
+    //
+    //     if (value.gps_id == req.query.id) {
+    //         io.to(value.id).emit("bus position", obj);
+    //     }
+    //
+    // });
+
     buses.forEach(function (value,index) {
 
-
         if(value.gps_id == req.query.id){
-            io.to(value.id).emit("bus position", req.query);
+            io.sockets.socket(value.id).emit("bus position",req.query);
+            // io.(value.id).emit("bus position", req.query);
         }
 
     });

@@ -13,17 +13,19 @@
         '$window',
         '$filter',
         'homeService',
-        'busRegistrationService'
+        'busRegistrationService',
+        '$timeout',
+        'leafletData'
 
     ];
 
-    function homeController($scope,$window,$filter,homeService,busRegistrationService){
+    function homeController($scope,$window,$filter,homeService,busRegistrationService,$timeout,leafletData){
 
 
         var socket = io.connect();
 
         $scope.busData = [];
-        $scope.currentBus = 0;
+        $scope.currentBus = '1';
         $scope.paths = [];
         $scope.center = {};
         $scope.markers = {};
@@ -76,6 +78,23 @@
             'title': 'Bus Travel Reports'
         };
 
+        $scope.popup2 = {
+            opened: false
+        };
+
+        $scope.open2 = function() {
+            $scope.popup2.opened = true;
+        };
+
+
+        $scope.dateOptions = {
+            dateDisabled: 'disabled',
+            formatYear: 'yy',
+            maxDate: new Date(2020, 5, 22),
+            minDate: new Date(),
+            startingDay: 1
+        };
+
         $scope.getBusDetails = function () {
             busRegistrationService.getBusRegData().then(function (result) {
                 $scope.busData = result.data;
@@ -94,29 +113,37 @@
                 if(result.data.length > 0) {
                     $scope.selectedDate = $filter('date')(result.data[0].date, "yyyy-MM-dd");
                     $scope.busPosition = result.data;
-                    // $scope.updateMap();
+                    $scope.updateMap();
                     $scope.markers = {
-                        currentPosition: {
+                        marker: {
                             lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
                             lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
                             icon: {
                                 iconUrl: 'images/bus.png',
                             },
                             iconSize: [38, 95],
-                            title: $scope.busPosition[$scope.busPosition.length - 1].devicetime,
+                            title: $filter('date')($scope.busPosition[$scope.busPosition.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
                             riseOnHover: true,
                             opacity: 5,
-                            riseOffset: 250,
-                            move:true
+                            riseOffset: 250
                         }
                     };
+
+                    // $timeout(function again() {
+                    //         leafletData.getMarkers().then(function (markers) {
+                    //             console.log(markers);
+                    //             markers.marker._latlng = new L.latLng($scope.markers.marker.lat+0.2,$scope.markers.marker.lat)
+                    //         });
+                    //         $scope.markers.marker.lat += 0.2;
+                    //         $timeout(again, 1000);
+                    //     }, 1000);
 
                     $scope.center = {
                         lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
                         lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
                         zoom: 18
                     };
-                    $scope.currentBus = '1';
+
                     var obj = {
                         date: $scope.busPosition[$scope.busPosition.length - 1].date,
                         gpsUnit: $scope.busPosition[$scope.busPosition.length - 1].deviceid
@@ -130,7 +157,9 @@
             });
             
         };
-        
+
+
+
         $scope.updateMap = function () {
             var latLng = [];
             angular.forEach($scope.busPosition, function (value, index) {
@@ -200,21 +229,38 @@
 
         socket.on('bus position',function (data) {
 
-            // var points = {
-            //     lat: data.lat,
-            //     lng: data.log,
-            //     icon: {
-            //         iconUrl: 'images/bus.png',
-            //     },
-            //     riseOnHover: true,
-            //     opacity: 5,
-            //     riseOffset: 250
-            // }
-            // $scope.busPosition.push(points);
-            $scope.markers.currentPosition.lat = data.lat;
-            $scope.markers.currentPosition.lng = data.log;
+            //
+            // $scope.markers.marker.lat = data.lat;
+            // $scope.markers.marker.lng = data.log;
+            // // $scope.markers.currentPosition.icon = {
+            //     iconUrl: 'images/bus.png',
+            // };
+            // $scope.markers.currentPosition.iconSize = [38, 95]
+            // leafletData.getMarkers().then(function (markers) {
+            //     console.log(markers);
+            //
+            //     markers.marker._latlng = new L.latLng(data.lat,data.log);
+            //     markers.marker.options.title = $filter('date')(data.divTime, "dd-MM-yyyy h:mm:ss a");
+            //
+            // });
+            var points = {
+                lat: Number(data.lat),
+                lng: Number(data.log),
+                riseOnHover: true,
+                opacity: 5,
+                riseOffset: 250
+            }
+            $scope.busPosition.push(points);
+            console.log(data.lat);
+            console.log(data.log);
+            $scope.markers.marker.lat = Number(data.lat);
+            $scope.markers.marker.lng = Number(data.log);
+            $scope.center.lat = Number(data.lat);
+            $scope.center.lng = Number(data.log);
 
-            $scope.$apply();
+            leafletData.getMap(function (map) {
+               map.invalidateSize();
+            });
         });
 
         $scope.searchForBusPosition = function () {
