@@ -15,11 +15,13 @@
     <link rel="stylesheet" href="bower_components/select2/dist/css/select2.css">
     <link rel="stylesheet" href="bower_components/angularjs-datepicker/dist/angular-datepicker.min.css">
     <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css">
+    <!--<link rel="stylesheet" href="bower_components/leaflet/dist/leaflet-draw.css">-->
+    <link rel="stylesheet" href="bower_components/leaflet-draw/dist/leaflet.draw.css" />
 
     <link rel="stylesheet" href="css/dark-bootstrap.all.min.css">
     <link rel="stylesheet" href="css/light-bootstrap.all.min.css">
 
-    <link rel="stylesheet" href="css/leaflet.css">
+    <!--<link rel="stylesheet" href="css/leaflet.css">-->
 
     <link rel="stylesheet" type="text/css" href="css/local.css">
 
@@ -30,15 +32,23 @@
 
     <ng-view></ng-view>
 
+    <script src="bower_components/leaflet/dist/leaflet.js"></script>
+    <script src="bower_components/leaflet-draw/dist/leaflet.draw-src.js"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/select2/dist/js/select2.min.js"></script>
     <script src="bower_components/angular-google-chart/ng-google-chart.js"></script>
+    <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
     <!--<script src="bower_components/angularjs-datepicker/dist/angular-datepicker.min.js"></script>-->
-    <script src="bower_components/leaflet/dist/leaflet.js"></script>
-    <script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>
+
+
+    <!--<script src="bower_components/angular-leaflet-directive/dist/angular-leaflet-directive.min.js"></script>-->
+
+    <script src="bower_components/ui-leaflet/dist/ui-leaflet.js"></script>
+    <script src="js/ui-leaflet-draw.js"></script>
+
 
     <!--<script src="js/angular-leaflet.js"></script>-->
     <!--<script src="js/leaflet.js"></script>-->
@@ -86,6 +96,10 @@
     <!--Home [Dashboard]-->
     <script src="app/home/homeService.js"></script>
     <script src="app/home/homeController.js"></script>
+
+    <!--Geofence Registry-->
+    <script src="app/geofenceRegistration/geofenceRegistrationController.js"></script>
+    <script src="app/geofenceRegistration/geofenceRegistrationService.js"></script>
 
 </body>
 </html>

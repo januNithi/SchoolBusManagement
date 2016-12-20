@@ -9,13 +9,22 @@
     "express-session": "^1.14.2",
     "formidable": "^1.0.17",
     "fs": "0.0.1-security",
+    "grunt": "^1.0.1",
     "multer": "^1.2.0",
     "mysql": "^2.12.0",
     "path": "^0.12.7",
     "q": "^1.4.1",
     "socket.io": "^0.9.16"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt-mocha-istanbul": "^5.0.2",
+    "grunt-mocha-test": "^0.13.2",
+    "istanbul": "^0.4.5",
+    "matchdep": "^1.0.1",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.6",
+    "chai": "^3.5.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"

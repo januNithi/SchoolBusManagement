@@ -45,6 +45,10 @@
                 controller: 'settingsController',
                 templateUrl: '../app/settings/settings.html'
             })
+            .when('/geofenceRegistration', {
+                controller: 'geofenceRegistrationController',
+                templateUrl: '../app/geofenceRegistration/geofenceRegistration.html'
+            })
         ;
 
         $locationProvider.html5Mode(true);
