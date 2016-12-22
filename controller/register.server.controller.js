@@ -231,3 +231,4 @@ exports.deleteStudentData=function (req,res) {
         res.send(result);
     });
 };
+

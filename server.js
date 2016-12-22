@@ -26,7 +26,6 @@ io.on('connection',function(socket){
     socket.on('bus track',function(busData){
 
         buses.push({id: socket.id, date:busData.date, gps_id:busData.gpsUnit});
-
         socketDup = socket;
 
     });

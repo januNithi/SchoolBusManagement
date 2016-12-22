@@ -47,5 +47,7 @@ module.exports=function(app){
     app.post('/delete/studentData',config.deleteStudentData);
 
     //------------- StudentRegDetails--------------------//
+
+    
     
 };

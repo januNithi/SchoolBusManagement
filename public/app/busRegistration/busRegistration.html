@@ -49,6 +49,7 @@
                     <td>
                         <span class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="edit(data)" aria-hidden="true"></span>
                         <span class="fa fa-window-close"  style="color: red" ng-click="delete(data)" aria-hidden="true"></span>
+                        <span class="fa fa-gg-circle fa-1x" style="color: red" ng-click="openGeofence(data)" data-toggle="modal" data-target="#geofenceModal" ng-click="edit(data)" aria-hidden="true"></span>
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
 
@@ -108,7 +109,50 @@
             </div>
             <!-- Modal -->
 
+            <!--geofence Modal -->
+            <div class="modal fade" id="geofenceModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4  ng-show="busdata.id==null" class="modal-title">Geofences</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <thead style="background-color: #337ab7">
+                                <tr>
+                                    <th>Sl No</th>
+                                    <th></th>
+                                    <th>Geofence Name</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="geofence in geofences">
+                                    <th scope="row">{{$index+1}}</th>
+                                    <td><input type="checkbox" ng-model="selGeofences[$index]"  ng-change="addGeofence(geofence,$index)"></td>
+                                    <td>{{geofence.name}}</td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-click="mapGeofenceToDevice(geofence)"  aria-hidden="true">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
+
+        <!--geofence Modal -->
 
     </div>
 

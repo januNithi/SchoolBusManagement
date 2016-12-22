@@ -11,51 +11,78 @@
         return{
 
 
-            getGpsUnitData:function(){
+            getGeofences:function(){
                 
                 return $http({
                     
-                    method:'post',
-                    url:'/get/gpsUnitData'
+                    method:'get',
+                    url:'/dao/getGeofences'
                 });
             },
-            postGpsUnitData:function(data){
+
+            getGeofenceById:function(id){
+
+                return $http({
+
+                    method:'get',
+                    url:'/dao/getGeofenceById/'+id
+                });
+            },
+            postGeofenceData:function(data){
 
                 return $http({
 
                     method:'post',
-                    url:'/post/gpsUnitData',
+                    url:'/dao/geofenceData',
                     data:data
 
                 });
 
             },
-            deleteGpsUnitData:function(data){
+            deleteGeofence:function(id){
 
                 return $http({
 
-                    method:'post',
-                    url:'/post/deleteGpsUnitData',
-                    data:{data:data.id}
+                    method:'delete',
+                    url:'/dao/deleteGeofence/'+id
 
                 });
 
 
                 
             },
-            updateGpsUnitData:function(data){
+            updateGofence:function(data){
 
+                alert("sdfsd");
             return $http({
 
-                method:'post',
-                url:'/post/updateGpsUnitData',
+
+                method:'put',
+                url:'/dao/updateGeofence/'+data.id,
                 data:data
 
             });
 
+        },
+            mapGeofenceToDevice:function(data){
 
+                return $http({
 
-        }
-        }
+                    method:'post',
+                    url:'/dao/mapGeofences',
+                    data:data
+
+                });
+        },
+            getMapGeofenceDataById:function(id){
+
+                return $http({
+
+                    method:'get',
+                    url:'/dao/getMapGeofenceById/'+id
+
+                });
+            }
+    }
     }
 })();
