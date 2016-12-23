@@ -38,6 +38,7 @@
 
         };
 
+
         
         $scope.postGeofencData=function(){
 
@@ -95,7 +96,7 @@
 
         };
 
-        $scope.edit=function(Data){
+        $scope.edit=function(id){
 
 
             if(layer!=null || layer=='data' ){
@@ -111,7 +112,7 @@
             }
 
             $scope.isEdit=true;
-            $scope.geofence=Data;
+            $scope.geofence=$scope.geofences[id];
             parseArea($scope.geofence.area);
             layer='data';
 
@@ -161,7 +162,7 @@
             if(geoType=='CIRCLE')
             {
 
-                $scope.geofence.area=geoType+' ('+circle.lat+','+circle.log+','+circle.radius+')';
+                $scope.geofence.area=geoType+' ('+circle.lat+' '+circle.log+', '+circle.radius+')';
 
                 console.log($scope.geofence);
             }

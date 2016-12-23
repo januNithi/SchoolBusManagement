@@ -29,7 +29,11 @@
         $scope.selBus;
         $scope.selFrom;
         $scope.selTo;
-
+        $scope.center = {
+            lat: 11.0168,
+            lng: 76.9558,
+            zoom: 16
+        };
 
         $scope.showSelectable = function (value) {
 
@@ -84,7 +88,7 @@
                     var begin = (($scope.curpage - 1) * $scope.itemspage),
                         end = begin + $scope.itemspage;
                     $scope.filteredEvents = $scope.events.slice(begin, end);
-                    updateMap(3);
+                    $scope.updateMap(0);
                 });
 
             },function(err){
@@ -111,7 +115,7 @@
         // });
 
         $scope.markers=[];
-        var updateMap=function(id){
+        $scope.updateMap=function(id){
 
             $scope.markers=[];
             if(id>=0){
@@ -134,31 +138,23 @@
                             lng: Number($scope.filteredEvents[i].position.lon),
                             icon: {
                                 iconUrl: selIcon,
-                                iconSize: [20, 20]
-                            }
+                                iconSize: [30, 30]
+                            },
                             // focus: true,
-                            // message: "This place is in London",
-                            // draggable: false,
+                            message: $scope.filteredEvents[i].event.servertime,
+                            draggable: true
 
                     });
 
-                // console.log($scope.filteredEvents.length);
+                    $scope.center={
+                        lat: Number($scope.filteredEvents[i].position.lat),
+                        lng: Number($scope.filteredEvents[i].position.lon),
+                        zoom: 16
+                    }
+
+
                 }
             }
-
-
-            // var positions=[];
-            //
-            // if(id>=0){
-            //
-            //     for(i=0;i<$scope.filteredEvents.length;i++){
-            //         positions.push(L.marker([Number($scope.filteredEvents[i].position.lat),Number($scope.filteredEvents[i].position.lon)]).bindPopup('This is Littleton, CO.'))
-            //     }
-            // }
-            //
-            // var cities = L.layerGroup(positions);
-            // L.control.layers([cities]).addTo($scope.map);
-
 
         };
 

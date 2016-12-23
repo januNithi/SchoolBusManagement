@@ -33,55 +33,50 @@
             <!--</div>-->
 
         <!--</div>-->
-        <!--<div class="col-sm-12" style="padding-bottom: 25px">-->
-            <leaflet markers="markers" style="height: 500px"></leaflet>
-        <!--</div>-->
+        <div class="form-group">
+            <leaflet markers="markers" center="center" style="height: 300px"></leaflet>
+        </div>
 
+
+        <div class="col-sm-12 form-group">
 
         <div class="col-sm-12">
             <div class="col-sm-3">
-
-                <div class="col-sm-6">
-                    <label>Bus</label>
-                </div>
-                <div class="col-sm-6">
-                    <select ng-model="selBus" ng-options="bus.busCode for bus in busList">
-                    </select>
-                </div>
-
-            </div>
-            <div class="col-sm-3">
-
-                <div class="col-sm-3">
-                    <label>From</label>
-                </div>
-                <div class="col-sm-6">
-
-                        <input ng-model="selFrom" type="datetime-local">
-
-                </div>
-
-
-
+                <label>Bus</label>
             </div>
 
             <div class="col-sm-3">
-
-                <div class="col-sm-2 col-sm-offset-3">
-                    <label>To</label>
-                </div>
-                <div class="col-sm-6">
-
-                        <input ng-model="selTo" type="datetime-local">
-
-                </div>
-
-
-
+                <label>From</label>
             </div>
+
+            <div class="col-sm-3">
+                <label>To</label>
+            </div>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="col-sm-3">
+                <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList">
+                </select>
+            </div>
+
+            <div class="col-sm-3">
+                <input class="form-control col-sm-12" ng-model="selFrom"  type="datetime-local">
+            </div>
+
+            <div class="col-sm-3">
+                <input class="form-control" ng-model="selTo" type="datetime-local">
+            </div>
+
             <div class="col-sm-3">
                 <div class="col-sm-offset-6"><button class="btn btn-primary" ng-click="showReport()">Show</button></div>
             </div>
+        </div>
+
+
+        </div>
+
+
         </div>
 
         <div class="col-sm-12"></div>
@@ -97,7 +92,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="Data in filteredEvents">
+
+                <tr ng-repeat="Data in filteredEvents" style="cursor: pointer;" ng-click="updateMap($index)">
                     <th scope="row">{{$index+1}}</th>
                     <td>{{ Data.event.servertime | date :  "yyyy-MM-dd hh:mm:ss a"}}</td>
                     <td>{{Data.device.name}}</td>
