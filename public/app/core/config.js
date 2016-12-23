@@ -49,6 +49,10 @@
                 controller: 'geofenceRegistrationController',
                 templateUrl: '../app/geofenceRegistration/geofenceRegistration.html'
             })
+            .when('/eventReport', {
+                controller: 'eventReportController',
+                templateUrl: '../app/eventReport/eventReport.html'
+            })
         ;
 
         $locationProvider.html5Mode(true);

@@ -29,6 +29,16 @@
         };
         $scope.geofences=[];
         $scope.isEdit=false;
+
+        $scope.showSelectable = function (value) {
+
+            if(value == 'geofence'){
+                return 'selected';
+            }
+
+        };
+
+        
         $scope.postGeofencData=function(){
 
 
@@ -207,6 +217,8 @@
 
 
         });
+
+
         map.addControl(drawControl);
         map.addLayer(drawnItems);
 
