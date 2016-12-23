@@ -3,5 +3,6 @@ angular.module('myApp',[
     'googlechart',
     // 'leaflet-directive',
     'ui.bootstrap',
-    'ui-leaflet'
+    'ui-leaflet',
+    'FBAngular'
 ]);

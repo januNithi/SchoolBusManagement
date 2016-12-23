@@ -9,68 +9,47 @@
             '$scope',
             '$window',
             'loginService'
-
-
         ];
 
         function loginController($scope,$window,loginService){
 
-            // $scope.user={
-            //     userName:'',
-            //     password:''
-            // };
-            // $scope.error='Invalid User Name or Password';
-            // $scope.isInvalid=false;
-            //
-            // $scope.redirect=function()
-            // {
-            //
-            //     if(localStorage.getItem('loggedIn')=="true")
-            //     {
-            //         $window.location.href = '/language';
-            //     }
-            //     else {
-            //
-            //
-            //     }
-            //
-            // };
-            // $scope.redirect();
-            //
-            //
-            // $scope.actionLogin=function(){
-            //
-            //     loginService.onLogin($scope.user)
-            //         .then(function(response){
-            //             if(response.data==="true"){
-            //                 //redirect
-            //                 alert('Successfully Login!');
-            //                 localStorage.setItem('loggedIn',true);
-            //                 $window.location.href = '/language';
-            //             }
-            //             else {
-            //                 //set error message
-            //                 $scope.isInvalid=true;
-            //                 $scope.userName='';
-            //                 $scope.password='';
-            //             }
-            //         },function(err){
-            //             // alert error
-            //             alert("error");
-            //
-            //         });
-            // };
-            //
-            //
-            // $scope.logout=function()
-            // {
-            //
-            //     localStorage.setItem('loggedIn',false);
-            //     $window.location.href = '/logout';
-            //
-            //
-            //
-            // }
+            $scope.userName = '';
+            $scope.password = '';
+
+            $scope.failMessage = '';
+            $scope.errorMessage = '';
+
+            loginService.isLoggedIn().then(function (result,err) {
+                if(result.data.id){
+                    loginService.goToDashboard();
+                }
+
+            });
+
+            $scope.login = function () {
+                $scope.failMessage = '';
+                $scope.errorMessage = '';
+                loginService.onLogin($scope.userName,$scope.password).then(function (result,err) {
+
+                    if(result.data == 'success'){
+                        loginService.goToDashboard();
+                    }else if(result.data == 'failure'){
+                        $scope.failMessage = 'Oops!! User Not Found';
+                    }
+                    if(err){
+                        $scope.errorMessage = err.data;
+                    }
+
+
+                });
+            };
+
+            $scope.onLogout = function () {
+                loginService.onLogout().then(function () {
+                   loginService.goToLogin();
+                });
+            };
+            
         }
     })();
 

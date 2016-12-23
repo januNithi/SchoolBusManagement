@@ -7,12 +7,13 @@
         '$scope',
         '$window',
         'studentRegistrationService',
-        'tripRegistrationService'
+        'tripRegistrationService',
+        'loginService'
 
 
     ];
 
-    function studentRegistrationController($scope,$window,studentRegistrationService,tripRegistrationService){
+    function studentRegistrationController($scope,$window,studentRegistrationService,tripRegistrationService,loginService){
 
         $scope.studentRegData=[];
         $scope.tripData=[];
@@ -31,6 +32,22 @@
             }
 
         };
+
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin();
+            }
+
+        });
+
+        $scope.onLogout = function () {
+            loginService.onLogout().then(function () {
+                loginService.goToLogin();
+            });
+        };
+
+
         $scope.getTripRegDetails = function () {
 
             tripRegistrationService.getTripRegData().then(function (result) {

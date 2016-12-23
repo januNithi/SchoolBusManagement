@@ -4,14 +4,31 @@
         .factory("loginService",loginService);
 
     loginService.$inject=[
-        '$http'
+        '$http',
+        '$window'
     ];
 
-    function loginService($http){
+    function loginService($http,$window){
         return{
-            // onLogin:function(userModel){
-        //         return $http.post("/api/login/",userModel);
-        //     }
+            isLoggedIn:function () {
+                return $http.get('/api/isUserLoggedIn');
+            },
+            onLogin:function(userName,password){
+                var userData = {
+                    userName : userName,
+                    password : password
+                }
+                return $http.post("/api/login",userData);
+            },
+            onLogout:function () {
+                return $http.get("/api/logout");
+            },
+            goToDashboard : function () {
+                $window.location.href = '/home';
+            },
+            goToLogin : function () {
+                $window.location.href = '/';
+            }
         }
     }
 })();

@@ -8,17 +8,20 @@
         '$window',
         'tripRegistrationService',
         'busRegistrationService',
-        'driverRegistrationService'
+        'driverRegistrationService',
+        'routeRegistrationService',
+        'loginService'
 
 
     ];
 
-    function tripRegistrationController($scope,$window,tripRegistrationService,busRegistrationService,driverRegistrationService) {
+    function tripRegistrationController($scope,$window,tripRegistrationService,busRegistrationService,driverRegistrationService,routeRegistrationService,loginService) {
 
         $scope.tripData = [];
         $scope.session = ['MORNING', 'AFTER-NOON', 'EVENING'];
         $scope.busRegData=[];
         $scope.driveData=[];
+        $scope.routeData=[];
         $scope.curpage = 1;
         $scope.itemspage = 10;
         $scope.filteredDoc = [];
@@ -33,6 +36,22 @@
             }
 
         };
+
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin();
+            }
+
+        });
+
+        $scope.onLogout = function () {
+            loginService.onLogout().then(function () {
+                loginService.goToLogin();
+            });
+        };
+
+
         $scope.getTripRegDetails = function () {
 
             tripRegistrationService.getTripRegData().then(function (result) {
@@ -69,7 +88,17 @@
 
         };
         $scope.getDirverData();
-        
+
+        $scope.getRouteData=function () {
+
+            routeRegistrationService.getRoutes().then(function(result){
+
+                $scope.routeData=result.data;
+
+            });
+
+        };
+        $scope.getRouteData();
 
         $scope.close = function () {
             $scope.trip = '';

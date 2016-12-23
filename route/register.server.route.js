@@ -48,6 +48,15 @@ module.exports=function(app){
 
     //------------- StudentRegDetails--------------------//
 
+    //------------- Routes --------------------//
+
+    app.get('/dao/getRoutes',config.getRoutes);
+    app.post('/dao/updateRoutes',config.updateRoutes);
+    app.post('/dao/deleteRoutes',config.deleteRoutes);
+    app.post('/dao/deleteStops',config.deleteStops);
+
+    //------------- Routes --------------------//
+
     
     
 };

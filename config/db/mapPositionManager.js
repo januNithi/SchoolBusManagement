@@ -17,7 +17,7 @@ exports.getBusPosition = function (id,date,cb) {
         // query += " from positions where date(devicetime) ='"+date+"'";
         // query += " and deviceid = "+id+"";
 
-        query = "select latitude as lat,longitude as lng,date(devicetime) as date,deviceid";
+        query = "select latitude as lat,longitude as lng,date(devicetime) as date,devicetime,deviceid";
         query += " from positions where date(devicetime) ='"+date+"'";
         query += " and deviceid = (select gpsUnit from bus where id = "+id+") order by devicetime ASC";
     }

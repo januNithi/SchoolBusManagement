@@ -5,6 +5,11 @@
         display: block;
     }
 
+    .fullscreen {
+        width: 100%;
+        height: 100%;
+    }
+
 
 </style>
 
@@ -12,89 +17,109 @@
 
     <div ng-include="'../../template/menu.html'"></div>
 
-    <div id="page-wrapper">
+    <div id="page-wrapper"   fullscreen="isFullscreen">
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
+
+                        <button class="pull-right" ng-click="toggleFullScreen()"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
+
                         <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Routes </h3>
+
                     </div>
                     <div class="panel-body">
-                        <div class="form form-horizontal">
+                        <div class="form">
 
                             <div class="form-group">
 
-                                <div class="col-xs-6">
-
-                                    <select ng-model="currentBus" class="form-control">
-
-                                        <option value="0">----SELECT BUS----</option>
-
-                                        <option value="{{bus.id}}" ng-repeat="bus in busData">
-
-                                            {{bus.regNo + ' - ' + bus.busCode}}
-
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-
-                                <div class="col-xs-1">
-
-                                    <button class="btn btn-success" ng-click="searchForBusPosition()"><i class="fa fa-search" aria-hidden="true"></i></button>
-
-                                </div>
+                                    <button class="btn btn-success btn-responsive" id="routeCreator" data-target="#createRoute" data-toggle="modal" data-dismiss="modal"><i class="fa fa-road" aria-hidden="true"></i>Create Route</button>
 
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" >
 
-                                <leaflet paths="paths" center="center" markers="markers" event-broadcast="events" height="300px"></leaflet>
+                                <leaflet event-broadcast="events" tiles="tiles" paths="path" center="center" markers="markers" height="700px"></leaflet>
 
                             </div>
+
 
                         </div>
 
+
+
                     </div>
+
                 </div>
+                <div class="panel panel-primary">
+
+                    <div class="panel-body">
+
+                        <table class="table table-bordered">
+                            <thead style="background-color: #337ab7">
+                            <tr>
+                                <th>#</th>
+                                <th>ID</th>
+                                <th>Route Name</th>
+                                <th>Stops</th>
+                                <th>Option</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="route in routes">
+                                <th><input type="checkbox" ng-model="selectedRte" ng-click="routeSelected(route,selectedRte)"></th>
+                                <th>{{route.id}}</th>
+                                <td>{{route.rtName}}</td>
+                                <td>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Stop Name</th>
+                                                <th>Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="stop in route.stops">
+                                                <td>{{stop.id}}</td>
+                                                <td>{{stop.stpName}}</td>
+                                                <td>
+                                                    <span ng-if="stop.id" class="fa fa-pencil-square fa-1x" style="color: red"  ng-click="editStop(stop)" aria-hidden="true"></span>
+                                                    <span ng-if="stop.id" class="fa fa-window-close"  style="color: red" ng-click="deleteStop(stop)" aria-hidden="true"></span>
+                                                    <span ng-if="!stop.id" class="fa fa-floppy-o" style="color: Green" ng-click="updateRoutes(route)" aria-hidden="true"></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td>
+                                    <span ng-if="route.id" class="fa fa-pencil-square fa-1x" style="color: red" ng-click="editRoute(route)" aria-hidden="true"></span>
+                                    <span ng-if="route.id" class="fa fa-window-close"  style="color: red" ng-click="deleteRoute(route)" aria-hidden="true"></span>
+                                    <span ng-if="!route.id" class="fa fa-floppy-o" style="color: Green" ng-click="updateRoutes(route)" aria-hidden="true"></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="pull-right">
+                            <button type="submit" style="float: left" class="btn btn-danger" aria-hidden="true">Delete Selected</button>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
             </div>
-          <div>
-            <button type="submit" data-target="#myModal" style="float: right" data-toggle="modal" data-dismiss="modal" class="btn btn-success" aria-hidden="true">New Route</button><br><br>
-          </div>
-            <table class="table table-bordered">
-                <thead style="background-color: #337ab7">
-                <tr>
-                    <th>#</th>
-                    <th>ID</th>
-                    <th>Route Name</th>
-                    <th>Stops</th>
-                    <th>Option</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th><input type="checkbox" ng-model="checkboxModel.value1"></th>
-                    <th scope="row">1</th>
-                    <td>Gandhipuram</td>
-                    <td>PN PALAYAM</td>
-                    <td>
-                        <span class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="edit(data)" aria-hidden="true"></span>
-                        <span class="fa fa-window-close"  style="color: red" ng-click="delete(data)" aria-hidden="true"></span>
-                        <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
-                        <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
 
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <!-- Stop Creation Modal -->
 
-            <div>
-                <button type="submit" style="float: left" class="btn btn-danger" aria-hidden="true">Delete Selected</button>
+            <div ng-show="false">
+                <button type="submit" id="markerCreator" data-target="#myModal" data-toggle="modal" data-dismiss="modal" class="btn btn-success" aria-hidden="true">Stop Creator</button><br><br>
             </div>
 
-            <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">
                 <div class="modal-dialog">
 
@@ -102,37 +127,80 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">New Registration</h4>
-                            <!--<h4 ng-show="" class="modal-title">Edit Registration</h4>-->
+                            <h4 class="modal-title">Stop Registration</h4>
                         </div>
 
                         <div class="modal-body">
                             <form class="form-horizontal" role="form" name="myForm">
                                 <div class="form-group">
-                                    <label for="inputName3" class="col-sm-4 control-label">Route Name:</label>
+                                    <label for="stopName" class="col-sm-4 control-label">Stop Name</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" id="inputName3" ng-model="route.name"  placeholder="Registration Number" required>
+                                        <input type="text" class="form-control" id="stopName" ng-model="markerData.stpName"  placeholder="Stop Name" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-4 control-label" >Stops:</label>
+                                    <label for="lat" class="col-sm-4 control-label" >Latitude</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="busdata.stops" id="inputEmail3" placeholder="Bus Number" required>
+                                        <input type="number" class="form-control" ng-model="markerData.lat" id="lat" placeholder="Latitude" required>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label for="lat" class="col-sm-4 control-label" >Longitude</label>
+                                    <div class="col-sm-6">
+                                        <input type="number" class="form-control" ng-model="markerData.lng" id="lng" placeholder="Longitude" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="time" class="col-sm-4 control-label" >Stop Time</label>
+                                    <div class="col-sm-6">
+                                        <input type="time" class="form-control" ng-model="markerData.stpTime" id="time" placeholder="Time" required>
+                                    </div>
+                                </div>
+                            </form>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-disabled="myForm.$invalid" aria-hidden="true">Save</button>
+                            <button type="submit" class="btn btn-danger" data-dismiss="modal" ng-disabled="myForm.$invalid" ng-click="updateStop()" aria-hidden="true">Save</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Cancel</button>
                         </div>
                     </div>
 
                 </div>
             </div>
-            <!-- Modal -->
+            <!-- Stop Creation Modal -->
 
+            <!-- Route Creation Modal -->
 
+            <div class="modal fade" id="createRoute" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Route Registration</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <form class="form-horizontal" role="form" name="routeForm">
+                                <div class="form-group">
+                                    <label for="routeName" class="col-sm-4 control-label">Stop Name</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="routeName" ng-model="routeData.rtName"  placeholder="Route Name" required>
+                                    </div>
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-danger" data-dismiss="modal" ng-disabled="routeForm.$invalid" ng-click="updateRoute()" aria-hidden="true">Save</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Cancel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Route Creation Modal -->
 
         </div>
 

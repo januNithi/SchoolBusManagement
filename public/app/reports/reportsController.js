@@ -1,27 +1,22 @@
 /**
- * Created by CSS on 08-12-2016.
+ * Created by CSS on 23-12-2016.
  */
-
 
 (function(){
     angular
         .module("myApp")
-        .controller("homeController",homeController);
+        .controller("reportsController",reportsController);
 
-    homeController.$inject=[
+    reportsController.$inject=[
         '$scope',
         '$window',
         '$filter',
-        'homeService',
-        'busRegistrationService',
-        '$timeout',
         'leafletData',
         'loginService'
 
     ];
 
-    function homeController($scope,$window,$filter,homeService,busRegistrationService,$timeout,leafletData,loginService){
-
+    function reportsController($scope,$window,$filter,leafletData,loginService){
 
         var socket = io.connect();
 
@@ -48,7 +43,7 @@
 
         $scope.showSelectable = function (value) {
 
-            if(value == 'home'){
+            if(value == 'report'){
                 return 'selected';
             }
 
@@ -62,55 +57,10 @@
 
         });
 
-        $scope.onLogout = function () {
+        $scope.logout = function () {
             loginService.onLogout().then(function () {
                 loginService.goToLogin();
             });
-        };
-
-        $scope.myChartObject = {};
-
-        $scope.myChartObject.type = "PieChart";
-
-        $scope.onions = [
-            {v: "Bus On Time Start"},
-            {v: 18},
-        ];
-
-        $scope.myChartObject.data = {"cols": [
-            {id: "t", label: "Topping", type: "string"},
-            {id: "s", label: "Slices", type: "number"}
-        ], "rows": [
-            {c: [
-                {v: "Bus On Time Arrival"},
-                {v: 15},
-            ]},
-            {c: $scope.onions},
-            {c: [
-                {v: "Bus Delay"},
-                {v: 5}
-            ]}
-        ]};
-
-        $scope.myChartObject.options = {
-            'title': 'Bus Travel Reports'
-        };
-
-        $scope.popup2 = {
-            opened: false
-        };
-
-        $scope.open2 = function() {
-            $scope.popup2.opened = true;
-        };
-
-
-        $scope.dateOptions = {
-            dateDisabled: 'disabled',
-            formatYear: 'yy',
-            maxDate: new Date(2020, 5, 22),
-            minDate: new Date(),
-            startingDay: 1
         };
 
         $scope.getBusDetails = function () {
@@ -120,7 +70,7 @@
                 console.log(error);
             });
         };
-        
+
         $scope.getBusPositions = function (id,date) {
 
             $scope.busPosition = [];
@@ -163,9 +113,9 @@
                 }
 
             },function (error) {
-               console.log(error);
+                console.log(error);
             });
-            
+
         };
 
 
@@ -233,7 +183,7 @@
         }
 
         $scope.showDate = function () {
-          console.log($scope.selectedDate);
+            console.log($scope.selectedDate);
         };
 
         socket.on('notification',function (data) {
@@ -261,7 +211,7 @@
             $scope.center.lng = Number(data.log);
 
             leafletData.getMap(function (map) {
-               map.invalidateSize();
+                map.invalidateSize();
             });
         });
 
@@ -276,9 +226,9 @@
             $scope.getBusPositions($scope.currentBus,$filter('date')($scope.selectedDate, "yyyy-MM-dd"));
         };
 
-        $scope.getBusPositions(null,null);
-
-        $scope.getBusDetails();
+        // $scope.getBusPositions(null,null);
+        //
+        // $scope.getBusDetails();
 
     }
 })();

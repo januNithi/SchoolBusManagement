@@ -48,15 +48,6 @@ app.get('/busPositionChange',function (req,res) {
 
     console.log(req.query);
 
-    // obj.lat+=0.2;
-    // buses.forEach(function (value,index) {
-    //
-    //     if (value.gps_id == req.query.id) {
-    //         io.to(value.id).emit("bus position", obj);
-    //     }
-    //
-    // });
-
     buses.forEach(function (value,index) {
 
         if(value.gps_id == req.query.id){
@@ -66,8 +57,13 @@ app.get('/busPositionChange',function (req,res) {
 
     });
 
+});
 
+app.post('/busNotification',function (req,res) {
 
+    console.log(req.body);
+
+    io.sockets.emit('notification', req.body);
 });
 
 

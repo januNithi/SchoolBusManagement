@@ -25,6 +25,21 @@
             }
 
         };
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin();
+            }
+
+        });
+
+        $scope.onLogout = function () {
+            loginService.onLogout().then(function () {
+                loginService.goToLogin();
+            });
+        };
+
+
 
 
         $scope.accordionGroupOptions1={

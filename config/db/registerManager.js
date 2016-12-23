@@ -340,6 +340,136 @@ function deleteStudentRegData(data){
 
 };
 
+function getRoutes(cb) {
+
+    var routes = [];
+    var i = 1;
+
+    // var query = "Select routes.id as rtId,routes.rtName as routeName,stops.id as stpId,stops.stpName,";
+    // query += " stops.stpPosition,stops.stpTime from routes left join stops on routes.id = stops.rtId";
+
+    var query = "Select id,rtName from routes";
+    con.query(query,function (err,result) {
+        if(err){
+            cb(err,result);
+        }
+        var totalLength = result.length;
+        result.forEach(function (value,index) {
+
+            query = "Select id,stpName,stpPosition,stpTime from stops where rtId = "+value.id+" order by time(stpTime) ASC";
+
+            con.query(query,function (err,result) {
+                if(err){
+                    cb(err,result);
+                }
+                var data = {
+                    id : value.id,
+                    rtName : value.rtName,
+                    stops : result
+                }
+                routes.push(data);
+                if((i) == totalLength){
+                    cb(err,routes);
+                }
+                i++;
+            });
+
+        });
+    });
+
+};
+
+function updateRoutes(data,cb) {
+    var query = "";
+    var i = 1;
+    if(data.id){
+        query = "Update routes set rtName = '"+data.rtName+"' where id = "+data.id;
+    }else{
+        query = "Insert into routes(rtName) values('"+data.rtName+"')";
+    }
+
+    con.query(query,function (err,result) {
+
+        if(err){
+            cb(err,result);
+        }else{
+
+            var rtId = data.id;
+            query = "delete from stops where rtId = "+rtId;
+            con.query(query,function (err,result) {
+              if(err){
+                  cb(err,result);
+              }else{
+
+                  data.stops.forEach(function (value,index) {
+                      query = "Insert into stops(stpName,stpPosition,stpTime,rtId)";
+                      query += " values('"+value.stpName+"','"+JSON.stringify(value.stpPosition)+"','";
+                      query += ""+value.stpTime+"',"+rtId+")";
+                      con.query(query,function (err,result) {
+
+                          if(err){
+                              cb(err,result);
+                          }else{
+                              if(i == data.stops.length) {
+                                  cb(err, result);
+                              }
+                              i++
+                          }
+
+                      });
+                  });
+
+              }
+            });
+
+        }
+
+    });
+
+
+}
+
+function deleteRoutes(data,cb) {
+
+    var query = "Delete from routes where id = "+data.id;
+
+    con.query(query,function (err,result) {
+
+        if(err){
+            cb(err,result);
+        }
+
+        query = "Delete from stops where rtId = "+data.id;
+
+        con.query(query,function (err,result) {
+
+            if(err){
+                cb(err,result);
+            }
+
+            cb(err,result);
+
+        });
+
+    });
+
+}
+
+function deleteStops(data,cb) {
+
+    var query = "Delete from stops where id = "+data.id;
+
+    con.query(query,function (err,result) {
+
+        if(err){
+            cb(err,result);
+        }
+        cb(err,result);
+
+    });
+
+}
+
 module.exports= {
 
     getBusRegDetail: getBusRegDetail,
@@ -358,6 +488,10 @@ module.exports= {
     deleteDriverRegData:deleteDriverRegData,
     getStudentRegData:getStudentRegData,
     postStudentRegData:postStudentRegData,
-    deleteStudentRegData:deleteStudentRegData
+    deleteStudentRegData:deleteStudentRegData,
+    getRoutes:getRoutes,
+    updateRoutes:updateRoutes,
+    deleteRoutes:deleteRoutes,
+    deleteStops:deleteStops
 
 };

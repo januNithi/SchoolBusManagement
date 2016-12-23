@@ -6,12 +6,13 @@
     driverRegistrationController.$inject=[
         '$scope',
         '$window',
-        'driverRegistrationService'
+        'driverRegistrationService',
+        'loginService'
 
 
     ];
 
-    function driverRegistrationController($scope,$window,driverRegistrationService){
+    function driverRegistrationController($scope,$window,driverRegistrationService,loginService){
         $scope.file=null;
         $scope.driveData=[];
         $scope.driverData=[];
@@ -29,6 +30,21 @@
             }
 
         };
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin();
+            }
+
+        });
+
+        $scope.onLogout = function () {
+            loginService.onLogout().then(function () {
+                loginService.goToLogin();
+            });
+        };
+
+
         $scope.uploadedFile = function(element) {
             $scope.$apply(function($scope) {
                 $scope.driverData.drvLicence = element.files;

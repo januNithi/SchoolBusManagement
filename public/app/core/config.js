@@ -37,6 +37,10 @@
                 controller: 'routeRegistrationController',
                 templateUrl: '../app/routeRegistration/routeRegistration.html'
             })
+            .when('/reports', {
+                controller: 'reportsController',
+                templateUrl: '../app/reports/reports.html'
+            })
             .when('/home', {
                 controller: 'homeController',
                 templateUrl: '../app/home/home.html'

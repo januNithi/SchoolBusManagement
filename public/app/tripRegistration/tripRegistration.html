@@ -102,8 +102,8 @@
                                     <label for="inputName3" class="col-sm-4 control-label">Route:</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" ng-model="trip.routeId"  placeholder="Route" required>
-                                            <option value="0">--SELECT--</option>
-                                            <option value="{{data.rtId}}" ng-repeat="data in tripData">{{data.rtName}}</option>
+                                            <option value=0>--SELECT--</option>
+                                            <option value="{{data.id}}" ng-repeat="data in routeData">{{data.rtName}}</option>
                                         </select>
                                     </div>
                                 </div>

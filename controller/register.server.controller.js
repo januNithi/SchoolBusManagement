@@ -232,3 +232,51 @@ exports.deleteStudentData=function (req,res) {
     });
 };
 
+exports.getRoutes = function (req,res) {
+
+    config.getRoutes(function (err,result) {
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
+    });
+    
+};
+
+exports.updateRoutes = function (req,res) {
+  
+    config.updateRoutes(req.body,function (err,result) {
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
+    });
+    
+};
+
+exports.deleteRoutes = function (req,res) {
+
+    config.deleteRoutes(req.body,function (err,result) {
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
+    });
+
+};
+
+exports.deleteStops = function (req,res) {
+
+    config.deleteStops(req.body,function (err,result) {
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
+    });
+
+};
+

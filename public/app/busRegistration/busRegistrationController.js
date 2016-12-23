@@ -10,13 +10,14 @@
         '$window',
         'busRegistrationService',
         'gpsUnitRegistrationService',
-        'geofenceRegistrationService'
+        'geofenceRegistrationService',
+        'loginService'
 
 
     ];
 
-    function busRegistrationController($scope,$window,busRegistrationService,gpsUnitRegistrationService,geofenceRegistrationService){
-
+    function busRegistrationController($scope,$window,busRegistrationService,gpsUnitRegistrationService,geofenceRegistrationService,loginService){
+    
         $scope.busRegData=[];
         $scope.busdata={
             gpsUnit:'0'
@@ -41,6 +42,21 @@
             }
 
         };
+
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin();
+            }
+
+        });
+
+        $scope.onLogout = function () {
+            loginService.onLogout().then(function () {
+                loginService.goToLogin();
+            });
+        };
+
 
         $scope.getBusRegDetails=function () {
             busRegistrationService.getBusRegData().then(function(result){
@@ -93,10 +109,6 @@
             $scope.busdata='';
 
         };
-
-
-
-
 
 
         $scope.delete=function(data){

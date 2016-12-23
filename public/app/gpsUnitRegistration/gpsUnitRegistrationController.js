@@ -6,12 +6,13 @@
     gpsUnitRegistrationController.$inject=[
         '$scope',
         '$window',
-        'gpsUnitRegistrationService'
+        'gpsUnitRegistrationService',
+        'loginService'
 
 
     ];
 
-    function gpsUnitRegistrationController($scope,$window,gpsUnitRegistrationService){
+    function gpsUnitRegistrationController($scope,$window,gpsUnitRegistrationService,loginService){
 
         $scope.getGpsData=[];
         $scope.data={};
@@ -28,6 +29,21 @@
             }
 
         };
+
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin();
+            }
+
+        });
+
+        $scope.onLogout = function () {
+            loginService.onLogout().then(function () {
+                loginService.goToLogin();
+            });
+        };
+
 
         $scope.getGpsUnitDetail=function(){
 
