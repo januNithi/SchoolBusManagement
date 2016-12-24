@@ -52,12 +52,21 @@
                 };
             }
             else if(geoType=='POLYGON'){
+
+                var arryLatLng="";
+                for(i=0;i<polygon.latlng[0].length;i++){
+                    arryLatLng+=polygon.latlng[0][i].lat+' '+polygon.latlng[0][i].lng+', ';
+                }
+                console.log(arryLatLng);
+                arryLatLng=arryLatLng.substring(0, arryLatLng.length - 2);
                 $scope.geofence={
                     name:$scope.geofence.name,
                     desc:$scope.geofence.description,
-                    area:geoType+' ('+circle.lat+' '+circle.log+', '+circle.radius+')'
+                    area:geoType+'(('+arryLatLng+'))'
                 };
             }
+
+            console.log( $scope.geofence);
 
             if($scope.geofence.area==''){
                 alert('please select valid geofence');
@@ -141,6 +150,25 @@
 
             else if(areaPolygon > -1 ){
                 areaType='POLYGON';
+                var arrayLatLong=[];
+
+                var openBr=area.indexOf("((");
+
+                var latlongs=area.substring(openBr+2,area.length-2).split(', ');
+
+                console.log(latlongs);
+                for(i=0;i<latlongs.length;i++){
+                    var latlong=latlongs[i].substring(0,area.length).split(' ');
+                    console.log(i+" "+latlong[0]);
+                    arrayLatLong.push(new L.LatLng(latlong[0],latlong[1]));
+                }
+
+                var polygonPoints = [arrayLatLong];
+
+
+                shape = new L.Polygon(polygonPoints).addTo(map);
+                map.panTo(new L.LatLng(latlong[0],latlong[1]));
+
             }
 
         };
@@ -167,11 +195,15 @@
                 console.log($scope.geofence);
             }
             else if(geoType=='POLYGON'){
-                // $scope.geofence={
-                //     name:$scope.geofence.name,
-                //     desc:$scope.geofence.description,
-                //     // area:geoType+' ('+circle.lat+','+circle.log+','+circle.radius+')'
-                // };
+                var arryLatLng="";
+                for(i=0;i<polygon.latlng[0].length;i++){
+                    arryLatLng+=polygon.latlng[0][i].lat+' '+polygon.latlng[0][i].lng+', ';
+                }
+                console.log(arryLatLng);
+                arryLatLng=arryLatLng.substring(0, arryLatLng.length - 2);
+
+                $scope.geofence.area=geoType+'(('+arryLatLng+'))';
+
             }
 
             if($scope.geofence.area==''){
@@ -194,7 +226,7 @@
             zoom: 13
         });
 
-        L.tileLayer('http://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}.png', {
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap2525</a> contributors'
             }).addTo(map);
 
@@ -204,7 +236,12 @@
             position: 'topright',
             draw: {
                                 polyline:false,
-                                polygon:false,
+                                polygon:{
+                                    shapeOptions: {
+                                        color: '#f357a1',
+                                        weight: 1
+                                    }
+                                },
                                 circle: {
                                     showArea: true,
                                     metric: false,
@@ -254,8 +291,11 @@
 
             else if(type=='polygon'){
 
-                polygon=layer.getLatLngs();
+
+
+                polygon.latlng=layer.getLatLngs();
                 geoType='POLYGON';
+
 
             }
 

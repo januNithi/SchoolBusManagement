@@ -232,6 +232,33 @@ CREATE TABLE `user_student` (
 --
 -- Indizes für die Tabelle `bus`
 --
+
+
+CREATE TABLE `user_geofence` (
+  `userid` int(11) NOT NULL,
+  `geofenceid` int(11) NOT NULL,
+  KEY `fk_user_geofence_userid` (`userid`),
+  KEY `fk_user_geofence_geofenceid` (`geofenceid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+--
+-- Dumping data for table `user_geofence`
+--
+
+INSERT INTO `user_geofence` (`userid`, `geofenceid`) VALUES
+(2, 14),
+(2, 14);
+
+
+
+CREATE TABLE `group_geofence` (
+  `groupid` int(11) NOT NULL,
+  `geofenceid` int(11) NOT NULL,
+  KEY `fk_group_geofence_groupid` (`groupid`),
+  KEY `fk_group_geofence_geofenceid` (`geofenceid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+
+
 ALTER TABLE `bus`
   ADD PRIMARY KEY (`id`);
 
