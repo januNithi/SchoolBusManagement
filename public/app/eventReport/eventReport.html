@@ -93,7 +93,7 @@
                 </thead>
                 <tbody>
 
-                <tr ng-repeat="Data in filteredEvents" style="cursor: pointer;" ng-click="updateMap($index)">
+                <tr ng-repeat="Data in filteredEvents" style="cursor: pointer;" ng-click="updateMap($index)" ng-class="{'selectedRow':$index == selectedRow}">
                     <th scope="row">{{$index+1}}</th>
                     <td>{{ Data.event.servertime | date :  "yyyy-MM-dd hh:mm:ss a"}}</td>
                     <td>{{Data.device.name}}</td>

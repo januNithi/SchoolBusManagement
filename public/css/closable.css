@@ -29,3 +29,9 @@
     color: #000;
 }
 
+
+.selectedRow {
+    background-color:gray;
+    color:white;
+    font-weight:bold;
+}

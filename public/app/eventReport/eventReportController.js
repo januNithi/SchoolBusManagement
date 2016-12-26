@@ -35,6 +35,9 @@
             zoom: 16
         };
 
+        $scope.selectedRow = null;  // initialize our variable to null
+
+
         $scope.showSelectable = function (value) {
 
             if (value == 'eventReport') {
@@ -117,15 +120,16 @@
         $scope.markers=[];
         $scope.updateMap=function(id){
 
+            $scope.selectedRow = id;
+
             $scope.markers=[];
             if(id>=0){
          
                 for(i=0;i<$scope.filteredEvents.length;i++){
                      var icon1='images/green.png';
-                    var icon2='images/dark.png';
+                    var icon2='images/red.png';
                     var selIcon=icon2;
                     if(id==i){
-                        alert(i);
                         selIcon=icon1;
                     }
 
@@ -141,20 +145,31 @@
                                 iconSize: [30, 30]
                             },
                             // focus: true,
-                            message: $scope.filteredEvents[i].event.servertime,
-                            draggable: true
+                            message: $filter('date')($scope.filteredEvents[i].event.servertime,  "yyyy-MM-dd hh:mm:ss a"),
+                            draggable: false
 
                     });
 
-                    $scope.center={
-                        lat: Number($scope.filteredEvents[i].position.lat),
-                        lng: Number($scope.filteredEvents[i].position.lon),
-                        zoom: 16
-                    }
+
 
 
                 }
+
+                $scope.center={
+                    lat: Number($scope.filteredEvents[id].position.lat),
+                    lng: Number($scope.filteredEvents[id].position.lon),
+                    zoom: 13
+                }
             }
+
+            $scope.$watch('selectedRow', function(newVal, oldVal) {
+                if (oldVal !== null) {
+                    $scope.markers[oldVal].zIndexOffset = 0;
+                }
+                if (newVal !== null) {
+                    $scope.markers[newVal].zIndexOffset = 100;
+                }
+            });
 
         };
 
