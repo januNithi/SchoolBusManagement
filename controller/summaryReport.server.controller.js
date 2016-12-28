@@ -2,10 +2,10 @@
  * Created by CSS on 10-12-2016.
  */
 
-var eventReport = require('../config/db/eventReportManager');
+var eventReport = require('../config/db/summaryReportManager');
 var excel = require('node-excel-export');
 
-exports.getEvents=function (req,res) {
+exports.getSummary=function (req,res) {
 
 
     var id=req.query.id;
@@ -14,7 +14,7 @@ exports.getEvents=function (req,res) {
 
 
 
-    eventReport.getEvents(id,from,to,function (error,result) {
+    eventReport.getSummary(id,from,to,function (error,result) {
 
 
 
@@ -27,20 +27,22 @@ exports.getEvents=function (req,res) {
                 var data={
                     device:{},
                     position:{},
-                    event:{}
+                    bus:{}
                 };
+
+                var  attribute=JSON.parse(result[i].attrib);
+
                 data.device.name=result[i].unitName;
-                data.device.id=result[i].deviceid;
+                data.device.id=result[i].id;
 
-                data.position.id=result[i].posId;
-                data.position.lat=result[i].latitude;
-                data.position.lon=result[i].longitude;
+                data.position.id=result[i].deviceid;
+                data.position.avgSpeed=result[i].avgspeed;
+                data.position.maxSpeed=result[i].maxspeed;
+                data.position.dist=attribute.distance;
 
-                data.event.id=result[i].id;
-                data.event.type=result[i].type;
-                data.event.servertime=result[i].servertime;
-                data.event.geofenceid=result[i].geofenceid;
-                data.event.attributes=result[i].attributes;
+                data.bus.busCode=result[i].busCode;
+                data.bus.gpsUnit=result[i].gpsUnit;
+                data.bus.busId=result[i].busId;
 
                 response.push(data);
 
@@ -52,15 +54,15 @@ exports.getEvents=function (req,res) {
 
     });
 
+
+
 };
 
-
-exports.exportEvents= function(req, res){
+exports.exportSummary= function(req, res){
 
     var id=req.query.id;
     var from=req.query.from;
     var to=req.query.to;
-
 
     var styles = {
         headerDark: {
@@ -102,32 +104,32 @@ exports.exportEvents= function(req, res){
 
 //Here you specify the export structure
     var specification = {
-        time: { // <- the key should match the actual data key
-            displayName: 'Date', // <- Here you specify the column header
+        deviceName: { // <- the key should match the actual data key
+            displayName: 'Device Name', // <- Here you specify the column header
             headerStyle: styles.headerDark, // <- Header style
             // cellStyle: function(value, row) { // <- style renderer function
             //     // if the status is 1 then color in green else color in red
             //     // Notice how we use another cell value to style the current one
             //     return (row.status_id == 1) ? styles.cellGreen : {fill: {fgColor: {rgb: 'FFFF0000'}}}; // <- Inline cell style is possible
             // },
-            width: 200// <- width in pixels
+            width: 400// <- width in pixels
         },
-        deviceName: {
-            displayName: 'Device Name',
+        distance: {
+            displayName: 'Distance',
             headerStyle: styles.headerDark,
             // cellFormat: function(value, row) { // <- Renderer function, you can access also any row.property
             //     return (value == 1) ? 'Active' : 'Inactive';
             // },
-            width: 400 // <- width in chars (when the number is passed as string)
+            width: 200 // <- width in chars (when the number is passed as string)
         },
-        type: {
-            displayName: 'Type',
+        averageSpeed: {
+            displayName: 'Average Speed',
             headerStyle: styles.headerDark,
             // cellStyle: styles.cellPink, // <- Cell style
             width: 200 // <- width in pixels
         },
-        geofence: {
-            displayName: 'Geofence',
+        maxSpeed: {
+            displayName: 'Max Speed',
             headerStyle: styles.headerDark,
             // cellStyle: styles.cellPink, // <- Cell style
             width: 200 // <- width in pixels
@@ -136,20 +138,21 @@ exports.exportEvents= function(req, res){
 
     var dataset = [];
 
-    eventReport.getEvents(id,from,to,function (error,result) {
+    eventReport.getSummary(id,from,to,function (error,result) {
         if(error)
             res.send(500,{error:error});
         else {
-            for(i=0;i<result.length;i++){
-                dataset.push({"time":result[i].servertime,"deviceName":result[i].unitName,"type":result[i].type,"geofence":result[i].geofenceid});
+                for(i=0;i<result.length;i++){
+                    var  attribute=JSON.parse(result[i].attrib);
+                    dataset.push({"deviceName":result[i].unitName,"distance":attribute.distance,"averageSpeed":result[i].avgspeed,"maxSpeed":result[i].maxspeed});
 
+                }
             }
-        }
 
         var report = excel.buildExport(
-            [
+            [ // <- Notice that this is an array. Pass multiple sheets to create multi sheet report
                 {
-                    name: 'Event Report', // <- Specify sheet name (optional)
+                    name: 'Summary Report', // <- Specify sheet name (optional)
                     // heading: heading, // <- Raw heading array (optional)
                     specification: specification, // <- Report specification
                     data: dataset // <-- Report data
@@ -157,7 +160,7 @@ exports.exportEvents= function(req, res){
             ]
         );
 
-        res.attachment('Event Report.xlsx');
+        res.attachment('Summary Report.xlsx');
         res.send(report);
 
 

@@ -35,6 +35,18 @@
             zoom: 16
         };
 
+
+        $scope.exportEvents=function(){
+
+            var data={
+                device:$scope.selBus.gpsUnit,
+                from:$filter('date')($scope.selFrom,'yyyy-MM-dd HH:mm:ss'),
+                to:$filter('date')($scope.selTo,'yyyy-MM-dd HH:mm:ss')
+            };
+
+            $window.location.href="/report/exportEvents?id="+data.device +"&from="+data.from+"&to="+data.to;
+        };
+
         $scope.selectedRow = null;  // initialize our variable to null
 
 

@@ -8,134 +8,136 @@
 
     <div id="page-wrapper">
 
-        <div style="font-family: 'Britannic Bold';color: black;"><center><h2>Geofence Registry</h2></center></div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i>Geofence Registry</h3>
+                    </div>
+                    <div class="panel-body">
 
-        <div>
+                        <div class="col-sm-12 form-group" style="border: 1px solid white; padding: 15px;height: auto">
+                            <div class="col-sm-7" id="map" style="height: 250px;"></div>
+                            <div class="col-sm-5">
+                                <form class="form-horizontal" role="form" name="myForm">
 
-            <div class="col-sm-12 form-group" style="border: 1px solid white; padding: 15px">
-                <div class="col-sm-7" id="map" style="height: 250px;"></div>
-                <div class="col-sm-5">
-                    <form class="form-horizontal" role="form" name="myForm">
+                                    <div class="form-group">
+                                        <label for="txtName" class="col-sm-4 control-label">Name:</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control"  id="txtName" ng-model="geofence.name" placeholder="Geofence Name" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtDesc" class="col-sm-4 control-label">Description</label>
+                                        <div class="col-sm-6">
+                                            <textarea class="form-control" id="txtDesc" ng-model="geofence.description" placeholder="Description"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
 
-                        <div class="form-group">
-                            <label for="txtName" class="col-sm-4 control-label">Name:</label>
-                            <div class="col-sm-6">
-                                <input class="form-control"  id="txtName" ng-model="geofence.name" placeholder="Geofence Name" required>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-danger" ng-hide="isEdit" ng-click="postGeofencData()" ng-disabled="myForm.$invalid" data-dismiss="modal">Save</button>
+                                    <button type="submit" class="btn btn-danger" ng-show="isEdit"  ng-click="update()" ng-disabled="myForm.$invalid" data-dismiss="modal">Update</button>
+                                    <button type="button" class="btn btn-default" ng-click="newGeofence()" data-dismiss="modal">New</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="txtDesc" class="col-sm-4 control-label">Description</label>
-                            <div class="col-sm-6">
-                                <textarea class="form-control" id="txtDesc" ng-model="geofence.description" placeholder="Description"></textarea>
-                            </div>
-                        </div>
-                    </form>
 
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger" ng-hide="isEdit" ng-click="postGeofencData()" ng-disabled="myForm.$invalid" data-dismiss="modal">Save</button>
-                        <button type="submit" class="btn btn-danger" ng-show="isEdit"  ng-click="update()" ng-disabled="myForm.$invalid" data-dismiss="modal">Update</button>
-                        <button type="button" class="btn btn-default" ng-click="newGeofence()" data-dismiss="modal">New</button>
+
+
+
+
+                        <div class="main"  style="margin-top: 1%">
+
+
+                            <!-- Content Here -->
+
+                            <!--<button type="button" class="btn btn-info btn-lg" style="float: right;"  data-toggle="modal" data-target="#myModal">New Bus</button>-->
+
+
+                            <table class="table table-bordered">
+                                <thead style="background-color: #337ab7">
+                                <tr>
+                                    <th>Sl No</th>
+                                    <th>Geofence Name</th>
+                                    <th>Description</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="Data in geofences">
+                                    <th scope="row">{{$index+1}}</th>
+                                    <td>{{Data.name}}</td>
+                                    <td>{{Data.description}}</td>
+
+                                    <td>
+                                        <span class="fa fa-pencil-square fa-1x" data-dismiss="modal" ng-click="edit($index)" data-toggle="modal" style="color: red" aria-hidden="true"></span>
+                                        <span class="fa fa-window-close"  style="color: red" ng-click="delete(Data)" aria-hidden="true"></span>
+                                        <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
+                                        <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+
+                            <!--&lt;!&ndash; Modal &ndash;&gt;-->
+                            <!--<div class="modal fade" id="myModal" role="dialog">-->
+                                <!--<div class="modal-dialog">-->
+
+                                    <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+                                    <!--<div class="modal-content">-->
+                                        <!--<div class="modal-header">-->
+                                            <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                                            <!--<h4 class="modal-title" ng-if="!data.id">New Registration</h4>-->
+                                            <!--<h4 class="modal-title" ng-if="data.id">Edit Registration</h4>-->
+                                        <!--</div>-->
+                                        <!--<div class="modal-body">-->
+
+                                            <!--<form class="form-horizontal" role="form" name="myForm">-->
+
+                                                <!--<div class="form-group">-->
+                                                    <!--&lt;!&ndash;<leaflet  center="center" id="map" height="250px"></leaflet>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;<leaflet id="map" lf-center="map.center" lf-draw="map.drawOptions" height="480px" width="100%"></leaflet>&ndash;&gt;-->
+
+                                                    <!--<div id="map1" style="height: 250px;width:550px;"></div>-->
+                                                <!--</div>-->
+
+                                                <!--<div class="form-group">-->
+                                                    <!--<label for="txtName" class="col-sm-4 control-label">Name:</label>-->
+                                                    <!--<div class="col-sm-6">-->
+                                                        <!--<input class="form-control"  id="txtName" ng-model="geofence.name" placeholder="Geofence Name" required>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <!--<div class="form-group">-->
+                                                    <!--<label for="txtDesc" class="col-sm-4 control-label">Description</label>-->
+                                                    <!--<div class="col-sm-6">-->
+                                                        <!--<textarea class="form-control" id="txtDesc" ng-model="geofence.description" placeholder="Description"></textarea>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</form>-->
+
+                                        <!--</div>-->
+                                        <!--<div class="modal-footer">-->
+                                            <!--<button type="submit" class="btn btn-danger" ng-hide="isEdit"  ng-click="postGeofencData()" ng-disabled="myForm.$invalid" data-dismiss="modal">Save</button>-->
+                                            <!--<button type="submit" ng-show="isEdit" class="btn btn-danger"   ng-disabled="myForm.$invalid" data-dismiss="modal">Update</button>-->
+                                            <!--<button type="button" class="btn btn-default" ng-click="close()" data-dismiss="modal">Close</button>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--&lt;!&ndash; Modal &ndash;&gt;-->
+
+                        </div>
+
                     </div>
                 </div>
             </div>
-
-
         </div>
 
 
-        <div class="main"  style="margin-top: 1%">
-
-
-            <!-- Content Here -->
-
-            <!--<button type="button" class="btn btn-info btn-lg" style="float: right;"  data-toggle="modal" data-target="#myModal">New Bus</button>-->
-
-            <div></div>
-            <br>
-
-            <table class="table table-bordered">
-                <thead style="background-color: #337ab7">
-                <tr>
-                    <th>Sl No</th>
-                    <th>Geofence Name</th>
-                    <th>Description</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="Data in geofences">
-                    <th scope="row">{{$index+1}}</th>
-                    <td>{{Data.name}}</td>
-                    <td>{{Data.description}}</td>
-
-                    <td>
-                        <span class="fa fa-pencil-square fa-1x" data-dismiss="modal" ng-click="edit($index)" data-toggle="modal" style="color: red" aria-hidden="true"></span>
-                        <span class="fa fa-window-close"  style="color: red" ng-click="delete(Data)" aria-hidden="true"></span>
-                        <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
-                        <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
-
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <!--<leaflet id="map" lf-center="map.center" lf-draw="map.drawOptions" height="480px" width="100%">-->
-
-
-
-
-
-            <!-- Modal -->
-            <div class="modal fade" id="myModal" role="dialog">
-                <div class="modal-dialog">
-
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title" ng-if="!data.id">New Registration</h4>
-                            <h4 class="modal-title" ng-if="data.id">Edit Registration</h4>
-                        </div>
-                        <div class="modal-body">
-
-                            <form class="form-horizontal" role="form" name="myForm">
-
-                                <div class="form-group">
-                                    <!--<leaflet  center="center" id="map" height="250px"></leaflet>-->
-                                    <!--<leaflet id="map" lf-center="map.center" lf-draw="map.drawOptions" height="480px" width="100%"></leaflet>-->
-
-                                    <div id="map1" style="height: 250px;width:550px;"></div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="txtName" class="col-sm-4 control-label">Name:</label>
-                                    <div class="col-sm-6">
-                                        <input class="form-control"  id="txtName" ng-model="geofence.name" placeholder="Geofence Name" required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="txtDesc" class="col-sm-4 control-label">Description</label>
-                                    <div class="col-sm-6">
-                                        <textarea class="form-control" id="txtDesc" ng-model="geofence.description" placeholder="Description"></textarea>
-                                    </div>
-                                </div>
-                            </form>
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-danger" ng-hide="isEdit"  ng-click="postGeofencData()" ng-disabled="myForm.$invalid" data-dismiss="modal">Save</button>
-                            <button type="submit" ng-show="isEdit" class="btn btn-danger"   ng-disabled="myForm.$invalid" data-dismiss="modal">Update</button>
-                            <button type="button" class="btn btn-default" ng-click="close()" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <!-- Modal -->
-
-        </div>
-
-    </div>
 
     <div class="pager">
         <!-- Pagination -->

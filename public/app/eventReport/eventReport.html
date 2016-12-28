@@ -2,14 +2,97 @@
 
 
 
-<div id="wrapper" class="container">
+<div id="wrapper">
 
     <div ng-include="'../../template/menu.html'"></div>
 
     <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i>Event Report</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <leaflet markers="markers" center="center" style="height: 300px;border: 1px solid rosybrown"></leaflet>
+                        </div>
 
-        <div style="font-family: 'Britannic Bold';color: black;"><center><h2>Event Report</h2></center></div>
 
+                        <div class="col-sm-12 form-group">
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-3">
+                                    <label>Bus</label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <label>From</label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <label>To</label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-3">
+                                    <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList">
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <input class="form-control col-sm-12" ng-model="selFrom"  type="datetime-local">
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <input class="form-control" ng-model="selTo" type="datetime-local">
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="col-sm-offset-1">
+                                        <button class="btn btn-primary" ng-click="showReport()">Show</button>
+                                        <button class="btn btn-primary" ng-click="exportEvents()">Export</button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+
+
+                    <div class="col-sm-12" style="min-height: 250px;">
+                        <table class="table table-bordered">
+                            <thead style="background-color: #337ab7">
+                            <tr>
+                                <th>Sl No</th>
+                                <th>Time</th>
+                                <th>Device Name</th>
+                                <th>Type</th>
+                                <th>Geofence</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr ng-repeat="Data in filteredEvents" style="cursor: pointer;" ng-click="updateMap($index)" ng-class="{'selectedRow':$index == selectedRow}">
+                                <th scope="row">{{$index+1}}</th>
+                                <td>{{ Data.event.servertime | date :  "yyyy-MM-dd hh:mm:ss a"}}</td>
+                                <td>{{Data.device.name}}</td>
+                                <td>{{Data.event.type}}</td>
+                                <td>{{Data.event.geofenceid}}</td>
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
         <!--<div class="row" style="height: 85px;" >-->
 
             <!--<div style=" background-color: white;height: auto;min-height: 50px;padding: 0px;border-radius: 5px" class="col-sm-5"  ng-click="viewElement()" >-->
@@ -33,83 +116,6 @@
             <!--</div>-->
 
         <!--</div>-->
-        <div class="form-group">
-            <leaflet markers="markers" center="center" style="height: 300px"></leaflet>
-        </div>
-
-
-        <div class="col-sm-12 form-group">
-
-        <div class="col-sm-12">
-            <div class="col-sm-3">
-                <label>Bus</label>
-            </div>
-
-            <div class="col-sm-3">
-                <label>From</label>
-            </div>
-
-            <div class="col-sm-3">
-                <label>To</label>
-            </div>
-        </div>
-
-        <div class="col-sm-12">
-            <div class="col-sm-3">
-                <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList">
-                </select>
-            </div>
-
-            <div class="col-sm-3">
-                <input class="form-control col-sm-12" ng-model="selFrom"  type="datetime-local">
-            </div>
-
-            <div class="col-sm-3">
-                <input class="form-control" ng-model="selTo" type="datetime-local">
-            </div>
-
-            <div class="col-sm-3">
-                <div class="col-sm-offset-6"><button class="btn btn-primary" ng-click="showReport()">Show</button></div>
-            </div>
-        </div>
-
-
-        </div>
-
-
-        </div>
-
-        <div class="col-sm-12"></div>
-        <div class="row">
-            <table class="table table-bordered">
-                <thead style="background-color: #337ab7">
-                <tr>
-                    <th>Sl No</th>
-                    <th>Time</th>
-                    <th>Device Name</th>
-                    <th>Type</th>
-                    <th>Geofence</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                <tr ng-repeat="Data in filteredEvents" style="cursor: pointer;" ng-click="updateMap($index)" ng-class="{'selectedRow':$index == selectedRow}">
-                    <th scope="row">{{$index+1}}</th>
-                    <td>{{ Data.event.servertime | date :  "yyyy-MM-dd hh:mm:ss a"}}</td>
-                    <td>{{Data.device.name}}</td>
-                    <td>{{Data.event.type}}</td>
-                    <td>{{Data.event.geofenceid}}</td>
-
-
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-
-
-
-    </div>
 
     <div class="pager">
         <!-- Pagination -->
@@ -123,4 +129,5 @@
         <!-- Pagination -->
     </div>
 
+</div>
 </div>

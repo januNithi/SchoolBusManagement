@@ -57,7 +57,14 @@
                 controller: 'eventReportController',
                 templateUrl: '../app/eventReport/eventReport.html'
             })
-        ;
+            .when('/summaryReport', {
+                controller: 'summaryReportController',
+                templateUrl: '../app/summaryReport/summaryReport.html'
+            })
+            .when('/studentReport', {
+                controller: 'studentReportController',
+                templateUrl: '../app/studentReport/studentReport.html'
+            });
 
         $locationProvider.html5Mode(true);
     }

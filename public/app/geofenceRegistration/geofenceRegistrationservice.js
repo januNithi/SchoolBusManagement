@@ -52,8 +52,6 @@
                 
             },
             updateGofence:function(data){
-
-                alert("sdfsd");
             return $http({
 
 

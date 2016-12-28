@@ -213,6 +213,7 @@
 
             geofenceRegistrationService.updateGofence($scope.geofence).then(function(result){
 
+                alert("Updated Succesfully..");
                 getGeofences();
             },function(err){
                 console.log('error');

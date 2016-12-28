@@ -1,0 +1,131 @@
+<script src="../template/navbar.js"></script>
+
+
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i>Student Report</h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="row form-group">
+
+                            <div class="col-sm-offset-8">
+                                <div class="col-sm-12">
+                                    <input type="text" ng-model="stName"  ng-change="loadReportByStName()" class="form-control" placeholder="search student name">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="col-sm-3">
+                                    <label>Bus</label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <label>Trip</label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <label>Route</label>
+                                </div>
+
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-3">
+                                    <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList">
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <select ng-model="selTrip"  class="form-control col-sm-12" ng-options="trip.trpName for trip in tripList">
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <select ng-model="selRoute"  class="form-control col-sm-12" ng-options="route.rtName for route in routeList">
+                                    </select>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="col-sm-offset-1">
+                                        <button class="btn btn-primary" ng-click="showReport()">Show</button>
+                                        <button class="btn btn-primary" ng-click="exportReport()">Export</button>
+                                    </div>
+
+                                </div>
+
+
+
+
+                            </div>
+
+
+                        </div>
+
+
+
+
+
+                        <div class="form-group" id="summaryData" style="min-height: 450px">
+                            <table class="table table-bordered" >
+                                <thead style="background-color: #337ab7">
+                                <tr>
+                                    <th>Sl No</th>
+                                    <th>Student</th>
+                                    <th>Contact No</th>
+                                    <th>Bus</th>
+                                    <th>Trip</th>
+                                    <th>Route</th>
+                                    <th>Driver</th>
+                                    <th>Driver Mob</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr ng-repeat="Data in filteredReport" style="cursor: pointer;" ng-class="{'selectedRow':$index == selectedRow}">
+                                    <th scope="row">{{$index+1}}</th>
+                                    <td>{{ Data.student.name}}</td>
+                                    <td>{{Data.student.mob}}</td>
+                                    <td>{{Data.bus.busCode}}</td>
+                                    <td>{{Data.trip.trpName}}</td>
+                                    <td>{{Data.route.rtName}}</td>
+                                    <td>{{Data.driver.drvName}}</td>
+                                    <td>{{Data.driver.drvMob}}</td>
+
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="pager">
+                    <!-- Pagination -->
+                    <pagination class = "pager"
+                                ng-model="curpage"
+                                total-items="totalItems"
+                                items-per-page="itemspage"
+                                max-size="maxSize"
+                                boundary-links="true">
+                    </pagination>
+                    <!-- Pagination -->
+                </div>
+                    </div>
+                </div>
+            </div>
+        <!--<div style="font-family: 'Britannic Bold';color: black;"><center><h2>Summary Report</h2></center></div>-->
+
+
+
+</div>
