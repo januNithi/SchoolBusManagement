@@ -36,10 +36,27 @@
         };
 
 
+        $scope.selectDevice=function() {
+            var flag = false;
+            for (i = 0; i < $scope.selDevice.length; i++) {
+                if ($scope.selBus.id == $scope.selDevice[i].id) {
+                    flag = true;
+                    break;
+                }
+                else
+                    flag=false;
+
+            }
+
+            if (!flag)
+                $scope.selDevice.push($scope.selBus);
+
+
+        };
         $scope.exportEvents=function(){
 
             var data={
-                device:$scope.selBus.gpsUnit,
+                device:$scope.selDevice,
                 from:$filter('date')($scope.selFrom,'yyyy-MM-dd HH:mm:ss'),
                 to:$filter('date')($scope.selTo,'yyyy-MM-dd HH:mm:ss')
             };
@@ -69,13 +86,17 @@
 
         $scope.showReport=function(){
 
+            if($scope.selDevice.length <=0){
+                alert("Please select Bus Details!!");
+                return;
+            }
+
+
             loadEvents($scope.selBus.gpsUnit,$scope.selFrom,$scope.selTo);;
         };
 
         $scope.removeDevice=function (index) {
-            $scope.selDevice.splice(index,0);
-
-            console.log($scope.selDevice);
+            $scope.selDevice.splice(index,1);
         };
 
 
@@ -90,7 +111,7 @@
         loadEvents=function(id,from,to){
 
             var data={
-                device:id,
+                device: JSON.stringify($scope.selDevice),
                 from:$filter('date')(from,'yyyy-MM-dd HH:mm:ss'),
                 to:$filter('date')(to,'yyyy-MM-dd HH:mm:ss')
             };
@@ -103,7 +124,9 @@
                     var begin = (($scope.curpage - 1) * $scope.itemspage),
                         end = begin + $scope.itemspage;
                     $scope.filteredEvents = $scope.events.slice(begin, end);
-                    $scope.updateMap(0);
+
+                    if(result.length>0)
+                        $scope.updateMap(0);
                 });
 
             },function(err){
