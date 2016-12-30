@@ -64,6 +64,10 @@
             .when('/studentReport', {
                 controller: 'studentReportController',
                 templateUrl: '../app/studentReport/studentReport.html'
+            })
+            .when('/jsReport', {
+                controller: 'jsReportController',
+                templateUrl: '../app/jsReport/jsReport.html'
             });
 
         $locationProvider.html5Mode(true);
