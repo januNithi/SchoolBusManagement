@@ -4,6 +4,23 @@
 
 var eventReport = require('../config/db/eventReportManager');
 var excel = require('node-excel-export');
+var request = require('request');
+
+exports.report=function(req,res){
+
+    var data={
+        template:{"shortid":"Hkef0bqGrx","recipe" : "phantom-pdf"}
+    };
+    var options={
+        uri:'http://localhost:5488/api/report',
+        method:'POST',
+        preview:'true',
+        json:data
+    };
+
+    request(options).pipe(res);
+
+};
 
 exports.getEvents=function (req,res) {
 

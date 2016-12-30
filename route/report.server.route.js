@@ -18,5 +18,7 @@ module.exports=function(app) {
     app.get('/report/exportStudentReport', configStudent.exportStudentReport);
     app.get('/report/studentReportByName', configStudent.getReportByName);
 
+    app.get('/report/js', config.report);
+
 
 };

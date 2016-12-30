@@ -16,6 +16,8 @@ module.exports=function(app) {
 
     app.post('/not', config.notify);
 
+    app.get('/dao/getGeofenceByUser/:id', config.getGeofenceByUser);
+
 
 
 };
