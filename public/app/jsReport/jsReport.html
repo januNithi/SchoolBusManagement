@@ -1,0 +1,74 @@
+<script src="../template/navbar.js"></script>
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i>Event Report</h3>
+                    </div>
+                    <div class="panel-body">
+
+
+                        <div class="col-sm-12 form-group">
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-3">
+                                    <label>Bus</label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <label>From</label>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <label>To</label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-12">
+                                <div class="col-sm-3">
+                                    <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList" ng-change="selectDevice()">
+                                    </select>
+
+                                            <div ng-repeat="device in selDevice" style="display: inline;">
+
+                                                <div class="chip" style="margin-top: 5px">
+                                                    {{device.busCode}}
+                                                        <span class="closebtn" ng-click="removeDevice($index)" onclick="this.parentElement.style.display='none'">&times;</span>
+                                                </div>
+                                            </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <input class="form-control col-sm-12" ng-model="selFrom"  type="datetime-local">
+
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <input class="form-control" ng-model="selTo" type="datetime-local">
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="col-sm-offset-1">
+                                        <button class="btn btn-primary" ng-click="showReport()">Show</button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                </div>
+            </div>
+            </div>
+        </div>
+
+
+</div>
+</div>

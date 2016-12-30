@@ -8,17 +8,40 @@ var request = require('request');
 
 exports.report=function(req,res){
 
-    var data={
-        template:{"shortid":"Hkef0bqGrx","recipe" : "phantom-pdf"}
-    };
-    var options={
-        uri:'http://localhost:5488/api/report',
-        method:'POST',
-        preview:'true',
-        json:data
-    };
+    var id=req.query.id;
+    var objId=[];
+    objId=JSON.parse(id);
+    var from=req.query.from;
+    var to=req.query.to;
 
-    request(options).pipe(res);
+    var arrayId=[];
+    for(i=0;i<objId.length;i++){
+        arrayId.push(objId[i].id);
+    }
+
+
+
+    eventReport.getEvents(arrayId,from,to,function (error,result) {
+
+        var data={
+            template:{"shortid":"r1ZRvDXHl","recipe" : "phantom-pdf"},
+            data: {
+                "events": result,
+                "from":from,
+                "to":to
+            }
+        };
+        var options={
+            uri:'http://localhost:5488/api/report',
+            method:'POST',
+            preview:'true',
+            json:data
+        };
+
+        request(options).pipe(res);
+    });
+
+
 
 };
 
