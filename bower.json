@@ -27,7 +27,9 @@
     "leaflet-draw": "leaflet.draw#^0.4.7",
     "ui-leaflet": "^2.0.0",
     "angular-fullscreen": "^1.0.1",
-    "leaflet-routing-machine": "^3.2.4"
+    "leaflet-routing-machine": "^3.2.4",
+    "angular-google-maps-geocoder": "^0.0.2",
+    "ng-maps": "ng-map#*"
   },
   "authors": [
     "CCS DEPT <premvishnnu@gmail.com>"
