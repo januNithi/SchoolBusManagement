@@ -48,6 +48,7 @@
                 $scope.geofence={
                     name:$scope.geofence.name,
                     desc:$scope.geofence.description,
+                    userId:'',
                     area:geoType+' ('+circle.lat+' '+circle.log+', '+circle.radius+')'
                 };
             }
@@ -62,6 +63,7 @@
                 $scope.geofence={
                     name:$scope.geofence.name,
                     desc:$scope.geofence.description,
+                    userId:'',
                     area:geoType+'(('+arryLatLng+'))'
                 };
             }
@@ -191,7 +193,6 @@
             {
 
                 $scope.geofence.area=geoType+' ('+circle.lat+' '+circle.log+', '+circle.radius+')';
-
                 console.log($scope.geofence);
             }
             else if(geoType=='POLYGON'){

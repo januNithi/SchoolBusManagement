@@ -11,19 +11,35 @@ exports.geofenceRegister = function (data,cb) {
     console.log(data);
     var query = "INSERT INTO geofences (name,description,area) values ('"+data.name+"','"+data.desc+"','"+data.area+"')";
 
-    console.log(query);
+
+
     con.query(query, function (err,results) {
         if (err) {
             console.log(err);
             cb(err,null);
         } else {
-            cb(null,results);
+
+            var qry="INSERT INTO user_geofence (userid,geofenceid) values ("+data.userId+","+results.insertId+")";
+            console.log(qry);
+            con.query(qry, function (err,results1) {
+                if (err) {
+                    console.log(err);
+                    cb(err,null);
+                }
+                else {
+
+                    var response={};
+                    response.geofenceId=results.insertId;
+                    cb(null,response);
+                }
+
+            })
         }
     });
 };
 
-exports.getGeofences = function (cb) {
-    var query = "SELECT id,name,description,area from geofences";
+exports.getGeofences = function (id,cb) {
+    var query = "SELECT g.id,g.name,g.description,g.area,ug.userid from geofences g INNER JOIN user_geofence ug on ug.geofenceid=g.id where ug.userid="+id;
 
     con.query(query, function (err,results) {
         if (err) {
@@ -47,6 +63,22 @@ exports.getGeofenceById = function (id,cb) {
         }
     });
 };
+
+exports.getGeofenceByUser = function (id,cb) {
+    console.log(id);
+    var query = "SELECT g.id,g.name,g.description,g.area,ug.userid from geofences g INNER JOIN user_geofence ug on ug.geofenceid=g.id where ug.userid="+id;
+
+    con.query(query, function (err,results) {
+        if (err) {
+            console.log(err);
+            cb(err,null);
+        } else {
+            console.log(results);
+            cb(null,results);
+        }
+    });
+};
+
 
 exports.deleteGeofence = function (id,cb) {
     var query = "DELETE from geofences where id="+id;

@@ -34,8 +34,17 @@
 
                             <div class="col-sm-12">
                                 <div class="col-sm-3">
-                                    <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList">
+                                    <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList" ng-change="selectDevice()">
                                     </select>
+
+                                    <div ng-repeat="device in selDevice" style="display: inline;">
+
+                                        <div class="chip" style="margin-top: 5px">
+                                            {{device.busCode}}
+                                            <span class="closebtn" ng-click="removeDevice($index)" onclick="this.parentElement.style.display='none'">&times;</span>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="col-sm-3">

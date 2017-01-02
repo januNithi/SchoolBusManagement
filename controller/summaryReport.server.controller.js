@@ -8,13 +8,20 @@ var excel = require('node-excel-export');
 exports.getSummary=function (req,res) {
 
 
+
     var id=req.query.id;
+    var objId=[];
+    objId=JSON.parse(id);
     var from=req.query.from;
     var to=req.query.to;
 
+    var arrayId=[];
+    for(i=0;i<objId.length;i++){
+        arrayId.push(objId[i].id);
+    }
 
 
-    eventReport.getSummary(id,from,to,function (error,result) {
+    eventReport.getSummary(arrayId,from,to,function (error,result) {
 
 
 

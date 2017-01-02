@@ -15,7 +15,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            <leaflet markers="markers" center="center" style="height: 300px;border: 1px solid rosybrown"></leaflet>
+                            <leaflet markers="markers" center="center" style="height: 300px;border: 3px solid rosybrown"></leaflet>
                         </div>
 
 
@@ -37,8 +37,16 @@
 
                             <div class="col-sm-12">
                                 <div class="col-sm-3">
-                                    <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList">
+                                    <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList" ng-change="selectDevice()">
                                     </select>
+
+                                            <div ng-repeat="device in selDevice" style="display: inline;">
+
+                                                <div class="chip" style="margin-top: 5px">
+                                                    {{device.busCode}}
+                                                        <span class="closebtn" ng-click="removeDevice($index)" onclick="this.parentElement.style.display='none'">&times;</span>
+                                                </div>
+                                            </div>
                                 </div>
 
                                 <div class="col-sm-3">

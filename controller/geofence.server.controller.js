@@ -6,7 +6,11 @@ var geofence = require('../config/db/geofenceManager');
 
 exports.geofenceRegister=function (req,res) {
 
+    console.log("user id"+req.body.userId);
+    if(req.body.userId=='')
+        req.body.userId=req.session.user.id;
     geofence.geofenceRegister(req.body,function (error,result) {
+
 
         if(error){
             res.send(500,{error:error});
@@ -20,7 +24,8 @@ exports.geofenceRegister=function (req,res) {
 
 exports.getGeofences=function (req,res) {
 
-    geofence.getGeofences(function (error,result) {
+    var id=req.session.user.id;
+    geofence.getGeofences(id,function (error,result) {
         console.log(result);
         if(error){
             console.log(error);
@@ -35,8 +40,24 @@ exports.getGeofences=function (req,res) {
 
 exports.getGeofenceById=function (req,res) {
 
-    var id=req.param.id;
+    var id=req.params.id;
     geofence.getGeofenceById(id,function (error,result) {
+
+        if(error){
+            res.send(500,{error:error});
+        }else{
+            res.send(result);
+        }
+
+    });
+
+};
+
+exports.getGeofenceByUser=function (req,res) {
+
+    var id=req.params.id;
+
+    geofence.getGeofenceByUser(id,function (error,result) {
 
         if(error){
             res.send(500,{error:error});
@@ -127,6 +148,8 @@ exports.getMapGeofenceById=function (req,res) {
     });
 
 };
+
+
 
 
 exports.notify=function (req,res) {

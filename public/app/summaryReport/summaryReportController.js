@@ -33,6 +33,25 @@
 
 
 
+        $scope.selectDevice=function() {
+            var flag = false;
+            for (i = 0; i < $scope.selDevice.length; i++) {
+                if ($scope.selBus.id == $scope.selDevice[i].id) {
+                    flag = true;
+                    break;
+                }
+                else
+                    flag=false;
+
+            }
+
+            if (!flag)
+                $scope.selDevice.push($scope.selBus);
+
+
+        };
+
+
         $scope.showSelectable = function (value) {
 
             if(value == 'summaryReport'){
@@ -41,16 +60,24 @@
 
         };
 
+        $scope.removeDevice=function (index) {
+            $scope.selDevice.splice(index,1);
+        };
+
         $scope.showReport=function(){
 
-            loadSummary($scope.selBus.gpsUnit,$scope.selFrom,$scope.selTo);
+            if($scope.selDevice.length <=0) {
+                alert("Please select Bus Details!!");
+                return;
+            }
+            loadSummary($scope.selDevice,$scope.selFrom,$scope.selTo);
         };
 
 
         $scope.exportSummary=function(){
 
             var data={
-                device:$scope.selBus.gpsUnit,
+                device:$scope.selDevice,
                 from:$filter('date')($scope.selFrom,'yyyy-MM-dd HH:mm:ss'),
                 to:$filter('date')($scope.selTo,'yyyy-MM-dd HH:mm:ss')
             };
@@ -70,9 +97,10 @@
         loadSummary=function(id,from,to){
 
             var data={
-                device:id,
+                device:JSON.stringify(id),
                 from:$filter('date')(from,'yyyy-MM-dd HH:mm:ss'),
                 to:$filter('date')(to,'yyyy-MM-dd HH:mm:ss')
+
             };
             summaryReportService.getSummary(data).then(function(result){
 

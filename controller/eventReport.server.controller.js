@@ -4,17 +4,64 @@
 
 var eventReport = require('../config/db/eventReportManager');
 var excel = require('node-excel-export');
+var request = require('request');
+
+exports.report=function(req,res){
+
+    var id=req.query.id;
+    var objId=[];
+    objId=JSON.parse(id);
+    var from=req.query.from;
+    var to=req.query.to;
+
+    var arrayId=[];
+    for(i=0;i<objId.length;i++){
+        arrayId.push(objId[i].id);
+    }
+
+
+
+    eventReport.getEvents(arrayId,from,to,function (error,result) {
+
+        var data={
+            template:{"shortid":"r1ZRvDXHl","recipe" : "phantom-pdf"},
+            data: {
+                "events": result,
+                "from":from,
+                "to":to
+            }
+        };
+        var options={
+            uri:'http://localhost:5488/api/report',
+            method:'POST',
+            preview:'true',
+            json:data
+        };
+
+        request(options).pipe(res);
+    });
+
+
+
+};
 
 exports.getEvents=function (req,res) {
 
 
     var id=req.query.id;
+    var objId=[];
+    objId=JSON.parse(id);
     var from=req.query.from;
     var to=req.query.to;
 
+    var arrayId=[];
+    for(i=0;i<objId.length;i++){
+        arrayId.push(objId[i].id);
+    }
 
 
-    eventReport.getEvents(id,from,to,function (error,result) {
+
+    eventReport.getEvents(arrayId,from,to,function (error,result) {
 
 
 
@@ -58,8 +105,15 @@ exports.getEvents=function (req,res) {
 exports.exportEvents= function(req, res){
 
     var id=req.query.id;
+    var objId=[];
+    objId=JSON.parse(id);
     var from=req.query.from;
     var to=req.query.to;
+
+    var arrayId=[];
+    for(i=0;i<objId.length;i++){
+        arrayId.push(objId[i].id);
+    }
 
 
     var styles = {
@@ -136,7 +190,7 @@ exports.exportEvents= function(req, res){
 
     var dataset = [];
 
-    eventReport.getEvents(id,from,to,function (error,result) {
+    eventReport.getEvents(arrayId,from,to,function (error,result) {
         if(error)
             res.send(500,{error:error});
         else {

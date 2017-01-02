@@ -10,7 +10,7 @@
 
         <div class="main" style="margin-top: 1%">
             <!-- Content Here -->
-            <span class="fa fa-plus-circle fa-1x pull-right" style="color: red" data-toggle="modal" data-target="#myModal"  aria-hidden="true">ADD</span>
+            <span class="fa fa-plus-circle fa-1x pull-right" style="color: red;cursor:pointer" ng-click="new()" data-toggle="modal" data-target="#myModal"  aria-hidden="true">ADD</span>
             <!--<button type="button" class="btn btn-info btn-lg" style="float: right;"  data-toggle="modal" data-target="#myModal">New Bus</button>-->
             <br>
 
@@ -66,11 +66,11 @@
                                     <label class="col-sm-4 control-label">Driver Photo:</label>
                                     <div class="col-sm-6">
 
-                                        <div ng-click="showFileDialog()">
-                                            <img style="height:50px;width:50px;" src="../../images/upload.png">
+                                        <div ng-click="showFileDialog()" style="cursor: pointer;">
+                                            <img id="image1" style="height:50px;width:50px;" ng-src="{{licence}}">
                                         </div>
 
-                                        <input type="file" id="file" ng-hide="true" class="form-control" ngf-pattern="'image/*'" name="file" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedFile(this)"/>
+                                        <input type="file" id="file" ng-hide="true" class="form-control"  ngf-pattern="'image/*'" name="file" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedFile(this)"/>
                                         <!--<input type="file" class="form-control" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>-->
                                         <!--<input class="form-control" id="inputEmail4" placeholder="Driver photo">-->
                                     </div>
@@ -78,17 +78,17 @@
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">Driver Licence:</label>
                                     <div class="col-sm-6">
-                                        <div ng-click="chooseDriverLicence()">
-                                            <img style="height:50px;width:50px;" src="../../images/upload.png">
+                                        <div ng-click="chooseDriverLicence()" style="cursor: pointer;">
+                                            <img id="image2" style="height:50px;width:50px;" ng-src="{{licence}}">
                                         </div>
-                                        <input type="file" id="file1" ng-hide="true" class="form-control"  name="file1" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedLiscence(this)"/>
+                                        <input type="file" id="file1" ng-hide="true" class="form-control"   name="file1" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedLiscence(this)"/>
                                         <!--<input class="form-control" id="inputEmail3" ng-model="data.driverLiscence" placeholder="Driver Liscence">-->
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputPassword3"  class="col-sm-4 control-label">Mobile No:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="driverData.drvMob" id="inputPassword3" placeholder="Mobile No">
+                                        <input class="form-control" ng-model="driverData.drvMob" id="inputPassword3" placeholder="Mobile No" >
                                     </div>
                                 </div>
                                 <div class="form-group">

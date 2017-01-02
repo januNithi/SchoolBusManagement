@@ -1,18 +1,17 @@
 (function(){
     angular
         .module("myApp")
-        .controller("eventReportController",eventReportController);
+        .controller("jsReportController",jsReportController);
 
-    eventReportController.$inject=[
+    jsReportController.$inject=[
         '$scope',
         '$window',
         'eventReportService',
-        'leafletDrawEvents',
         'busRegistrationService',
         '$filter'
 
     ];
-    function eventReportController($scope,$window,eventReportService,leafletDrawEvents,busRegistrationService,$filter) {
+    function jsReportController($scope,$window,eventReportService,busRegistrationService,$filter) {
 
         $scope.map;
 
@@ -69,7 +68,7 @@
 
         $scope.showSelectable = function (value) {
 
-            if (value == 'eventReport') {
+            if (value == 'jsReport') {
                 return 'selected';
             }
 
@@ -115,23 +114,8 @@
                 from:$filter('date')(from,'yyyy-MM-dd HH:mm:ss'),
                 to:$filter('date')(to,'yyyy-MM-dd HH:mm:ss')
             };
-            eventReportService.getEvents(data).then(function(result){
 
-                $scope.events=result.data;
-
-                $scope.totalItems = result.data.length;
-                $scope.$watch('curpage + itemspage', function() {
-                    var begin = (($scope.curpage - 1) * $scope.itemspage),
-                        end = begin + $scope.itemspage;
-                    $scope.filteredEvents = $scope.events.slice(begin, end);
-
-                    if(result.length>0)
-                        $scope.updateMap(0);
-                });
-
-            },function(err){
-
-            })
+            $window.location.href="/report/js?id="+data.device +"&from="+data.from+"&to="+data.to;
 
         };
 
