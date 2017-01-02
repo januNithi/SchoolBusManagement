@@ -15,7 +15,7 @@
     function driverRegistrationController($scope,$window,driverRegistrationService,loginService){
         $scope.file=null;
         $scope.driveData=[];
-        $scope.driverData=[];
+        $scope.driverData={};
         $scope.licence='../../images/upload.png';
         $scope.curpage = 1;
         $scope.itemspage = 10;
@@ -50,6 +50,9 @@
                 $scope.driverData.drvLicence = element.files;
 
             });
+
+            loadImage(element);
+
         };
         $scope.uploadedLiscence = function(element) {
             $scope.$apply(function($scope) {
@@ -57,8 +60,16 @@
                 $scope.driverData.drvPhoto = element.files;
 
             });
+
+            loadImage(element);
         };
 
+        $scope.new=function(){
+            alert();
+            $scope.driverData={};
+            $scope.licence='../../images/upload.png';
+            $scope.$apply();
+        };
 
         $scope.getDirverData=function () {
 
@@ -79,6 +90,7 @@
         $scope.getDirverData();
 
         $scope.Save=function(data){
+            alert("sdd");
                 $scope.driverDetails = data;
                 // $scope.driverDetails.file = $scope.files;
                 // $scope.driverDetails.driverLiscence = $scope.liscence;
@@ -141,6 +153,30 @@
                 $scope.getDirverData();
 
             });
+        };
+
+        loadImage=function(elem){
+
+            var src =elem;// document.getElementById(elem.id);
+            var target;
+            if(src==document.getElementById("file"))
+                target= document.getElementById("image1");
+            else
+                target= document.getElementById("image2");
+            // showImage(src,target);
+        };
+        
+
+        function showImage(src,target) {
+            var fr=new FileReader();
+            // when image is loaded, set the src of the image where you want to display it
+            fr.onload = function(e) { target.src = this.result; };
+            fr.readAsDataURL(src.files[0]);
+            // src.addEventListener("change",function() {
+            //     // fill fr with image data
+            //     alert('inside');
+            //     fr.readAsDataURL(src.files[0]);
+            // });
         }
     }
 })();

@@ -58,6 +58,11 @@
         };
 
 
+        $scope.new=function(){
+            $scope.busdata={
+                gpsUnit:'0'
+            };
+        };
         $scope.getBusRegDetails=function () {
             busRegistrationService.getBusRegData().then(function(result){
 

@@ -17,13 +17,13 @@
 
         $scope.studentRegData=[];
         $scope.tripData=[];
-        $scope.stdentData=[];
+        $scope.stdentData={};
         $scope.curpage = 1;
         $scope.itemspage = 10;
         $scope.filteredDoc = [];
         $scope.maxSize = 4;
         $scope.totalItems = 0;
-
+        $scope.stdentData.tripId=0;
 
         $scope.showSelectable = function (value) {
 
@@ -79,10 +79,18 @@
         $scope.Edit=function(data){
 
             $scope.stdentData=data;
+            console.log($scope.stdentData);
         };
         $scope.close=function()
         {
             $scope.stdentData='';
+
+        };
+
+        $scope.new=function()
+        {
+            $scope.stdentData={};
+            $scope.stdentData.tripId=0;
 
         };
         

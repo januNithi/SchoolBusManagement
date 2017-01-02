@@ -44,6 +44,9 @@
             });
         };
 
+        $scope.new=function(){
+            $scope.data={};
+        };
 
         $scope.getGpsUnitDetail=function(){
 
