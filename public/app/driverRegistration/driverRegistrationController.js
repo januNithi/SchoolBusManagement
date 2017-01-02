@@ -65,7 +65,7 @@
         };
 
         $scope.new=function(){
-            alert();
+            
             $scope.driverData={};
             $scope.licence='../../images/upload.png';
             $scope.$apply();
@@ -90,7 +90,7 @@
         $scope.getDirverData();
 
         $scope.Save=function(data){
-            alert("sdd");
+
                 $scope.driverDetails = data;
                 // $scope.driverDetails.file = $scope.files;
                 // $scope.driverDetails.driverLiscence = $scope.liscence;
