@@ -156,11 +156,11 @@ function postTripRegDatas(data) {
     var deferred = q.defer();
     if(data.id==undefined)
     {
-        RegInfo = "insert into trips(trpName,trpSession,trpStart,trpEnd,rtId,busId,drvId) values('" + data.trpName + "','" + data.trpSession + "','" + data.trpStart + "','" + data.trpEnd + "','" + data.routeId + "','" + data.busId + "','" + data.driverId + "')";
+        RegInfo = "insert into trips(trpName,trpSession,trpStart,trpEnd,rtId,busId,drvId) values('" + data.trpName + "','" + data.trpSession + "','" + data.trpStart + "','" + data.trpEnd + "','" + data.rtId + "','" + data.busId + "','" + data.drvId + "')";
     }
     else{
 
-        RegInfo = "update trips set trpName='" + data.trpName + "',trpSession='" + data.trpSession + "',trpStart='" + data.trpStart + "',trpEnd='" + data.trpEnd + "',rtId='" + data.routeId + "',busId='" + data.busId + "',drvId='" + data.driverId + "' where id='"+ data.id +"' ";
+        RegInfo = "update trips set trpName='" + data.trpName + "',trpSession='" + data.trpSession + "',trpStart='" + data.trpStart + "',trpEnd='" + data.trpEnd + "',rtId='" + data.rtId + "',busId='" + data.busId + "',drvId='" + data.drvId + "' where id='"+ data.id +"' ";
 
     }
     con.query(RegInfo, function (err,results) {

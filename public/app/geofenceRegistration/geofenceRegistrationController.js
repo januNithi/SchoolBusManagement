@@ -184,6 +184,8 @@
                 drawnItems.removeLayer(layer);
                 map.removeLayer(layer)
             }
+
+            $scope.isEdit=false;
         };
         $scope.update=function(){
 

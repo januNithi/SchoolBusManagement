@@ -10,12 +10,13 @@
         'busRegistrationService',
         'driverRegistrationService',
         'routeRegistrationService',
-        'loginService'
+        'loginService',
+        '$filter'
 
 
     ];
 
-    function tripRegistrationController($scope,$window,tripRegistrationService,busRegistrationService,driverRegistrationService,routeRegistrationService,loginService) {
+    function tripRegistrationController($scope,$window,tripRegistrationService,busRegistrationService,driverRegistrationService,routeRegistrationService,loginService,$filter) {
 
         $scope.tripData = [];
         $scope.session = ['MORNING', 'AFTER-NOON', 'EVENING'];
@@ -27,7 +28,13 @@
         $scope.filteredDoc = [];
         $scope.maxSize = 4;
         $scope.totalItems = 0;
-        
+
+        $scope.trip={
+            drvId:0,
+            rtId:0,
+            busId:0
+
+        };
 
         $scope.showSelectable = function (value) {
 
@@ -58,6 +65,7 @@
 
                 $scope.tripData = result.data;
                 $scope.totalItems = $scope.tripData.length;
+
                 $scope.$watch('curpage + itemspage', function() {
                     var begin = (($scope.curpage - 1) * $scope.itemspage),
                         end = begin + $scope.itemspage;
@@ -101,21 +109,30 @@
         $scope.getRouteData();
 
         $scope.close = function () {
-            $scope.trip = '';
+            $scope.trip={
+                drvId:0,
+                rtId:0,
+                busId:0
+
+            };
 
         };
 
         $scope.Edit = function (data) {
 
             $scope.trip = data;
+            $scope.trip.trpStart=new Date("2016-12-31 "+ data.trpStart);
+            $scope.trip.trpEnd=new Date("2016-12-31 "+ data.trpEnd);
 
         };
 
         $scope.add = function (data) {
 
             $scope.data=data;
+            $scope.data.trpStart=$filter('date')(data.trpStart,'HH:mm:ss');
+            $scope.data.trpEnd=$filter('date')(data.trpEnd,'HH:mm:ss');
 
-            tripRegistrationService.postTripRegDetails(data).then(function (result) {
+            tripRegistrationService.postTripRegDetails($scope.data).then(function (result) {
 
                 alert('Succesfully registered !!!');
                 $scope.getTripRegDetails();

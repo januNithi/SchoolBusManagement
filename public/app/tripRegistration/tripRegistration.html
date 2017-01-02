@@ -13,7 +13,7 @@
 
         <div class="main" style="margin-top: 1%">
             <!-- Content Here -->
-            <span class="fa fa-plus-circle fa-1x pull-right" style="color: red" data-toggle="modal" data-target="#myModal"  aria-hidden="true">ADD</span>
+            <span class="fa fa-plus-circle fa-1x pull-right" style="color: red;cursor: pointer" ng-click="close()" data-toggle="modal" data-target="#myModal"  aria-hidden="true">ADD</span>
             <!--<button type="button" class="btn btn-info btn-lg" style="float: right;"  data-toggle="modal" data-target="#myModal">New Bus</button>-->
             <br>
 
@@ -36,8 +36,8 @@
                     <th scope="row">{{data.id}}</th>
                     <td>{{data.trpName}}</td>
                     <td>{{data.trpSession}}</td>
-                    <td>{{data.trpStart}}</td>
-                    <td>{{data.trpEnd}}</td>
+                    <td>{{data.trpStart | date : "HH:mm:ss"}}</td>
+                    <td>{{data.trpEnd | date : "HH:mm:ss"}}</td>
                     <td>{{data.rtName}}</td>
                     <td>{{data.busCode}}</td>
                     <td>{{data.drvName}}</td>
@@ -84,7 +84,7 @@
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Start:</label>
                                     <div class="col-sm-6">
-                                        <input type="time" class="form-control" ng-model="trip.trpStart"
+                                        <input type="time" class="form-control" ng-value="trip.trpStart | date:'HH:mm'"  ng-model="trip.trpStart"
                                                placeholder="HH:mm:ss"  />
 
                                         <!--<input class="form-control" ng-model="trip.trpStart"  placeholder="Start" required>-->
@@ -93,7 +93,7 @@
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Destination:</label>
                                     <div class="col-sm-6">
-                                        <input type="time" class="form-control"  ng-model="trip.trpEnd"
+                                        <input type="time" class="form-control" ng-value="trip.trpEnd | date:'HH:mm'"  ng-model="trip.trpEnd"
                                                placeholder="HH:mm:ss" required />
                                         <!--<input class="form-control" ng-model="trip.trpEnd"  placeholder="Dep" required>-->
                                     </div>
@@ -101,9 +101,9 @@
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Route:</label>
                                     <div class="col-sm-6">
-                                        <select class="form-control" ng-model="trip.routeId"  placeholder="Route" required>
-                                            <option value=0>--SELECT--</option>
-                                            <option value="{{data.id}}" ng-repeat="data in routeData">{{data.rtName}}</option>
+                                        <select class="form-control" ng-model="trip.rtId"   placeholder="Route" required>
+                                            <option ng-value="0">--SELECT--</option>
+                                            <option ng-value="data.id" ng-repeat="data in routeData">{{data.rtName}}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -111,17 +111,17 @@
                                     <label for="inputName3" class="col-sm-4 control-label">Bus:</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" ng-model="trip.busId" placeholder="Start" required>
-                                            <option value="0">--SELECT--</option>
-                                            <option value="{{data.busId}}" ng-repeat="data in busRegData">{{data.busCode}}</option>
+                                            <option ng-value="0">--SELECT--</option>
+                                            <option ng-value="data.id" ng-repeat="data in busRegData">{{data.busCode}}</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="inputName3" class="col-sm-4 control-label">Driver:</label>
                                     <div class="col-sm-6">
-                                        <select class="form-control" ng-model="trip.driverId" placeholder="Driver" required>
-                                            <option value="0">--SELECT--</option>
-                                            <option value="{{data.drvId}}" ng-repeat="data in driveData">{{data.drvName}}</option>
+                                        <select class="form-control" ng-model="trip.drvId" placeholder="Driver" required>
+                                            <option ng-value="0">--SELECT--</option>
+                                            <option ng-value="data.id" ng-repeat="data in driveData">{{data.drvName}}</option>
                                         </select>
                                     </div>
                                 </div>
