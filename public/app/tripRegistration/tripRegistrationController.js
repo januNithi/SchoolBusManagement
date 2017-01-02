@@ -27,6 +27,12 @@
         $scope.filteredDoc = [];
         $scope.maxSize = 4;
         $scope.totalItems = 0;
+        $scope.trip={
+
+            rtId:0,
+            busId:0,
+            drvId:0
+        };
         
 
         $scope.showSelectable = function (value) {
@@ -101,13 +107,23 @@
         $scope.getRouteData();
 
         $scope.close = function () {
-            $scope.trip = '';
+            $scope.trip={
+
+            rtId:0,
+            busId:0,
+            drvId:0,
+            trpEnd:0,
+            trpStart:0
+        };
 
         };
 
         $scope.Edit = function (data) {
 
             $scope.trip = data;
+            console.log($scope.trip);
+
+
 
         };
 
@@ -119,7 +135,11 @@
 
                 alert('Succesfully registered !!!');
                 $scope.getTripRegDetails();
-                $scope.trip='';
+                $scope.trip={
+                    routeId:0,
+                    busId:0,
+                    driverId:0
+                };
             });
 
         };
