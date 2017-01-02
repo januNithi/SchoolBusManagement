@@ -104,7 +104,8 @@
 
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-disabled="myForm.$invalid" aria-hidden="true">Confirm</button>
+                            <button type="submit" ng-show="busdata.id==null"  data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-click="update(busdata)" ng-disabled="myForm.$invalid" aria-hidden="true">Save</button>
+                            <button type="submit" ng-show="busdata.id!=null" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-disabled="myForm.$invalid" aria-hidden="true">Confirm</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Cancel</button>
                         </div>
                     </div>
