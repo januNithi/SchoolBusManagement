@@ -141,7 +141,7 @@
 
         };
 
-        $scope.delete = function (data) {
+        $scope.delete =  function (data) {
 
             tripRegistrationService.deleteTripRegDetails(data).then(function (result) {
 
