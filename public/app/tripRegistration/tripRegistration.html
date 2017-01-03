@@ -36,8 +36,8 @@
                     <th scope="row">{{data.id}}</th>
                     <td>{{data.trpName}}</td>
                     <td>{{data.trpSession}}</td>
-                    <td>{{data.trpStart | date : "HH:mm:ss"}}</td>
-                    <td>{{data.trpEnd | date : "HH:mm:ss"}}</td>
+                    <td>{{data.trpStart | date : "HH:mm"}}</td>
+                    <td>{{data.trpEnd | date : "HH:mm"}}</td>
                     <td>{{data.rtName}}</td>
                     <td>{{data.busCode}}</td>
                     <td>{{data.drvName}}</td>
@@ -53,7 +53,7 @@
             </table>
 
             <!-- Modal -->
-            <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal fade" id="myModal"   role="dialog">
                 <div class="modal-dialog">
 
                     <!-- Modal content-->
