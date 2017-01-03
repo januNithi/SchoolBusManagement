@@ -17,11 +17,13 @@
         $scope.driveData=[];
         $scope.driverData={};
         $scope.licence='../../images/upload.png';
+        $scope.drvPhoto='../../images/upload.png';
         $scope.curpage = 1;
         $scope.itemspage = 10;
         $scope.filteredDoc = [];
         $scope.maxSize = 4;
         $scope.totalItems = 0;
+
                 
         $scope.showSelectable = function (value) {
 
@@ -49,9 +51,12 @@
             $scope.$apply(function($scope) {
                 $scope.driverData.drvLicence = element.files;
 
+
             });
 
-            loadImage(element);
+            // $scope.drvPhoto=element.files[0];
+
+            // loadImage(element);
 
         };
         $scope.uploadedLiscence = function(element) {
@@ -59,16 +64,19 @@
 
                 $scope.driverData.drvPhoto = element.files;
 
+
             });
 
-            loadImage(element);
+
         };
 
         $scope.new=function(){
-            
+
+
             $scope.driverData={};
             $scope.licence='../../images/upload.png';
-            $scope.$apply();
+            $scope.drvPhoto='../../images/upload.png';
+
         };
 
         $scope.getDirverData=function () {
@@ -136,6 +144,8 @@
         {
 
             $scope.driverData=data;
+            $scope.licence='../../uploads/driverLicense/'+$scope.driverData.drvLicence;
+            $scope.drvPhoto='../../uploads/driverPhoto/'+$scope.driverData.drvPhoto;
         };
 
         $scope.close=function(){
@@ -165,13 +175,18 @@
                 target= document.getElementById("image2");
             // showImage(src,target);
         };
-        
+
+
+
+
 
         function showImage(src,target) {
             var fr=new FileReader();
             // when image is loaded, set the src of the image where you want to display it
-            fr.onload = function(e) { target.src = this.result; };
+
+            fr.onload = function(e) { target.src = this.result;};
             fr.readAsDataURL(src.files[0]);
+
             // src.addEventListener("change",function() {
             //     // fill fr with image data
             //     alert('inside');

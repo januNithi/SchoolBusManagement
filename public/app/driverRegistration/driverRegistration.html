@@ -66,22 +66,27 @@
                                     <label class="col-sm-4 control-label">Driver Photo:</label>
                                     <div class="col-sm-6">
 
+
                                         <div ng-click="showFileDialog()" style="cursor: pointer;">
-                                            <img id="image1" style="height:50px;width:50px;" ng-src="{{licence}}">
+                                            <img ngf-src="licence" id="image1" style="height:50px;width:50px;">
+
                                         </div>
 
-                                        <input type="file" id="file" ng-hide="true" class="form-control"  ngf-pattern="'image/*'" name="file" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedFile(this)"/>
+
+
+                                        <input type="file" ngf-select ng-model="licence" id="file" ng-hide="true"  class="form-control"  ngf-pattern="'image/*'" name="file" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedFile(this)"/>
                                         <!--<input type="file" class="form-control" name="file" onchange="angular.element(this).scope().uploadFile(this.files)"/>-->
                                         <!--<input class="form-control" id="inputEmail4" placeholder="Driver photo">-->
                                     </div>
+
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">Driver Licence:</label>
                                     <div class="col-sm-6">
                                         <div ng-click="chooseDriverLicence()" style="cursor: pointer;">
-                                            <img id="image2" style="height:50px;width:50px;" ng-src="{{licence}}">
+                                            <img ngf-src="drvPhoto" id="image2" style="height:50px;width:50px;" >
                                         </div>
-                                        <input type="file" id="file1" ng-hide="true" class="form-control"   name="file1" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedLiscence(this)"/>
+                                        <input type="file" ngf-select ng-model="drvPhoto" id="file1" ng-hide="true" class="form-control"   name="file1" ngf-pattern="'image/*'" accept="image/*" ngf-max-size="20MB"  onchange="angular.element(this).scope().uploadedLiscence(this)"/>
                                         <!--<input class="form-control" id="inputEmail3" ng-model="data.driverLiscence" placeholder="Driver Liscence">-->
                                     </div>
                                 </div>

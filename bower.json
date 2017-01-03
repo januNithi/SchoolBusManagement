@@ -29,7 +29,9 @@
     "angular-fullscreen": "^1.0.1",
     "leaflet-routing-machine": "^3.2.4",
     "angular-google-maps-geocoder": "^0.0.2",
-    "ng-maps": "ng-map#*"
+    "ng-maps": "ng-map#*",
+    "file-saver": "FileSaver#^1.3.3",
+    "ng-file-upload": "^12.2.13"
   },
   "authors": [
     "CCS DEPT <premvishnnu@gmail.com>"
