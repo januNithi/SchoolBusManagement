@@ -10,13 +10,12 @@
         'busRegistrationService',
         'driverRegistrationService',
         'routeRegistrationService',
-        'loginService',
-        '$filter'
+        'loginService'
 
 
     ];
 
-    function tripRegistrationController($scope,$window,tripRegistrationService,busRegistrationService,driverRegistrationService,routeRegistrationService,loginService,$filter) {
+    function tripRegistrationController($scope,$window,tripRegistrationService,busRegistrationService,driverRegistrationService,routeRegistrationService,loginService) {
 
         $scope.tripData = [];
         $scope.session = ['MORNING', 'AFTER-NOON', 'EVENING'];
@@ -28,13 +27,13 @@
         $scope.filteredDoc = [];
         $scope.maxSize = 4;
         $scope.totalItems = 0;
-
         $scope.trip={
-            drvId:0,
-            rtId:0,
-            busId:0
 
+            rtId:0,
+            busId:0,
+            drvId:0
         };
+
 
         $scope.showSelectable = function (value) {
 
@@ -65,7 +64,6 @@
 
                 $scope.tripData = result.data;
                 $scope.totalItems = $scope.tripData.length;
-
                 $scope.$watch('curpage + itemspage', function() {
                     var begin = (($scope.curpage - 1) * $scope.itemspage),
                         end = begin + $scope.itemspage;
@@ -110,10 +108,12 @@
 
         $scope.close = function () {
             $scope.trip={
-                drvId:0,
-                rtId:0,
-                busId:0
 
+                rtId:0,
+                busId:0,
+                drvId:0,
+                trpEnd:0,
+                trpStart:0
             };
 
         };
@@ -121,22 +121,25 @@
         $scope.Edit = function (data) {
 
             $scope.trip = data;
-            $scope.trip.trpStart=new Date("2016-12-31 "+ data.trpStart);
-            $scope.trip.trpEnd=new Date("2016-12-31 "+ data.trpEnd);
+            console.log($scope.trip);
+
+
 
         };
 
         $scope.add = function (data) {
 
             $scope.data=data;
-            $scope.data.trpStart=$filter('date')(data.trpStart,'HH:mm:ss');
-            $scope.data.trpEnd=$filter('date')(data.trpEnd,'HH:mm:ss');
 
-            tripRegistrationService.postTripRegDetails($scope.data).then(function (result) {
+            tripRegistrationService.postTripRegDetails(data).then(function (result) {
 
                 alert('Succesfully registered !!!');
                 $scope.getTripRegDetails();
-                $scope.trip='';
+                $scope.trip={
+                    routeId:0,
+                    busId:0,
+                    driverId:0
+                };
             });
 
         };

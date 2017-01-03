@@ -1,0 +1,142 @@
+
+<script src="'../../js/navbar.js'"></script>
+
+
+
+<style>
+    .angular-google-map {
+        display: block;
+    }
+</style>
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <!--<div>-->
+            <!--<div class="panel panel-primary">-->
+            <!--<div class="panel-heading">-->
+            <!--<h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Today's Bus Report </h3>-->
+            <!--</div>-->
+            <!--<div class="panel-body">-->
+            <!--<div google-chart chart="myChartObject"></div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="col-xs-4">-->
+
+            <!--<div class="panel panel-primary">-->
+
+            <!--<div class="panel-heading">-->
+
+            <!--<h3 class="panel-title"><i class="fa fa-rss"></i> Recent Views </h3>-->
+
+            <!--</div>-->
+
+            <!--<div class="panel-body">-->
+
+            <!--<ul><a href="#"> Charts </a></ul>-->
+
+            <!--<ul><a href="#"> Notifications </a></ul>-->
+
+            <!--<ul><a href="#"> Bus Status </a></ul>-->
+
+            <!--<ul><a href="#"> Student Details </a></ul>-->
+
+            <!--<ul><a href="#"> Settings Changes </a></ul>-->
+
+            <!--<ul><a href="#"> Password Changes </a></ul>-->
+
+            <!--<ul><a href="#"> View More </a></ul>-->
+
+            <!--</div>-->
+
+            <!--</div>-->
+
+            <!--</div>-->
+
+            <!--</div>-->
+
+            <div ng-show="notify" class="alert alert-info">
+                <!--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
+                <strong>Notification!</strong>
+                <label>Event : </label> <label>{{notifyObj.event.deviceOnline}}</label>
+                <label>Device : </label> <label>{{notifyObj.device.name}}</label>
+                <label ng-if="notifyObj.device.status != 'unknown'">Status : </label> <label ng-if="notifyObj.device.status != 'unknown'">{{notifyObj.device.status}}</label>
+                <label>Unique ID : </label> <label>{{notifyObj.device.uniqueId}}</label>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Track Buses </h3>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="form form-horizontal">
+
+                                <div class="form-group">
+
+                                    <div class="col-xs-6">
+
+                                        <select ng-model="currentBus" class="form-control">
+
+                                            <option value="0">----SELECT BUS----</option>
+
+                                            <option value="{{bus.id}}" ng-repeat="bus in busData">
+
+                                                {{bus.regNo + ' - ' + bus.busCode}}
+
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-xs-5">
+
+                                        <!--<datepicker date-format="yyyy-MM-dd">-->
+                                        <!--<input ng-model="selectedDate" class="form-control" type="text"/>-->
+                                        <!--</datepicker>-->
+
+                                        <p class="input-group">
+                                            <input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                        </span>
+                                        </p>
+
+                                    </div>
+
+                                    <div class="col-xs-1">
+
+                                        <button class="btn btn-success" ng-click="searchForBusPosition()"><i class="fa fa-search" aria-hidden="true"></i></button>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group" style="height: 650px">
+
+
+                                    <leaflet paths="paths" center="center" markers="markers" height="700px"></leaflet>
+
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>

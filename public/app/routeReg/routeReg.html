@@ -1,0 +1,255 @@
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/home">Admin Panel</a>
+    </div>
+
+</nav>
+
+<div class="container-fluid">
+
+    <div class="row">
+
+        <div class="col-md-4">
+
+            <div class="panel panel-primary" ng-if="!(stops.length > 0) && !selectedRow ">
+
+                <div class="panel-heading">
+
+                    <h1 class="panel-title">Create Route</h1>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <div class='container-fluid form-group'>
+
+                        <div
+                                angular-google-maps-geocoder
+                                output="from"
+                                placeholder="RouteFrom"
+                                min-length="10"
+                                wait-ms="500"
+                                onchange="makeFitFrom()"
+                        ></div>
+                        <!--<pre>{{ from | json }}</pre>-->
+
+                    </div>
+
+                    <!--<div class="form-group">-->
+
+                        <!--<div class="col-md-6">-->
+
+                            <!--<input type="text" placeholder="latitude" class="form-control" value="{{from.geometry.location.lat()}}">-->
+
+                        <!--</div>-->
+
+                        <!--<div class="col-md-6">-->
+
+                            <!--<input type="text" placeholder="longitude" class="form-control" value="{{from.geometry.location.lng()}}">-->
+
+                        <!--</div>-->
+
+                    <!--</div>-->
+
+                    <!--<br><br>-->
+
+                    <div class='container-fluid form-group'>
+
+                        <div
+                                angular-google-maps-geocoder
+                                output="to"
+                                placeholder="Route To"
+                                min-length="10"
+                                wait-ms="500"
+                                onchange="makeFitTo()"
+                        ></div>
+                        <!--<pre>{{ to | json }}</pre>-->
+
+                    </div>
+
+                    <!--<div class="form-group">-->
+
+                        <!--<div class="col-md-6">-->
+
+                            <!--<input type="text" placeholder="latitude" class="form-control" value="{{from.geometry.location.lat()}}">-->
+
+                        <!--</div>-->
+
+                        <!--<div class="col-md-6">-->
+
+                            <!--<input type="text" placeholder="longitude" class="form-control" value="{{from.geometry.location.lng()}}">-->
+
+                        <!--</div>-->
+
+                    <!--</div>-->
+
+                    <button class="btn btn-success pull-right form-group"
+                            ng-click="updateRoutes(from.address_components[0].short_name
+                            + '-'+ to.address_components[0].short_name )">Create</button>
+
+                </div>
+
+            </div>
+
+            <div class="panel panel-primary" ng-show="!(stops.length > 0)  && !selectedRow">
+
+                <div class="panel-heading">
+
+                    <h1 class="panel-title">Routes</h1>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table table-bordered">
+                        <thead style="background-color: #337ab7">
+                        <tr>
+                            <!--<th>#</th>-->
+                            <th>ID</th>
+                            <th>Route Name</th>
+                            <th>Option</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="route in routes" style="cursor: pointer;" ng-click="routeSelected(route,$index)" ng-class="{'selectedRow':$index == selectedRow}">
+                            <!--<th><input type="checkbox" ng-model="selectedRte" ng-click="routeSelected(route,selectedRte)"></th>-->
+                            <th>{{route.id}}</th>
+                            <td>{{route.rtName}}</td>
+
+                            <td>
+                                <span ng-if="route.id" class="fa fa-pencil-square fa-1x" style="color: red" ng-click="editRoute(route)" aria-hidden="true"></span>
+                                <span ng-if="route.id" class="fa fa-window-close"  style="color: red" ng-click="deleteRoute(route)" aria-hidden="true"></span>
+                                <span ng-if="!route.id" class="fa fa-floppy-o" style="color: Green" ng-click="updateRoutes(route)" aria-hidden="true"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+            </div>
+
+            <div class="panel panel-primary" ng-show="stops.length > 0 || selectedRow">
+
+                <div class="panel-heading">
+
+                    <h1 class="panel-title">Stops</h1>
+
+                </div>
+
+                <div class="panel-body">
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Stop Name</th>
+                            <th>Options</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="stop in stops">
+                            <td>{{stop.id}}</td>
+                            <td>{{stop.stpName}}</td>
+                            <td>
+                                <span ng-if="stop.id" class="fa fa-pencil-square fa-1x" style="color: red"  ng-click="editStop(stop)" aria-hidden="true"></span>
+                                <span ng-if="stop.id" class="fa fa-window-close"  style="color: red" ng-click="deleteStop(stop)" aria-hidden="true"></span>
+                                <span ng-if="!stop.id" class="fa fa-floppy-o" style="color: Green" ng-click="updateStops()" aria-hidden="true"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pull-right">
+                        <button type="submit" style="float: left" class="btn btn-danger" ng-click="showRoutes()" aria-hidden="true">Go Back</button>
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+
+        </div>
+
+        <div class="col-md-8">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-body">
+
+                    <leaflet event-broadcast="events" tiles="tiles" paths="path" center="center" markers="markers" height="700px"></leaflet>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Stop Creation Modal -->
+
+<div ng-show="false">
+    <button type="submit" id="markerCreator" data-target="#myModal" data-toggle="modal" data-dismiss="modal" class="btn btn-success" aria-hidden="true">Stop Creator</button><br><br>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Stop Registration</h4>
+            </div>
+
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" name="myForm">
+                    <div class="form-group">
+                        <label for="stopName" class="col-sm-4 control-label">Stop Name</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="stopName" ng-model="markerData.stpName"  placeholder="Stop Name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lat" class="col-sm-4 control-label" >Latitude</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" ng-model="markerData.lat" id="lat" placeholder="Latitude" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="lat" class="col-sm-4 control-label" >Longitude</label>
+                        <div class="col-sm-6">
+                            <input type="number" class="form-control" ng-model="markerData.lng" id="lng" placeholder="Longitude" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="time" class="col-sm-4 control-label" >Stop Time</label>
+                        <div class="col-sm-6">
+                            <input type="time" class="form-control" ng-value="markerData.stpTime | date:'HH:mm'" ng-model="markerData.stpTime" id="time" placeholder="Time" required>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" data-dismiss="modal" ng-disabled="myForm.$invalid" ng-click="updateStop()">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Stop Creation Modal -->

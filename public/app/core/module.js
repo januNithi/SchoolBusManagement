@@ -6,5 +6,6 @@ angular.module('myApp',[
     
     'ui.bootstrap',
     'ui-leaflet',
-    'FBAngular'
+    'FBAngular',
+    'angular-google-maps-geocoder'
 ]);

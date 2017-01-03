@@ -6,9 +6,9 @@
 (function(){
     angular
         .module("myApp")
-        .controller("homeController",homeController);
+        .controller("dashboardController",dashboardController);
 
-    homeController.$inject=[
+    dashboardController.$inject=[
         '$scope',
         '$window',
         '$filter',
@@ -20,7 +20,7 @@
 
     ];
 
-    function homeController($scope,$window,$filter,homeService,busRegistrationService,$timeout,leafletData,loginService){
+    function dashboardController($scope,$window,$filter,homeService,busRegistrationService,$timeout,leafletData,loginService){
 
 
         var socket = io.connect();
@@ -36,16 +36,6 @@
         $scope.notify = false;
         $scope.notifyObj = {};
 
-        $scope.map = L.map('map', {
-            center: [11.0168, 76.9558],
-            zoom: 13
-        });
-
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap2525</a> contributors'
-        }).addTo($scope.map);
-
-
         angular.extend($scope, {
             centerProperty: {
                 lat: 11.015,
@@ -58,7 +48,7 @@
 
         $scope.showSelectable = function (value) {
 
-            if(value == 'home'){
+            if(value == 'routeMap'){
                 return 'selected';
             }
 
@@ -130,41 +120,18 @@
                 console.log(error);
             });
         };
-        
+
         $scope.getBusPositions = function (id,date) {
-            $scope.clearMap();
+
             $scope.busPosition = [];
             $scope.paths = [];
             $scope.center = {};
             $scope.markers = [];
 
             homeService.getBusPosition(id,date).then(function (result) {
-                console.log(result);
-                angular.forEach(result.data,function(value,index){
-                        console.log(result.data);
-                    if ((index+1) != result.data.length) {
-                        var R = 6371e3;
-                        var slat = value.lat;
-                        var slng = value.lng;
-                        var bl_lat = result.data[index + 1].lat;
-                        var bl_lng = result.data[index + 1].lng;
-                        var lat1 = slat * Math.PI / 180;
-                        var lat2 = bl_lat * Math.PI / 180;
-                        var lat = (bl_lat - slat) * Math.PI / 180;
-                        var lng = (bl_lng - slng) * Math.PI / 180;
-                        var a = Math.sin(lat / 2) * Math.sin(lat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(lng / 2) * Math.sin(lng / 2);
-                        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                        var dis = (R * c);
-                        if (dis > 40) {
-                            $scope.busPosition.push(value);
-                            console.log($scope.busPosition);
-                        }
-                    }
-                });
-
                 if(result.data.length > 0) {
                     $scope.selectedDate = $filter('date')(result.data[0].date, "yyyy-MM-dd");
-                    $scope.busPosition;
+                    $scope.busPosition = result.data;
                     $scope.updateMap();
                     $scope.markers = {
                         marker: {
@@ -196,48 +163,35 @@
                 }
 
             },function (error) {
-               console.log(error);
+                console.log(error);
             });
-            
+
         };
 
 
 
         $scope.updateMap = function () {
-
-            var path=[];
             var latLng = [];
-            var i = 1;
-
             angular.forEach($scope.busPosition, function (value, index) {
 
                 if ((index + 1) == $scope.busPosition.length) {
-
-                    var point = {
-                        lat: Number(value.lat),
-                        lng: Number(value.lng),
+                    var points = {
+                        lat: value.lat,
+                        lng: value.lng,
                         title: value.devicetime,
                         riseOnHover: true,
                         opacity: 5,
                         riseOffset: 250
+                    }
+                    latLng.push(points);
+                    $scope.paths = {
+                        p1: {
+                            color: 'red',
+                            weight: 4,
+                            latlngs: $scope.busPosition
+                        }
+
                     };
-                    path.push(point);
-
-                    // L.Routing.control({
-                    //     waypoints: [
-                    //         L.latLng(11.635308, 77.22496),
-                    //         L.latLng(11.984461, 77.70641)
-                    //     ]
-                    // }).addTo($scope.map);
-
-                    var firstpolyline = new L.Polyline(path, {
-                        color: 'blue',
-                        weight: 3,
-                        opacity: 0.5,
-                        smoothFactor: 1
-                    });
-                    firstpolyline.addTo($scope.map);
-
                     $scope.center = {
                         lat: value.lat,
                         lng: value.lng,
@@ -260,93 +214,26 @@
                     }
 
                 } else {
-
-                    var pos=Math.abs(new Date(value.devicetime).getTime()-new Date($scope.busPosition[index + 1].devicetime).getTime());
-
-                    if(pos<=20000){
-                        var point = {
-                            lat: value.lat,
-                            lng: value.lng,
-                            title: value.devicetime,
-                            riseOnHover: true,
-                            opacity: 5,
-                            riseOffset: 250
-                        };
-                        path.push(point);
+                    var points = {
+                        lat: value.lat,
+                        lng: value.lng,
+                        icon: {
+                            iconUrl: 'images/Circle_Blue.png',
+                        },
+                        title: value.devicetime,
+                        riseOnHover: true,
+                        opacity: 5,
+                        riseOffset: 250
                     }
-                    else {
-                        var point = {
-                            lat: value.lat,
-                            lng: value.lng,
-                            title: value.devicetime,
-                            riseOnHover: true,
-                            opacity: 5,
-                            riseOffset: 250
-                        };
-                        path.push(value);
-                        var points = {
-                            color: 'blue',
-                            weight: 3,
-                            latlngs: path
-                        };
-                        var firstpolyline = new L.Polyline(path, {
-                            color: 'blue',
-                            weight: 3,
-                            opacity: 0.5,
-                            smoothFactor: 1
-                        });
-                        firstpolyline.addTo($scope.map);
-
-                        //$scope.paths['p'+i]=points;
-                        path=[];
-                        i++;
-                        
-                        // L.Routing.control({
-                        //     waypoints: [
-                        //         L.latLng(value.lat, value.lng),
-                        //         L.latLng($scope.busPosition[index+1].lat,$scope.busPosition[index+1].lng)
-                        //     ]
-                        // }).addTo($scope.map);
-
-                    }
-                    // var points = {
-                    //     lat: value.lat,
-                    //     lng: value.lng,
-                    //     icon: {
-                    //         iconUrl: 'images/Circle_Blue.png',
-                    //     },
-                    //     title: value.devicetime,
-                    //     riseOnHover: true,
-                    //     opacity: 5,
-                    //     riseOffset: 250
-                    // }
-                    // latLng.push(points);
+                    latLng.push(points);
                 }
-
-                // console.log($scope.path);
-                // $scope.paths.push($scope.path);
 
             });
-            console.log($scope.paths);
 
-        };
-
-        $scope.clearMap=function() {
-            for(i in $scope.map._layers) {
-                if($scope.map._layers[i]._path != undefined) {
-                    try {
-                        $scope.map.removeLayer($scope.map._layers[i]);
-                    }
-                    catch(e) {
-                        console.log("problem with " + e + $scope.map._layers[i]);
-                    }
-                }
-            }
-        };
-        $scope.clearMap();
+        }
 
         $scope.showDate = function () {
-          console.log($scope.selectedDate);
+            console.log($scope.selectedDate);
         };
 
         socket.on('notification',function (data) {
@@ -367,14 +254,14 @@
             }
             $scope.busPosition.push(points);
             console.log(data.lat);
-            console.log(data.lng);
+            console.log(data.log);
             $scope.markers.marker.lat = Number(data.lat);
             $scope.markers.marker.lng = Number(data.lng);
             $scope.center.lat = Number(data.lat);
             $scope.center.lng = Number(data.lng);
 
             leafletData.getMap(function (map) {
-               map.invalidateSize();
+                map.invalidateSize();
             });
         });
 

@@ -134,20 +134,25 @@ function updateGpsUnitRegDetail(data) {
 
 };
 
-function getTripRegDatas() {
+function getTripRegDatas(tripId,cb) {
 
-    var deferred = q.defer();
-    var RegInfo = "SELECT a.id,a.trpName,a.trpSession,a.trpStart,a.trpEnd,a.rtId,a.busId,a.drvId,r.rtName,b.busCode,d.drvName from trips as a LEFT JOIN routes as r ON a.rtId=r.id LEFT JOIN bus as b ON a.busId=b.id LEFT JOIN drivers as d on a.drvId=d.id";
+    var RegInfo = "SELECT a.id,a.trpName,a.trpSession,a.trpStart,a.trpEnd,a.rtId,a.busId,a.drvId,";
+    RegInfo += " r.rtName,b.busCode,d.drvName from trips as a LEFT JOIN routes as r ON a.rtId=r.id";
+    RegInfo += " LEFT JOIN bus as b ON a.busId=b.id LEFT JOIN drivers as d on a.drvId=d.id";
+
+    if(tripId){
+        RegInfo += " where a.id = "+tripId+"";
+    }
+
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);
-            deferred.reject(err);
+            cb(err,results);
         } else {
 
-            deferred.resolve(results);
+            cb(err,results);
         }
     });
-    return deferred.promise;
 
 };
 
@@ -331,7 +336,6 @@ function deleteStudentRegData(data){
         if (err) {
             deferred.reject(err);
         } else {
-
             deferred.resolve(results);
         }
     });
@@ -340,7 +344,7 @@ function deleteStudentRegData(data){
 
 };
 
-function getRoutes(cb) {
+function getRoutes(routeId,cb) {
 
     var routes = [];
     var i = 1;
@@ -348,33 +352,42 @@ function getRoutes(cb) {
     // var query = "Select routes.id as rtId,routes.rtName as routeName,stops.id as stpId,stops.stpName,";
     // query += " stops.stpPosition,stops.stpTime from routes left join stops on routes.id = stops.rtId";
 
-    var query = "Select id,rtName from routes";
+    var query = "Select id,rtName,fromRoutePoints,toRoutePoints from routes";
+    if(routeId){
+        query += " where id = "+routeId;
+    }
     con.query(query,function (err,result) {
         if(err){
             cb(err,result);
         }
         var totalLength = result.length;
-        result.forEach(function (value,index) {
+        if(totalLength > 0) {
+            result.forEach(function (value, index) {
 
-            query = "Select id,stpName,stpPosition,stpTime from stops where rtId = "+value.id+" order by time(stpTime) ASC";
+                query = "Select id,stpName,stpPosition,stpTime from stops where rtId = " + value.id + " order by time(stpTime) ASC";
 
-            con.query(query,function (err,result) {
-                if(err){
-                    cb(err,result);
-                }
-                var data = {
-                    id : value.id,
-                    rtName : value.rtName,
-                    stops : result
-                }
-                routes.push(data);
-                if((i) == totalLength){
-                    cb(err,routes);
-                }
-                i++;
+                con.query(query, function (err, result) {
+                    if (err) {
+                        cb(err, result);
+                    }
+                    var data = {
+                        id: value.id,
+                        rtName: value.rtName,
+                        fromRoutePoints : value.fromRoutePoints,
+                        toRoutePoints : value.toRoutePoints,
+                        stops: result
+                    }
+                    routes.push(data);
+                    if ((i) == totalLength) {
+                        cb(err, routes);
+                    }
+                    i++;
+                });
+
             });
-
-        });
+        }else{
+            cb(err,"No data Matches ID");
+        }
     });
 
 };
@@ -383,9 +396,12 @@ function updateRoutes(data,cb) {
     var query = "";
     var i = 1;
     if(data.id){
-        query = "Update routes set rtName = '"+data.rtName+"' where id = "+data.id;
+        query = "Update routes set rtName = '"+data.rtName+"', fromRoutePoints = '";
+        query += JSON.stringify(data.fromRoutePoints)+"', toRoutePoints = '";
+        query += JSON.stringify(data.toRoutePoints)+"' where id = "+data.id;
     }else{
-        query = "Insert into routes(rtName) values('"+data.rtName+"')";
+        query = "Insert into routes(rtName,fromRoutePoints,toRoutePoints) values('"+data.rtName;
+        query += "','"+JSON.stringify(data.fromRoutePoints)+"','"+JSON.stringify(data.toRoutePoints)+"')";
     }
 
     con.query(query,function (err,result) {
@@ -394,30 +410,40 @@ function updateRoutes(data,cb) {
             cb(err,result);
         }else{
 
-            var rtId = data.id;
+            var rtId = 0;
+            if(!data.id){
+                rtId = result.insertId;
+            }else{
+                rtId = data.id
+            }
             query = "delete from stops where rtId = "+rtId;
             con.query(query,function (err,result) {
               if(err){
                   cb(err,result);
               }else{
 
-                  data.stops.forEach(function (value,index) {
-                      query = "Insert into stops(stpName,stpPosition,stpTime,rtId)";
-                      query += " values('"+value.stpName+"','"+JSON.stringify(value.stpPosition)+"','";
-                      query += ""+value.stpTime+"',"+rtId+")";
-                      con.query(query,function (err,result) {
+                  if(data.stops && data.stops.length) {
 
-                          if(err){
-                              cb(err,result);
-                          }else{
-                              if(i == data.stops.length) {
+                      data.stops.forEach(function (value, index) {
+                          query = "Insert into stops(stpName,stpPosition,stpTime,rtId)";
+                          query += " values('" + value.stpName + "','" + JSON.stringify(value.stpPosition) + "','";
+                          query += "" + value.stpTime + "'," + rtId + ")";
+                          con.query(query, function (err, result) {
+
+                              if (err) {
                                   cb(err, result);
+                              } else {
+                                  if (i == data.stops.length) {
+                                      cb(err, result);
+                                  }
+                                  i++
                               }
-                              i++
-                          }
 
+                          });
                       });
-                  });
+                  }else{
+                      cb(err,result);
+                  }
 
               }
             });

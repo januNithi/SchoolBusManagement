@@ -101,8 +101,16 @@ exports.updateGpsRegDetails=function (req,res) {
 };
 
 exports.getTripRegData=function (req,res) {
-    config.getTripRegDatas().then(function(result){
-        res.send(result);
+    var tripId = null;
+    if(req.query.trip){
+       tripId = req.query.trip;
+    }
+    config.getTripRegDatas(tripId,function(err,result){
+        if(err){
+            res.send(500,{error:err});
+        }else {
+            res.send(result);
+        }
     });
 
 };
@@ -233,8 +241,11 @@ exports.deleteStudentData=function (req,res) {
 };
 
 exports.getRoutes = function (req,res) {
-
-    config.getRoutes(function (err,result) {
+    var routeId = null;
+    if(req.query.route){
+        routeId = req.query.route;
+    }
+    config.getRoutes(routeId,function (err,result) {
         if(err){
             res.send(500,{error:err});
         }else{

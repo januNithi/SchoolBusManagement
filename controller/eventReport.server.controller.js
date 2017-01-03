@@ -16,7 +16,7 @@ exports.report=function(req,res){
 
     var arrayId=[];
     for(i=0;i<objId.length;i++){
-        arrayId.push(objId[i].id);
+        arrayId.push(objId[i].gpsUnit);
     }
 
 
@@ -56,7 +56,7 @@ exports.getEvents=function (req,res) {
 
     var arrayId=[];
     for(i=0;i<objId.length;i++){
-        arrayId.push(objId[i].id);
+        arrayId.push(objId[i].gpsUnit);
     }
 
 
@@ -112,7 +112,7 @@ exports.exportEvents= function(req, res){
 
     var arrayId=[];
     for(i=0;i<objId.length;i++){
-        arrayId.push(objId[i].id);
+        arrayId.push(objId[i].gpsUnit);
     }
 
 

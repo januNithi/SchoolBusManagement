@@ -108,6 +108,8 @@ module.exports = function(app, passport) {
 
     app.get('/verifyOTP',function (req,res) {
 
+        var token = req.query.token;
+
         config.verifyOTPAppUser(req.query.otp, req.query.userid,function (err, result) {
 
             if (err) {
@@ -117,7 +119,14 @@ module.exports = function(app, passport) {
             if(result && result.length == 0){
                 res.send("OTP Doesn't Exist or Expired");
             }else {
-                res.send('Success');
+                var studentData = result[0];
+                config.updateToken(studentData.id,token,function (err,result) {
+                    if(err){
+                        res.send(500,{error:err});
+                    }else{
+                        res.send(studentData);
+                    }
+                });
             }
 
         });

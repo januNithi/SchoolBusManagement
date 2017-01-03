@@ -12,7 +12,7 @@
             getTripRegData:function () {
                 return $http({
 
-                    method: 'post',
+                    method: 'get',
                     url: '/get/tripRegDetails'
                 });
 

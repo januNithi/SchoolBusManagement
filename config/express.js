@@ -60,6 +60,7 @@ module.exports=function(){
     require('../route/mapPostion.server.route.js')(app);
     require('../route/geofence.server.route.js')(app);
     require('../route/report.server.route')(app);
+    require('../route/clientApp.server.route')(app);
     require('../route/login.server.route')(app,passport);
     
 

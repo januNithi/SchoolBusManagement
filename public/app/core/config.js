@@ -17,6 +17,10 @@
                 controller: 'busRegistrationController',
                 templateUrl: '../app/busRegistration/busRegistration.html'
             })
+            .when('/mappedRoute',{
+                controller: 'dashboardController',
+                templateUrl: '../app/dashboard/dashboard.html'
+            })
             .when('/driverRegistration', {
                 controller: 'driverRegistrationController',
                 templateUrl: '../app/driverRegistration/driverRegistration.html'
@@ -34,8 +38,10 @@
                 templateUrl: '../app/tripRegistration/tripRegistration.html'
             })
             .when('/route', {
-                controller: 'routeRegistrationController',
-                templateUrl: '../app/routeRegistration/routeRegistration.html'
+                // controller: 'routeRegistrationController',
+                // templateUrl: '../app/routeRegistration/routeRegistration.html'
+                controller : 'routeRegController',
+                templateUrl : '../app/routeReg/routeReg.html'
             })
             .when('/reports', {
                 controller: 'reportsController',
@@ -48,6 +54,10 @@
             .when('/settings', {
                 controller: 'settingsController',
                 templateUrl: '../app/settings/settings.html'
+            })
+            .when('/notification', {
+                controller: 'notificationController',
+                templateUrl: '../app/notification/notification.html'
             })
             .when('/geofenceRegistration', {
                 controller: 'geofenceRegistrationController',

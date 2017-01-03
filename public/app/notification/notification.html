@@ -1,0 +1,135 @@
+
+<script src="'../../js/navbar.js'"></script>
+
+<style>
+    button.accordion {
+        background-color: #2A9FD6;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
+
+    button.accordion.active, button.accordion:hover {
+        background-color: #28befc;
+    }
+
+    button.accordion:after {
+        content: '\002B';
+        color: #777;
+        font-weight: bold;
+        float: right;
+        margin-left: 5px;
+    }
+
+    button.accordion.active:after {
+        content: "\2212";
+    }
+
+    div.panel {
+        padding: 0 18px;
+        background-color: #646464;
+        max-height: 0;
+        overflow: hidden;
+        transition: 0.6s ease-in-out;
+        opacity: 0;
+    }
+
+    div.panel.show {
+        opacity: 1;
+        max-height: 500px;
+    }
+</style>
+
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].onclick = function(){
+            this.classList.toggle("active");
+            this.nextElementSibling.classList.toggle("show");
+        }
+    }
+</script>
+
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+
+        <button class="accordion">Bus Start Notification</button>
+        <div class="panel">
+            <div class="panel-body">
+
+                <div ng-repeat="event in onlineEvents">
+
+                    <div class="form-group">
+
+                        <div class="control-label">Device : {{event.device.name}}</div>
+                        <div class="control-label">Event Type : {{event.event.type}}</div>
+                        <div class="control-label">Date Time: {{showDate(event.event.servertime)}}</div>
+                        <!--<div class="control-label">Time : {{show(event.device.name)}}</div>-->
+                        <div class="control-label">Latitude: {{event.position.lat}}</div>
+                        <div class="control-label">Longitude: {{event.position.lon}}</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <button class="accordion">Bus Stop Notification</button>
+        <div class="panel">
+            <div class="panel-body">
+
+                <div ng-repeat="event in offlineEvents">
+
+                    <div class="form-group">
+
+                        <div class="control-label">Device : {{event.device.name}}</div>
+                        <div class="control-label">Event Type : {{event.event.type}}</div>
+                        <div class="control-label">Date Time: {{showDate(event.event.servertime)}}</div>
+                        <!--<div class="control-label">Time : {{show(event.device.name)}}</div>-->
+                        <div class="control-label">Latitude: {{event.position.lat}}</div>
+                        <div class="control-label">Longitude: {{event.position.lon}}</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <button class="accordion">Geofence Notification</button>
+        <div class="panel">
+            <div class="panel-body">
+
+                <div ng-repeat="event in geofenceEvents">
+
+                    <div class="form-group">
+
+                        <div class="control-label">Device : {{event.device.name}}</div>
+                        <div class="control-label">Event Type : {{event.event.type}}</div>
+                        <div class="control-label">Date Time: {{showDate(event.event.servertime)}}</div>
+                        <!--<div class="control-label">Time : {{show(event.device.name)}}</div>-->
+                        <div class="control-label">Latitude: {{event.position.lat}}</div>
+                        <div class="control-label">Longitude: {{event.position.lon}}</div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
