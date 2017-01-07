@@ -14,7 +14,7 @@ var socketDup;
 var obj = {
     lat : 11.01503823,
     log : 76.96040946
-}
+};
 
 var server=app.listen(3000,function(){
 
@@ -144,7 +144,7 @@ function notificationAlgorithm(notificationData) {
                                 UniqueId: notificationData.device.UniqueId,
                                 gps : notificationData.device.name
                             };
-                            io.sockets.emit('Bus Start', req.body);
+                            io.sockets.emit('Bus Start', notificationData);
                         }
 
                     }
@@ -184,7 +184,7 @@ function notificationAlgorithm(notificationData) {
                                 UniqueId: notificationData.device.UniqueId,
                                 gps : notificationData.device.name
                             };
-                            io.sockets.emit('Bus Stop', req.body);
+                            io.sockets.emit('Bus Stop', notificationData);
                         }
 
                     }
@@ -196,7 +196,7 @@ function notificationAlgorithm(notificationData) {
         });
 
     }else{
-        io.sockets.emit('notification', req.body);
+        io.sockets.emit('notification', notificationData);
     }
 
 }
@@ -207,33 +207,35 @@ function stopReachAlgorithm(stopReachData) {
 
     config.sendNotification(stopReachData,function (err,result) {
         console.log(err);
-        if(result.length > 0 || result.stop){
+        if(result.length > 0){
             console.log(result);
-            var stpPosition = JSON.parse(result.stop.stpPosition);
-            // var stpPosition = {
-            //     latitude : 11.023606431835102,
-            //     longitude : 77.00283245612809
-            // }
-            if(geolib.isPointInCircle({latitude:data.lat,longitude:data.log}, stpPosition, 50)){
-                var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                    to: result.token,
-                    collapse_key: 'Stop Reached',
+            result.forEach(function (value,index) {
+                var stpPosition = JSON.parse(value.stop.stpPosition);
+                // var stpPosition = {
+                //     latitude : 11.023606431835102,
+                //     longitude : 77.00283245612809
+                // }
+                if(geolib.isPointInCircle({latitude:data.lat,longitude:data.log}, stpPosition, 50)){
+                    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                        to: value.token,
+                        collapse_key: 'Stop Reached',
 
-                    notification: {
-                        title: 'Reached Stop',
-                        body: 'Reached '+result.stop.stpName+' at '+(new Date(Number(data.divTime))).toLocaleTimeString(),
-                    },
-                    data: result
-                };
+                        notification: {
+                            title: 'Reached Stop',
+                            body: 'Reached '+value.stop.stpName+' at '+(new Date(Number(data.divTime))).toLocaleTimeString(),
+                        },
+                        data : value
+                    };
 
-                fcm.send(message, function(err, response){
-                    if (err) {
-                        console.log("Something has gone wrong!");
-                    } else {
-                        console.log("Successfully sent with response: ", response);
-                    }
-                });
-            }
+                    fcm.send(message, function(err, response){
+                        if (err) {
+                            console.log("Something has gone wrong!");
+                        } else {
+                            console.log("Successfully sent with response: ", response);
+                        }
+                    });
+                }
+            });
         }
 
     });

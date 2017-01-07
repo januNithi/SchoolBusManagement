@@ -18,7 +18,7 @@
 
         <div class="col-md-4">
 
-            <div class="panel panel-primary" ng-if="!(stops.length > 0) && !selectedRow ">
+            <div class="panel panel-primary" ng-show="!(stops.length > 0) && !selectedRow ">
 
                 <div class="panel-heading">
 
@@ -35,8 +35,8 @@
                                 output="from"
                                 placeholder="RouteFrom"
                                 min-length="10"
-                                wait-ms="500"
-                                onchange="makeFitFrom()"
+                                wait-ms="100"
+
                         ></div>
                         <!--<pre>{{ from | json }}</pre>-->
 
@@ -67,8 +67,7 @@
                                 output="to"
                                 placeholder="Route To"
                                 min-length="10"
-                                wait-ms="500"
-                                onchange="makeFitTo()"
+                                wait-ms="100"
                         ></div>
                         <!--<pre>{{ to | json }}</pre>-->
 

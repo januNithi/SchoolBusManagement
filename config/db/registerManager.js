@@ -284,8 +284,14 @@ function deleteDriverRegData(data){
 function getStudentRegData()
 {
     var deferred = q.defer();
-    var RegInfo = "select s.id,s.Name,s.Gender,s.MobileNo,s.trip,t.id AS tripId,t.trpName from student as s left join trips as t on t.id = s.trip";
-    con.query(RegInfo, function (err,results) {
+    // var RegInfo = "select s.id,s.Name,s.Gender,s.MobileNo,s.trip,t.id AS tripId,t.trpName";
+    // RegInfo += " from student as s left join trips as t on t.id = s.trip";
+
+    var query = "select s.id,s.Name,s.Gender,s.MobileNo,s.trip,s.stop as stopId,t.id AS tripId,t.trpName,";
+    query += " (select stpName from stops where id = s.stop) as stopName";
+    query += " from student as s left join trips as t on t.id = s.trip";
+
+    con.query(query, function (err,results) {
         if (err) {
             console.log(err);
             deferred.reject(err);
@@ -304,12 +310,14 @@ function postStudentRegData(data)
     var deferred = q.defer();
     if(data.id==undefined)
     {
-         RegInfo = "INSERT INTO student(Name,Gender,MobileNo,trip) VALUES ('"+data.Name+"','"+data.Gender+"','"+data.MobileNo+"','"+data.tripId+"')";
+         RegInfo = "INSERT INTO student(Name,Gender,MobileNo,trip,stop) VALUES ('"+data.Name;
+         RegInfo += "','"+data.Gender+"','"+data.MobileNo+"','"+data.tripId+"','"+data.stopId+"')";
     }
     else
     {
 
-         RegInfo = "update student set Name='"+data.Name+"',Gender='"+data.Gender+"',MobileNo='"+data.MobileNo+"',trip='"+data.tripId+"' where id='"+data.id+"'";
+         RegInfo = "update student set Name='"+data.Name+"',Gender='"+data.Gender;
+         RegInfo +="',MobileNo='"+data.MobileNo+"',trip='"+data.tripId+"',stop='"+data.stopId+"' where id='"+data.id+"'";
 
     }
 

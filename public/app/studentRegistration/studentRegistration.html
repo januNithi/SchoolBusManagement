@@ -22,6 +22,7 @@
                     <th>Gender</th>
                     <th>Parent MobileNo</th>
                     <th>Trip</th>
+                    <th>Stop</th>
                     <th>Option</th>
                 </tr>
                 </thead>
@@ -32,6 +33,7 @@
                     <td>{{data.Gender}}</td>
                     <td>{{data.MobileNo}}</td>
                     <td>{{data.trpName}}</td>
+                    <td>{{data.stopName}}</td>
                     <td>
                         <span class="fa fa-pencil-square fa-1x" style="color: red" aria-hidden="true" data-toggle="modal" data-target="#myModal" ng-click="Edit(data) "></span>
                         <span class="fa fa-window-close"  style="color: red" aria-hidden="true" ng-click="delete(data)"></span>
@@ -82,9 +84,19 @@
                                 <div class="form-group">
                                     <label for="inputPassword3" class="col-sm-4 control-label">Trip</label>
                                     <div class="col-sm-6">
-                                        <select class="form-control" id="inputPassword4" ng-model="stdentData.tripId" placeholder="Trip">
+                                        <select class="form-control" id="inputPassword4" ng-change="getStops()" ng-model="stdentData.tripId" placeholder="Trip">
                                         <option ng-value="0">---SELECT---</option>
                                         <option ng-value="data.id" ng-repeat="data in tripData">{{data.trpName}}</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputPassword3" class="col-sm-4 control-label">Stop</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="stops" ng-model="stdentData.stopId" placeholder="Stop">
+                                            <option ng-value="0">---SELECT---</option>
+                                            <option ng-value="stop.id" ng-repeat="stop in stops">{{stop.stpName}}</option>
 
                                         </select>
                                     </div>

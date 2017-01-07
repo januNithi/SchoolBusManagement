@@ -113,6 +113,7 @@
             startingDay: 1
         };
 
+
         $scope.getBusDetails = function () {
             busRegistrationService.getBusRegData().then(function (result) {
                 $scope.busData = result.data;
@@ -160,6 +161,13 @@
                     };
 
                     socket.emit('bus track', obj);
+
+                    // leafletData.getMap('map').then(function (map) {
+                    //
+                    //     L.circle([11.015298173932,76.96311294870613], Number(50)).addTo(map);
+                    //
+                    //
+                    // });
                 }
 
             },function (error) {

@@ -7,4 +7,6 @@ module.exports=function(app) {
     //------------- gpsUnit---------------------------//
 
     app.get('/get/updateNotificationStop', config.updateNotificationStop);
+    app.get('/get/updateNotificationStops',config.updateNotificationStopdup);
+    app.get('/dao/appStart',config.getAppStartData);
 };

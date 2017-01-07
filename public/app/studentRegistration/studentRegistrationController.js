@@ -17,13 +17,17 @@
 
         $scope.studentRegData=[];
         $scope.tripData=[];
-        $scope.stdentData={};
+        $scope.stops = [];
         $scope.curpage = 1;
         $scope.itemspage = 10;
         $scope.filteredDoc = [];
         $scope.maxSize = 4;
         $scope.totalItems = 0;
-        $scope.stdentData.tripId=0;
+        $scope.stdentData = {
+            tripId:0,
+            stopId:0
+        };
+
 
         $scope.showSelectable = function (value) {
 
@@ -79,6 +83,11 @@
         $scope.Edit=function(data){
 
             $scope.stdentData=data;
+            $scope.getStops();
+            if(!$scope.stdentData.stopId){
+                $scope.stdentData.stopId = 0;
+            }
+
             console.log($scope.stdentData);
         };
         $scope.close=function()
@@ -89,8 +98,10 @@
 
         $scope.new=function()
         {
-            $scope.stdentData={};
-            $scope.stdentData.tripId=0;
+            $scope.stdentData = {
+                tripId:0,
+                stopId:0
+            };
 
         };
         
@@ -103,12 +114,16 @@
                 Gender:data.Gender,
                 MobileNo:data.MobileNo,
                 tripId:data.tripId,
-                id:data.id
+                id:data.id,
+                stopId : data.stopId
             };
             studentRegistrationService.postStudentData(studentRegData).then(function (result) {
 
-               alert('Successfully Registerd !!!!!!!'); 
-               $scope.stdentData='';
+               alert('Successfully Registerd !!!!!!!');
+                $scope.stdentData = {
+                    tripId:0,
+                    stopId:0
+                };
                $scope.getStudentRegData();
             });
             
@@ -118,9 +133,46 @@
             studentRegistrationService.deleteStudentData(data).then(function (result) {
 
                 alert('Successfully Delete !!!!!!!');
-                $scope.stdentData='';
+                $scope.stdentData = {
+                    tripId:0,
+                    stopId:0
+                };
                 $scope.getStudentRegData();
             });
+        }
+
+
+        $scope.getStops = function () {
+
+            var cont = true;
+
+            angular.forEach($scope.tripData,function (value,index) {
+
+                if(cont){
+
+                    if(value.id == $scope.stdentData.tripId){
+
+                        cont = false;
+
+                        studentRegistrationService.getRoutes(value.rtId).then(function (result,err) {
+
+                            if(err){
+                                console.log(err);
+                            }else{
+
+                                $scope.stops = result.data[0].stops;
+                            }
+
+
+
+                        });
+
+                    }
+
+                }
+
+            });
+
         }
 
     }

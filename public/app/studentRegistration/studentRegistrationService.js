@@ -43,6 +43,9 @@
                 })
                 
                 
+            },
+            getRoutes : function (id) {
+                return $http.get('/dao/getRoutes?route='+id);
             }
             
 

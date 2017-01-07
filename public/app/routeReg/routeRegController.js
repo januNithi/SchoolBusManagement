@@ -28,7 +28,7 @@
                 options: {
                     attribution: "",
                     minZoom: 2,
-                    maxZoom: 21
+                    maxZoom: 19
                 }
             }
         });
@@ -43,39 +43,39 @@
                 [33.778175, 76.57617140000002],
                 [8.0883064,77.5384507]]);
         });
-        $scope.makeFitFrom = function() {
-            leafletData.getMap().then(function(map) {
-
-                if($scope.to && $scope.to.geometry && $scope.from && $scope.from.geometry){
-                    map.fitBounds([
-                        [$scope.from.geometry.location.lat(),$scope.from.geometry.location.lng()],
-                        [$scope.to.geometry.location.lat(),$scope.to.geometry.location.lng()]
-                    ]);
-                }else if($scope.from && $scope.from.geometry){
-                    map.fitBounds([
-                        [$scope.from.geometry.bounds.f.b,$scope.from.geometry.bounds.b.b],
-                        [$scope.from.geometry.bounds.f.f,$scope.from.geometry.bounds.b.f]
-                    ]);
-                }
-            });
-        };
-        $scope.makeFitTo = function() {
-            leafletData.getMap().then(function(map) {
-
-                if($scope.from && $scope.from.geometry && $scope.to && $scope.to.geometry){
-                    map.fitBounds([
-                        [$scope.from.geometry.location.lat(),$scope.from.geometry.location.lng()],
-                        [$scope.to.geometry.location.lat(),$scope.to.geometry.location.lng()]
-                    ]);
-                }else if($scope.to && $scope.to.geometry){
-                    map.fitBounds([
-                        [$scope.to.geometry.bounds.f.b,$scope.to.geometry.bounds.b.b],
-                        [$scope.to.geometry.bounds.f.f,$scope.to.geometry.bounds.b.f]
-                    ]);
-                }
-
-            });
-        };
+        // $scope.makeFitFrom = function() {
+        //     leafletData.getMap().then(function(map) {
+        //
+        //         if($scope.to && $scope.to.geometry && $scope.from && $scope.from.geometry){
+        //             map.fitBounds([
+        //                 [$scope.from.geometry.location.lat(),$scope.from.geometry.location.lng()],
+        //                 [$scope.to.geometry.location.lat(),$scope.to.geometry.location.lng()]
+        //             ]);
+        //         }else if($scope.from && $scope.from.geometry){
+        //             map.fitBounds([
+        //                 [$scope.from.geometry.bounds.f.b,$scope.from.geometry.bounds.b.b],
+        //                 [$scope.from.geometry.bounds.f.f,$scope.from.geometry.bounds.b.f]
+        //             ]);
+        //         }
+        //     });
+        // };
+        // $scope.makeFitTo = function() {
+        //     leafletData.getMap().then(function(map) {
+        //
+        //         if($scope.from && $scope.from.geometry && $scope.to && $scope.to.geometry){
+        //             map.fitBounds([
+        //                 [$scope.from.geometry.location.lat(),$scope.from.geometry.location.lng()],
+        //                 [$scope.to.geometry.location.lat(),$scope.to.geometry.location.lng()]
+        //             ]);
+        //         }else if($scope.to && $scope.to.geometry){
+        //             map.fitBounds([
+        //                 [$scope.to.geometry.bounds.f.b,$scope.to.geometry.bounds.b.b],
+        //                 [$scope.to.geometry.bounds.f.f,$scope.to.geometry.bounds.b.f]
+        //             ]);
+        //         }
+        //
+        //     });
+        // };
 
         $scope.makeFitToMap = function (route) {
             leafletData.getMap().then(function(map) {
@@ -89,15 +89,24 @@
             $scope.routeData = route;
         };
 
-        $scope.from = '';
-        $scope.to = '';
+        // $scope.from = '';
+        // $scope.to = '';
 
-        $scope.$watch('from',function () {
-            $scope.makeFitFrom();
-        });
-        $scope.$watch('to',function () {
-            $scope.makeFitTo();
-        });
+        // $scope.$watch('from',function () {
+        //     $scope.makeFitFrom();
+        // });
+        // $scope.$watch('to',function () {
+        //     $scope.makeFitTo();
+        // });
+
+        // $scope.$apply(function () {
+        //     if($scope.from.geometry) {
+        //         $scope.makeFitFrom();
+        //     }
+        //     if($scope.to.geometry) {
+        //         $scope.makeFitTo();
+        //     }
+        // });
 
     //    ***********************Map Bounds End***********************       //
 

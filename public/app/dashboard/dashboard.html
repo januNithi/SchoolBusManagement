@@ -1,8 +1,16 @@
 
 <script src="'../../js/navbar.js'"></script>
 
-
-
+<!--Date Picker-->
+<script>
+    $("input").on("change", function() {
+    this.setAttribute(
+    "data-date",
+    moment(this.value, "YYYY-MM-DD")
+    .format( this.getAttribute("data-date-format") )
+    )
+    }).trigger("change")
+</script>
 <style>
     .angular-google-map {
         display: block;
@@ -103,13 +111,14 @@
                                         <!--<input ng-model="selectedDate" class="form-control" type="text"/>-->
                                         <!--</datepicker>-->
 
-                                        <p class="input-group">
-                                            <input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-                                        <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
-                                        </span>
-                                        </p>
-
+                                        <!--<p class="input-group">-->
+                                            <!--<input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="{{popup2.opened}}" datepicker-options="{{dateOptions}}" ng-required="true" close-text="Close" />-->
+                                        <!--<span class="input-group-btn">-->
+                                            <!--<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>-->
+                                        <!--</span>-->
+                                        <!--</p>-->
+                                        <!--<input class="form-control col-sm-12" ng-model="selectedDate"  type="datetime-local">-->
+                                        <input type="date" data-date="" class="form-control" ng-model="selectedDate" data-date-format="YYYY-MM-DD" value="{{selectedDate}}">
                                     </div>
 
                                     <div class="col-xs-1">
@@ -123,7 +132,7 @@
                                 <div class="form-group" style="height: 650px">
 
 
-                                    <leaflet paths="paths" center="center" markers="markers" height="700px"></leaflet>
+                                    <leaflet id="map" paths="paths" center="center" markers="markers" height="700px"></leaflet>
 
 
                                 </div>
@@ -138,5 +147,7 @@
         </div>
 
 
+
+    </div>
 
     </div>

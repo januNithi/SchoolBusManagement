@@ -31,6 +31,51 @@ function updateNotificationStop(stopId,studId,cb) {
 
 }
 
+function updateNotificationStopdup(stops,studId,cb) {
+
+    var query = "Delete from stop_notification where studId = "+studId;
+
+    con.query(query,function (err,result) {
+
+        if(err){
+            cb(err,result);
+        }else{
+            var stopsString = stops.substr(1,stops.length-2);
+            var stopsArr = stopsString.split(',');
+            if(stopsArr.length != 0) {
+                var query = "Insert into stop_notification(stopId,studId) VALUES ?";
+                var values = [];
+                stopsArr.forEach(function (value,index) {
+                    values.push([Number(value),studId]);
+                    if((index + 1) == stopsArr.length) {
+                        con.query(query,[values], function (err, results) {
+                            cb(err, "Success");
+                        });
+                    }
+                });
+            }else{
+                cb(err,"No Stops Found");
+            }
+        }
+
+    });
+
+}
+
+function getAppStartData(data,cb) {
+    var query = "Select trip,stop from student where MobileNo = '"+data.userid+"'";
+
+    con.query(query,function (err,result) {
+
+        if(err){
+            cb(err,result);
+        }else{
+            cb(err,result);
+        }
+
+    });
+}
+
 function getUser(id,cb) {
 
     var query = "Select sn.id,sn.stopId,t.trpStart,t.trpEnd,s.token from stop_notification as sn";
@@ -64,5 +109,7 @@ module.exports = {
     updateNotificationStop:updateNotificationStop,
     getUser:getUser,
     getStopDetails:getStopDetails,
-    getNotificationTrip:getNotificationTrip
+    getNotificationTrip:getNotificationTrip,
+    getAppStartData:getAppStartData,
+    updateNotificationStopdup:updateNotificationStopdup
 };
