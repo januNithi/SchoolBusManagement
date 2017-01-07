@@ -32,6 +32,7 @@
         $scope.markers = {};
         $scope.selectedDate = '---- SELECT DATE ----';
         $scope.busPosition = [];
+        var data=null;
 
         $scope.notify = false;
         $scope.notifyObj = {};
@@ -130,37 +131,58 @@
                 console.log(error);
             });
         };
-        
+
         $scope.getBusPositions = function (id,date) {
             $scope.clearMap();
             $scope.busPosition = [];
             $scope.paths = [];
             $scope.center = {};
             $scope.markers = [];
+            $scope.point=[];
 
             homeService.getBusPosition(id,date).then(function (result) {
-                console.log(result);
+
                 angular.forEach(result.data,function(value,index){
-                        console.log(result.data);
+                    
                     if ((index+1) != result.data.length) {
-                        var R = 6371e3;
-                        var slat = value.lat;
-                        var slng = value.lng;
-                        var bl_lat = result.data[index + 1].lat;
-                        var bl_lng = result.data[index + 1].lng;
-                        var lat1 = slat * Math.PI / 180;
-                        var lat2 = bl_lat * Math.PI / 180;
-                        var lat = (bl_lat - slat) * Math.PI / 180;
-                        var lng = (bl_lng - slng) * Math.PI / 180;
-                        var a = Math.sin(lat / 2) * Math.sin(lat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(lng / 2) * Math.sin(lng / 2);
-                        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                        var dis = (R * c);
-                        if (dis > 40) {
-                            $scope.busPosition.push(value);
-                            console.log($scope.busPosition);
+                        var num = value.lat;
+                        var slat = num.toFixed(8);
+                        var num = value.lng;
+                        var slng = num.toFixed(8);
+                        var num = result.data[index + 1].lat;
+                        var bl_lat= num.toFixed(8);
+                        var num = result.data[index + 1].lng;
+                        var bl_lng =num.toFixed(8);
+                        var lats = (slat - bl_lat) * 10000;
+                        var lngs = (slng - bl_lng) * 10000;
+                        var latitude = lats.toFixed(4);
+                        var lngitude=lngs.toFixed(4);
+                        var lat=Math.abs(latitude);
+                        var lng=Math.abs(lngitude);
+                        console.log(lat);
+                        console.log(lng);
+                        if ((lat<4.5) && (lng<4.5)) {
+                            if((lat>0)&& (lng>0)) {
+                                $scope.busPosition.push(value);
+                                console.log($scope.busPosition);
+                            }
+
                         }
-                    }
-                });
+
+                        // var lat1 = slat * Math.PI / 180;
+                        // var lat2 = bl_lat * Math.PI / 180;
+                        // var lat = (bl_lat - slat) * Math.PI / 180;
+                        // var lng = (bl_lng - slng) * Math.PI / 180;
+                        // var a = Math.sin(lat / 2) * Math.sin(lat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(lng / 2) * Math.sin(lng / 2);
+                        // var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                       // var dis = (R * c);
+                    //     if (dis > 20
+                    //     ) {
+                    //         $scope.busPosition.push(value);
+                    //         console.log($scope.busPosition);
+                    //
+                     }
+            });
 
                 if(result.data.length > 0) {
                     $scope.selectedDate = $filter('date')(result.data[0].date, "yyyy-MM-dd");
@@ -198,30 +220,135 @@
             },function (error) {
                console.log(error);
             });
-            
+
         };
 
 
+            // $scope.roadMap=function()
+            // {
+            //
+            //
+            //
+            //
+            // };
+            // $scope.roadMap();
 
         $scope.updateMap = function () {
-
-            var path=[];
-            var latLng = [];
-            var i = 1;
+            var data='';
 
             angular.forEach($scope.busPosition, function (value, index) {
+            //
+            //
+            //    // if ((index + 1) == $scope.busPosition.length) {
+            //         data += (value.lat + "," + value.lng + "|");
+            //
+            //     //}
+            // });
 
-                if ((index + 1) == $scope.busPosition.length) {
 
-                    var point = {
-                        lat: Number(value.lat),
-                        lng: Number(value.lng),
-                        title: value.devicetime,
-                        riseOnHover: true,
-                        opacity: 5,
-                        riseOffset: 250
-                    };
-                    path.push(point);
+
+                // data=data.substring(0,data.length-1);
+
+
+
+                    // homeService.getRoadMap(data).then(function(result){
+                    //
+                    //     console.log(result.data.snappedPoints);
+                    //     $scope.points1=[];
+                    //     var latlon={};
+                    //     angular.forEach(result.data.snappedPoints,function(value,index){
+                    //
+                    //         latlon={};
+                    //
+                    //         latlon.lat=value.location.latitude;
+                    //         latlon.lng=value.location.longitude;
+
+
+                                 //$scope.point.push.lat(value.location.latitude,value.location.longitude);
+
+
+                            // }
+
+
+
+                            var firstpolyline = new L.Polyline($scope.busPosition, {
+                                color: '#e51010',
+                                weight: 4,
+                                opacity: 0.5,
+                                smoothFactor: 1
+                            });
+                            firstpolyline.addTo($scope.map);
+
+                            // var firstpolyline = new L.Polyline(latlong, {
+                            //     color: '#e51010',
+                            //     weight: 4,
+                            //     opacity: 0.5,
+                            //     smoothFactor: 1
+                            // });
+                            // firstpolyline.addTo($scope.map);
+
+                            // $scope.points1.push(latlon);
+
+
+                        // });
+
+
+                        //
+                        // var firstpolyline = new L.Polyline($scope.points1, {
+                        //     color: '#e51010',
+                        //     weight: 4,
+                        //     opacity: 0.5,
+                        //     smoothFactor: 1
+                        // });
+                        // firstpolyline.addTo($scope.map);
+                        // var pathLine = L.polyline($scope.point).addTo($scope.map)
+                        // var flightPath = new google.maps.Polyline({
+                        //     path: $scope.point,
+                        //     geodesic: true,
+                        //     strokeColor: '#FF0000',
+                        //     strokeOpacity: 1.0,
+                        //     strokeWeight: 2
+                        // });
+                        //
+                        // flightPath.setMap(map);
+
+
+                        $scope.center = {
+                            lat: value.lat,
+                            lng: value.lng,
+                            zoom: 18
+                        };
+                        $scope.markers = {
+                            currentPosition: {
+                                lat: value.lat,
+                                lng: value.lng,
+                                icon: {
+                                    iconUrl: 'images/bus.png',
+                                },
+                                iconSize: [38, 95],
+                                title: value.devicetime,
+                                riseOnHover: true,
+                                opacity: 5,
+                                riseOffset: 250,
+                                move: true
+                            }
+
+                        };
+
+
+                    });
+
+
+                    //
+                    // var point = {
+                    //     lat: Number(value.lat),
+                    //     lng: Number(value.lng),
+                    //     title: value.devicetime,
+                    //     riseOnHover: true,
+                    //     opacity: 5,
+                    //     riseOffset: 250
+                    // };
+                    // path.push(point);
 
                     // L.Routing.control({
                     //     waypoints: [
@@ -230,77 +357,52 @@
                     //     ]
                     // }).addTo($scope.map);
 
-                    var firstpolyline = new L.Polyline(path, {
-                        color: 'blue',
-                        weight: 3,
-                        opacity: 0.5,
-                        smoothFactor: 1
-                    });
-                    firstpolyline.addTo($scope.map);
 
-                    $scope.center = {
-                        lat: value.lat,
-                        lng: value.lng,
-                        zoom: 18
-                    };
-                    $scope.markers = {
-                        currentPosition: {
-                            lat: value.lat,
-                            lng: value.lng,
-                            icon: {
-                                iconUrl: 'images/bus.png',
-                            },
-                            iconSize: [38, 95],
-                            title: value.devicetime,
-                            riseOnHover: true,
-                            opacity: 5,
-                            riseOffset: 250,
-                            move:true
-                        }
-                    }
 
-                } else {
 
-                    var pos=Math.abs(new Date(value.devicetime).getTime()-new Date($scope.busPosition[index + 1].devicetime).getTime());
-
-                    if(pos<=20000){
-                        var point = {
-                            lat: value.lat,
-                            lng: value.lng,
-                            title: value.devicetime,
-                            riseOnHover: true,
-                            opacity: 5,
-                            riseOffset: 250
-                        };
-                        path.push(point);
-                    }
-                    else {
-                        var point = {
-                            lat: value.lat,
-                            lng: value.lng,
-                            title: value.devicetime,
-                            riseOnHover: true,
-                            opacity: 5,
-                            riseOffset: 250
-                        };
-                        path.push(value);
-                        var points = {
-                            color: 'blue',
-                            weight: 3,
-                            latlngs: path
-                        };
-                        var firstpolyline = new L.Polyline(path, {
-                            color: 'blue',
-                            weight: 3,
-                            opacity: 0.5,
-                            smoothFactor: 1
-                        });
-                        firstpolyline.addTo($scope.map);
+                };
+                // else {
+                    //
+                    // var pos=Math.abs(new Date(value.devicetime).getTime()-new Date($scope.busPosition[index + 1].devicetime).getTime());
+                    //
+                    // if(pos<=70000){
+                    //     var point = {
+                    //         lat: value.lat,
+                    //         lng: value.lng,
+                    //         title: value.devicetime,
+                    //         riseOnHover: true,
+                    //         opacity: 5,
+                    //         riseOffset: 250
+                    //     };
+                    //     path.push(point);
+                    // }
+                   // else {
+                        // var point = {
+                        //     lat: value.lat,
+                        //     lng: value.lng,
+                        //     title: value.devicetime,
+                        //     riseOnHover: true,
+                        //     opacity: 5,
+                        //     riseOffset: 250
+                        // };
+                        // path.push(value);
+                        // var points = {
+                        //     color: '#e51010',
+                        //     weight: 4,
+                        //     latlngs: path
+                        // };
+                        // var firstpolyline = new L.Polyline($scope.busPosition, {
+                        //     color: '#e51010',
+                        //     weight: 4,
+                        //     opacity: 0.5,
+                        //     smoothFactor: 1
+                        // });
+                        // firstpolyline.addTo($scope.map);
 
                         //$scope.paths['p'+i]=points;
-                        path=[];
-                        i++;
-                        
+                        // path=[];
+                        // i++;
+
                         // L.Routing.control({
                         //     waypoints: [
                         //         L.latLng(value.lat, value.lng),
@@ -308,7 +410,7 @@
                         //     ]
                         // }).addTo($scope.map);
 
-                    }
+                    // }
                     // var points = {
                     //     lat: value.lat,
                     //     lng: value.lng,
@@ -321,15 +423,15 @@
                     //     riseOffset: 250
                     // }
                     // latLng.push(points);
-                }
+               // }
 
                 // console.log($scope.path);
                 // $scope.paths.push($scope.path);
 
-            });
-            console.log($scope.paths);
+            //});
 
-        };
+
+        //};
 
         $scope.clearMap=function() {
             for(i in $scope.map._layers) {
