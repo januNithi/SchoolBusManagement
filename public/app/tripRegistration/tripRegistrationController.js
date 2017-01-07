@@ -31,7 +31,9 @@
 
             rtId:0,
             busId:0,
-            drvId:0
+            drvId:0,
+            trpStart:0,
+            trpEnd:0
         };
 
 
@@ -128,19 +130,43 @@
         };
 
         $scope.add = function (data) {
-
             $scope.data=data;
+            if(!data.id)
 
-            tripRegistrationService.postTripRegDetails(data).then(function (result) {
+                $scope.data.trpStart=data.trpStart.toLocaleTimeString();
+                $scope.data.trpEnd=data.trpEnd.toLocaleTimeString();
 
-                alert('Succesfully registered !!!');
-                $scope.getTripRegDetails();
-                $scope.trip={
-                    routeId:0,
-                    busId:0,
-                    driverId:0
-                };
-            });
+                tripRegistrationService.postTripRegDetails($scope.data).then(function (result) {
+
+                    alert('Succesfully registered !!!');
+                    $scope.getTripRegDetails();
+                    $scope.trip={
+
+                        rtId:0,
+                        busId:0,
+                        drvId:0,
+                        trpStart:0,
+                        trpEnd:0
+                    };
+                });
+
+
+
+
+
+        };
+
+        $scope.close=function()
+        {
+            $scope.trip={
+
+                rtId:0,
+                busId:0,
+                drvId:0,
+                trpStart:0,
+                trpEnd:0
+            };
+            $scope.getTripRegDetails();
 
         };
 
