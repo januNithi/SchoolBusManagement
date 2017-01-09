@@ -156,7 +156,7 @@ function notificationAlgorithm(notificationData) {
 
                         // var deviceTime = new Date(notificationData.position.deviceTime);
 
-                        if(new Date().getTime() > minTime || new Date().getTime() < maxTime){
+                        if(new Date().getTime() > minTime && new Date().getTime() < maxTime){
                             var data = {
                                 message : 'Bus Started at '+ new Date().toLocaleTimeString(),
                                 bus_id : value.busId,
@@ -210,7 +210,7 @@ function notificationAlgorithm(notificationData) {
 
                         // var deviceTime = new Date(notificationData.position.deviceTime);
 
-                        if(new Date().getTime() > minTime || new Date().getTime() < maxTime){
+                        if(new Date().getTime() > minTime && new Date().getTime() < maxTime){
                             var data = {
                                 message : 'Bus Stopped at '+new Date().toLocaleTimeString(),
                                 bus_id : value.busId,
