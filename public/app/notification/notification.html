@@ -1,135 +1,83 @@
 
 <script src="'../../js/navbar.js'"></script>
 
-<style>
-    button.accordion {
-        background-color: #2A9FD6;
-        color: #444;
-        cursor: pointer;
-        padding: 18px;
-        width: 100%;
-        border: none;
-        text-align: left;
-        outline: none;
-        font-size: 15px;
-        transition: 0.4s;
-    }
-
-    button.accordion.active, button.accordion:hover {
-        background-color: #28befc;
-    }
-
-    button.accordion:after {
-        content: '\002B';
-        color: #777;
-        font-weight: bold;
-        float: right;
-        margin-left: 5px;
-    }
-
-    button.accordion.active:after {
-        content: "\2212";
-    }
-
-    div.panel {
-        padding: 0 18px;
-        background-color: #646464;
-        max-height: 0;
-        overflow: hidden;
-        transition: 0.6s ease-in-out;
-        opacity: 0;
-    }
-
-    div.panel.show {
-        opacity: 1;
-        max-height: 500px;
-    }
-</style>
-
-<script>
-    var acc = document.getElementsByClassName("accordion");
-    var i;
-
-    for (i = 0; i < acc.length; i++) {
-        acc[i].onclick = function(){
-            this.classList.toggle("active");
-            this.nextElementSibling.classList.toggle("show");
-        }
-    }
-</script>
-
-
 <div id="wrapper">
 
     <div ng-include="'../../template/menu.html'"></div>
 
     <div id="page-wrapper">
 
-        <button class="accordion">Bus Start Notification</button>
-        <div class="panel">
-            <div class="panel-body">
+        <div class="panel panel-primary">
 
-                <div ng-repeat="event in onlineEvents">
+            <div class="panel-heading">
 
-                    <div class="form-group">
-
-                        <div class="control-label">Device : {{event.device.name}}</div>
-                        <div class="control-label">Event Type : {{event.event.type}}</div>
-                        <div class="control-label">Date Time: {{showDate(event.event.servertime)}}</div>
-                        <!--<div class="control-label">Time : {{show(event.device.name)}}</div>-->
-                        <div class="control-label">Latitude: {{event.position.lat}}</div>
-                        <div class="control-label">Longitude: {{event.position.lon}}</div>
-                    </div>
-
-                </div>
+                <h1 class="panel-title">Notification</h1>
 
             </div>
-        </div>
 
-
-        <button class="accordion">Bus Stop Notification</button>
-        <div class="panel">
             <div class="panel-body">
 
-                <div ng-repeat="event in offlineEvents">
+                <table class="table table-bordered">
+                    <thead style="background-color: #337ab7">
+                        <tr>
+                            <!--<th>#</th>-->
+                            <th>Bus ID</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="data in notificationObject" ng-style="{'background-color':data.dataRead == 0 ?  'black': 'darkslategray'}" style="cursor: pointer;" ng-dblclick="expandNotification(data)" ng-click="notificationSelected(data,$index)" ng-class="{'selectedRow':$index == selectedNotify}">
+                            <!--<th><input type="checkbox" ng-model="selectedRte" ng-click="routeSelected(route,selectedRte)"></th>-->
+                            <th>{{data.busCode}}</th>
+                            <td>{{data.message}}</td>
 
-                    <div class="form-group">
+                        </tr>
+                        <!--<tr ng-repeat="data in readNotifyObj" ng-style="{'background-color':data.dataRead == 0 ?  'black': 'darkslategray'}" style="cursor: pointer;" ng-click="notificationunReadSelected(data,$index)" ng-class="{'selectedRow':$index == selectedunReadNotify}">-->
+                            <!--&lt;!&ndash;<th><input type="checkbox" ng-model="selectedRte" ng-click="routeSelected(route,selectedRte)"></th>&ndash;&gt;-->
+                            <!--<th>{{data.busCode}}</th>-->
+                            <!--<td>{{data.message}}</td>-->
 
-                        <div class="control-label">Device : {{event.device.name}}</div>
-                        <div class="control-label">Event Type : {{event.event.type}}</div>
-                        <div class="control-label">Date Time: {{showDate(event.event.servertime)}}</div>
-                        <!--<div class="control-label">Time : {{show(event.device.name)}}</div>-->
-                        <div class="control-label">Latitude: {{event.position.lat}}</div>
-                        <div class="control-label">Longitude: {{event.position.lon}}</div>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-
-        <button class="accordion">Geofence Notification</button>
-        <div class="panel">
-            <div class="panel-body">
-
-                <div ng-repeat="event in geofenceEvents">
-
-                    <div class="form-group">
-
-                        <div class="control-label">Device : {{event.device.name}}</div>
-                        <div class="control-label">Event Type : {{event.event.type}}</div>
-                        <div class="control-label">Date Time: {{showDate(event.event.servertime)}}</div>
-                        <!--<div class="control-label">Time : {{show(event.device.name)}}</div>-->
-                        <div class="control-label">Latitude: {{event.position.lat}}</div>
-                        <div class="control-label">Longitude: {{event.position.lon}}</div>
-                    </div>
-
-                </div>
+                        <!--</tr>-->
+                    </tbody>
+                </table>
 
             </div>
         </div>
 
     </div>
+
+    <!-- NotificationExpand Modal -->
+
+    <div ng-show="false">
+        <button type="submit" id="notificationExpander" data-target="#myModal" data-toggle="modal" data-dismiss="modal" class="btn btn-success" aria-hidden="true">Stop Creator</button><br><br>
+    </div>
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">{{selectedNotifyData.message}}</h4>
+                </div>
+
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form" name="myForm">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">Bus Number:</label>
+                            <label class="control-label">{{selectedNotifyData.busCode}}</label>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">GPS:</label>
+                            <label class="control-label">{{selectedNotifyData.gps}}</label>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- NotificationExpand Modal -->
 
 </div>

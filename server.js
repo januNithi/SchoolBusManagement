@@ -109,9 +109,28 @@ app.get('/busPositionChange',function (req,res) {
 
 app.post('/busNotification',function (req,res) {
     console.log(req.body);
-    // notificationAlgorithm(req.body);
-    io.sockets.emit('notification', req.body);
+    notificationAlgorithm(req.body);
+    // io.sockets.emit('notification', req.body);
 });
+var notificationObj = { event:
+{ serverTime: '2017-01-07T12:23:55.103+05:30',
+    positionId: 0,
+    geofenceId: 0,
+    type: 'deviceOnline',
+    deviceId: 1,
+    id: 24274,
+    attributes: {} },
+    device:
+    { name: 'Janani',
+        status: 'unknown',
+        groupId: 0,
+        uniqueId: '100',
+        lastUpdate: '2017-01-07T11:47:42.102+05:30',
+        positionId: 0,
+        geofenceIds: [],
+        id: 1,
+        attributes: {} } };
+// notificationAlgorithm(notificationObj);
 
 function notificationAlgorithm(notificationData) {
 
@@ -129,22 +148,36 @@ function notificationAlgorithm(notificationData) {
 
                     if(value.gpsUnit == notificationData.device.id){
 
-                        var minDate = new Date(value.trpStart);
-                        var minTime = new Date(minDate.getTime() - (10 * 60 * 1000));
-                        var maxDate = new Date(value.trpStart);
-                        var maxTime = new Date(maxDate.getTime() + (10 * 60 * 1000));
+                        // var minDate = new Date(value.trpStart);
+                        var minDate = new Date('2017-01-09 '+value.trpStart);//IF trpStart is TIME
+                        var minTime = minDate.getTime() - (10 * 60 * 1000);
+                        var maxDate = new Date('2017-01-09 '+value.trpStart);
+                        var maxTime = maxDate.getTime() + (10 * 60 * 1000);
 
-                        var deviceTime = new Date(notificationData.position.deviceTime);
+                        // var deviceTime = new Date(notificationData.position.deviceTime);
 
-                        if(deviceTime > minTime && deviceTime < maxTime){
+                        if(new Date().getTime() > minTime || new Date().getTime() < maxTime){
                             var data = {
-                                message : 'Bus Started at '+deviceTime,
+                                message : 'Bus Started at '+ new Date().toLocaleTimeString(),
                                 bus_id : value.busId,
                                 gpsUnit : notificationData.device.id,
-                                UniqueId: notificationData.device.UniqueId,
                                 gps : notificationData.device.name
                             };
-                            io.sockets.emit('Bus Start', notificationData);
+                            config.updateNotification(data,function (err,result) {
+                               
+                                if(err){
+                                    console.log(err);
+                                }else{
+                                    config.getAdminNotification(function (err,result) {
+                                        if(err){
+                                            console.log(err);
+                                        }else{
+                                            io.sockets.emit('adminNotification', result);
+                                        }
+                                    });
+                                }
+                                
+                            });
                         }
 
                     }
@@ -155,7 +188,7 @@ function notificationAlgorithm(notificationData) {
 
         });
         
-    }else if(notificationData.event.type == 'deviceOnline'){
+    }else if(notificationData.event.type == 'deviceOffline'){
 
         config.checkTripTime(function (err,result) {
 
@@ -169,22 +202,37 @@ function notificationAlgorithm(notificationData) {
 
                     if(value.gpsUnit == notificationData.device.id){
 
-                        var minDate = new Date(value.trpEnd);
-                        var minTime = new Date(minDate.getTime() - (10 * 60 * 1000));
-                        var maxDate = new Date(value.trpEnd);
-                        var maxTime = new Date(maxDate.getTime() + (10 * 60 * 1000));
+                        // var minDate = new Date(value.trpStart);
+                        var minDate = new Date('2017-01-09 '+value.trpStart);
+                        var minTime = minDate.getTime() - (10 * 60 * 1000);
+                        var maxDate = new Date('2017-01-09 '+value.trpStart);
+                        var maxTime = maxDate.getTime() + (10 * 60 * 1000);
 
-                        var deviceTime = new Date(notificationData.position.deviceTime);
+                        // var deviceTime = new Date(notificationData.position.deviceTime);
 
-                        if(deviceTime > minTime && deviceTime < maxTime){
+                        if(new Date().getTime() > minTime || new Date().getTime() < maxTime){
                             var data = {
-                                message : 'Bus Stopped at '+deviceTime,
+                                message : 'Bus Stopped at '+new Date().toLocaleTimeString(),
                                 bus_id : value.busId,
                                 gpsUnit : notificationData.device.id,
-                                UniqueId: notificationData.device.UniqueId,
                                 gps : notificationData.device.name
                             };
-                            io.sockets.emit('Bus Stop', notificationData);
+                            config.updateNotification(data,function (err,result) {
+
+                                if(err){
+                                    console.log(err);
+                                }else{
+                                    config.getAdminNotification(function (err,result) {
+                                        if(err){
+                                            console.log(err);
+                                        }else{
+                                            io.sockets.emit('adminNotification', notificationData);
+                                        }
+                                    });
+                                }
+
+                            });
+
                         }
 
                     }

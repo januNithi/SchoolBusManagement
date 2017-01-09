@@ -170,55 +170,66 @@
         };
 
         $scope.updateStop = function () {
-            var latLng = [$scope.markerData.lat,$scope.markerData.lng];
+            if($scope.markerData.id){
 
-            var stop = {
-                stpName : $scope.markerData.stpName,
-                stpTime :$filter('date')($scope.markerData.stpTime,'HH:mm:ss'),
-                stpPosition : {
-                    lat : $scope.markerData.lat,
-                    lng :$scope.markerData.lng
-                }
-            };
+                angular.forEach($scope.stops,function (value,index) {
 
-            $scope.stops.push(stop);
-            var time = $scope.markerData.stpTime;
-            $scope.markerData.message = '<div class="panel panel-primary">' +
-                '<div class="panel-heading">' +
-                '<h1 class="panel-title">'+$scope.markerData.stpName+'</h1> ' +
-                '</div>' +
-                '<div class="panel-body">' +
-                '<div class="well" style="color: white">' +
-                '<div class="form-group">' +
-                '<label>' +
-                'Stop Timing:' +
-                '</label> ' +
-                '<label>'
-                +$scope.markerData.stpTime +
-                '</label>' +
-                '</div> ' +
-                '<div class="form-group">' +
-                '<label>' +
-                'Latitude:' +
-                '</label> ' +
-                '<label>'
-                +$scope.markerData.lat +
-                '</label>' +
-                '</div> ' +
-                '<div class="form-group">' +
-                '<label>' +
-                'Longitude:' +
-                '</label> ' +
-                '<label>'
-                +$scope.markerData.lng +
-                '</label>' +
-                '</div> ' +
-                '</div> ' +
-                '</div> ' +
-                '</div>';
-            $scope.markers.push($scope.markerData);
+                   if($scope.markerData.id == value.id){
+                       $scope.stops.slice(index,1)
+                   }
 
+                });
 
+            }else {
+                var latLng = [$scope.markerData.lat, $scope.markerData.lng];
+
+                var stop = {
+                    stpName: $scope.markerData.stpName,
+                    stpTime: $filter('date')($scope.markerData.stpTime, 'HH:mm:ss'),
+                    stpPosition: {
+                        lat: $scope.markerData.lat,
+                        lng: $scope.markerData.lng
+                    }
+                };
+
+                $scope.stops.push(stop);
+                var time = $scope.markerData.stpTime;
+                $scope.markerData.message = '<div class="panel panel-primary">' +
+                    '<div class="panel-heading">' +
+                    '<h1 class="panel-title">' + $scope.markerData.stpName + '</h1> ' +
+                    '</div>' +
+                    '<div class="panel-body">' +
+                    '<div class="well" style="color: white">' +
+                    '<div class="form-group">' +
+                    '<label>' +
+                    'Stop Timing:' +
+                    '</label> ' +
+                    '<label>'
+                    + $scope.markerData.stpTime +
+                    '</label>' +
+                    '</div> ' +
+                    '<div class="form-group">' +
+                    '<label>' +
+                    'Latitude:' +
+                    '</label> ' +
+                    '<label>'
+                    + $scope.markerData.lat +
+                    '</label>' +
+                    '</div> ' +
+                    '<div class="form-group">' +
+                    '<label>' +
+                    'Longitude:' +
+                    '</label> ' +
+                    '<label>'
+                    + $scope.markerData.lng +
+                    '</label>' +
+                    '</div> ' +
+                    '</div> ' +
+                    '</div> ' +
+                    '</div>';
+                $scope.markers.push($scope.markerData);
+
+            }
 
             $scope.markerData = {};
 

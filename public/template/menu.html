@@ -10,7 +10,8 @@
     </div>
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul id="active" class="nav navbar-nav side-nav">
-            <li ng-class="showSelectable('home')"><a href="/home"><i class="fa fa-home"></i> Dashboard</a></li>
+            <li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Dashboard</a></li>
+            <li ng-class="showSelectable('home')"><a href="/home"><i class="fa fa-home"></i> Route Map </a></li>
             <li ng-class="showSelectable('gps')"><a href="/gpsUnitRegistration"><i class="fa fa-globe"></i> GPS unit</a></li>
             <li ng-class="showSelectable('bus')"><a href="/busRegistration"><i class="fa fa-bus"></i> Buses </a></li>
             <li ng-class="showSelectable('driver')"><a href="/driverRegistration"><i class="fa fa-id-card-o"></i> Drivers</a></li>
@@ -20,7 +21,7 @@
             <!--<li ng-class="showSelectable('#')"><a href="#"><i class="fa fa-user"></i> Profile</a></li>-->
             <!--<li ng-class="showSelectable('report')"><a href="/reports"><i class="fa fa-cog"></i> Reports </a></li>-->
             <!--<li ng-class="showSelectable('settings')"><a href="/settings"><i class="fa fa-cog"></i> Settings </a></li>-->
-            <!--<li ng-class="showSelectable('notification')"><a href="/notification"><i class="fa fa-bell-o"></i> Notification</a></li>-->
+            <li ng-class="showSelectable('notification')"><a href="/notification"><i class="fa fa-bell-o"></i> Notification</a></li>
             <!--<li ng-class="showSelectable('#')"><a href="/geofenceRegistration"><i class="fa fa-bell-o"></i> Geofence</a></li>-->
             <!--<li ng-class="showSelectable('#')"><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>-->
             <li ng-class="showSelectable('geofence')"><a href="/geofenceRegistration"><i class="fa fa-bell-slash"></i> Geofence</a></li>
@@ -28,30 +29,47 @@
             <li ng-class="showSelectable('summaryReport')"><a href="/summaryReport"><i class="fa fa-bell-o"></i> Summary Report</a></li>
             <li ng-class="showSelectable('studentReport')"><a href="/studentReport"><i class="fa fa-bell-o"></i> Student Report</a></li>
             <li ng-class="showSelectable('jsReport')"><a href="/jsReport"><i class="fa fa-bell-o"></i> JS Report</a></li>
-            <li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Route Map</a></li>
+
 
 
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user">
-            <li class="dropdown messages-dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell-o"></i> Notification <span class="badge">2</span> <b class="caret"></b></a>
+            <li class="dropdown messages-dropdown" ng-if="unReadNotifyObj">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell-o"></i> Notification <span ng-if="unReadNotifyObj.length" class="badge">{{unReadNotifyObj.length}}</span> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li class="dropdown-header">2 New Notifications</li>
-                    <li class="message-preview">
+                    <li ng-if="unReadNotifyObj.length" class="dropdown-header">{{unReadNotifyObj.length}} New Notifications</li>
+                    <li ng-if="unReadNotifyObj.length" class="message-preview">
                         <a href="/notification">
                             <span class="avatar"><i class="fa fa-bell"></i></span>
-                            <span class="message">Bus Delay Alert</span>
+                            <span class="message">{{unReadNotifyObj[0].message}}</span>
                         </a>
                     </li>
                     <li class="divider"></li>
-                    <li class="message-preview">
-                        <a href="/notification">
-                            <span class="avatar"><i class="fa fa-bell"></i></span>
-                            <span class="message">Bus Out Of Coverage</span>
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li><a href="#">View More <span class="badge">2</span></a></li>
+                    <!--<li class="message-preview">-->
+                        <!--<a href="/notification">-->
+                            <!--<span class="avatar"><i class="fa fa-bell"></i></span>-->
+                            <!--<span class="message">Bus Out Of Coverage</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="divider"></li>-->
+                    <li ng-if="unReadNotifyObj.length-1"><a href="#">View More <span class="badge">{{unReadNotifyObj.length-1}}</span></a></li>
+
+                    <!--<li class="dropdown-header">2 New Notifications</li>-->
+                    <!--<li class="message-preview">-->
+                        <!--<a href="/notification">-->
+                            <!--<span class="avatar"><i class="fa fa-bell"></i></span>-->
+                            <!--<span class="message">Bus Delay Alert</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="divider"></li>-->
+                    <!--<li class="message-preview">-->
+                        <!--<a href="/notification">-->
+                            <!--<span class="avatar"><i class="fa fa-bell"></i></span>-->
+                            <!--<span class="message">Bus Out Of Coverage</span>-->
+                        <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="divider"></li>-->
+                    <!--<li><a href="#">View More <span class="badge">2</span></a></li>-->
                 </ul>
             </li>
             <li class="dropdown user-dropdown">

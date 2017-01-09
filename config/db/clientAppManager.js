@@ -105,11 +105,43 @@ function getStopDetails(id,cb) {
     });
 }
 
+function updateNotification(data,cb) {
+    var query = "Insert into notification(message,gps,gpsUnit,bus_id,dataRead)";
+    query += " values('"+data.message+"','"+data.gps+"',"+data.gpsUnit;
+    query += ","+data.bus_id+","+0+")";
+
+    con.query(query,function (err,result) {
+        cb(err,result);
+    });
+}
+
+
+function getAdminNotification(cb) {
+    var query = "Select id,message,gps,gpsUnit,bus_id,(Select busCode from bus where id=bus_id) as busCode";
+    query += " ,dataRead from notification";
+
+    con.query(query,function (err,result) {
+        cb(err,result);
+    });
+}
+
+
+function updateReadNotification(id,cb) {
+    var query = "Update notification set dataRead = 1 where id = "+id;
+
+    con.query(query,function (err,result) {
+        cb(err,result);
+    });
+}
+
 module.exports = {
     updateNotificationStop:updateNotificationStop,
     getUser:getUser,
     getStopDetails:getStopDetails,
     getNotificationTrip:getNotificationTrip,
     getAppStartData:getAppStartData,
-    updateNotificationStopdup:updateNotificationStopdup
+    updateNotificationStopdup:updateNotificationStopdup,
+    updateNotification:updateNotification,
+    getAdminNotification : getAdminNotification,
+    updateReadNotification : updateReadNotification
 };

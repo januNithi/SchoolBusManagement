@@ -76,3 +76,41 @@ exports.checkTripTime = function (cb) {
         cb(err,result);      
     });
 };
+
+exports.updateNotification = function (data,cb) {
+
+    manager.updateNotification(data,function (err,result) {
+       cb(err,result);
+    });
+
+};
+exports.getAdminNotification = function (cb) {
+
+    manager.getAdminNotification(function (err,result) {
+        cb(err,result);
+    });
+
+};
+exports.getAdminNotifications = function (req,res) {
+
+    manager.getAdminNotification(function (err,result) {
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
+    });
+
+};
+
+exports.updateNotificationRead = function (req,res) {
+
+    manager.updateReadNotification(req.query.id,function (err,result) {
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
+    });
+
+};

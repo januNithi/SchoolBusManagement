@@ -14,6 +14,16 @@
         return{
             getEvent : function () {
                 return $http.get('/report/eventReport?id=null&from=null&to=null');
+            },
+            getAdminNotification : function () {
+
+                return $http.get('/dao/adminNotification');
+
+            },
+            updateNotificationRead : function (id) {
+
+                return $http.get('/dao/updateNotificationRead?id='+id);
+
             }
         }
     }

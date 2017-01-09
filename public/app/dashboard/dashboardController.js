@@ -14,13 +14,14 @@
         '$filter',
         'homeService',
         'busRegistrationService',
+        'notificationService',
         '$timeout',
         'leafletData',
         'loginService'
 
     ];
 
-    function dashboardController($scope,$window,$filter,homeService,busRegistrationService,$timeout,leafletData,loginService){
+    function dashboardController($scope,$window,$filter,homeService,busRegistrationService,notificationService,$timeout,leafletData,loginService){
 
 
         var socket = io.connect();
@@ -35,6 +36,8 @@
 
         $scope.notify = false;
         $scope.notifyObj = {};
+        $scope.readNotifyObj = [];
+        $scope.unReadNotifyObj = [];
 
         angular.extend($scope, {
             centerProperty: {
@@ -232,13 +235,13 @@
                         riseOnHover: true,
                         opacity: 5,
                         riseOffset: 250
-                    }
+                    };
                     latLng.push(points);
                 }
 
             });
 
-        }
+        };
 
         $scope.showDate = function () {
             console.log($scope.selectedDate);
@@ -248,6 +251,31 @@
 
             $scope.notify = true;
             $scope.notifyObj = data;
+
+        });
+        
+        socket.on('adminNotification',function (data) {
+
+            $scope.notificationObject = data;
+            $scope.readNotifyObj = [];
+            $scope.unReadNotifyObj = [];
+            angular.forEach(data,function (value,index) {
+
+                if(value.dataRead){
+                    $scope.readNotifyObj.push(value);
+                }else{
+                    $scope.unReadNotifyObj.push(value);
+                }
+
+            });
+
+        });
+
+        socket.on('Bus Stop',function (data) {
+
+
+            $scope.notify = true;
+            $scope.notifyStopObj = data;
 
         });
 
@@ -265,6 +293,7 @@
             console.log(data.log);
             $scope.markers.marker.lat = Number(data.lat);
             $scope.markers.marker.lng = Number(data.lng);
+            $scope.markers.marker.title = data.devicetime.toLocaleString,
             $scope.center.lat = Number(data.lat);
             $scope.center.lng = Number(data.lng);
 
@@ -283,6 +312,21 @@
             }
             $scope.getBusPositions($scope.currentBus,$filter('date')($scope.selectedDate, "yyyy-MM-dd"));
         };
+
+        notificationService.getAdminNotification().then(function (result,err) {
+
+            $scope.notificationObject = result.data;
+            angular.forEach($scope.notificationObject,function (value,index) {
+
+                if(value.dataRead){
+                    $scope.readNotifyObj.push(value);
+                }else{
+                    $scope.unReadNotifyObj.push(value);
+                }
+
+            });
+
+        });
 
         $scope.getBusPositions(null,null);
 
