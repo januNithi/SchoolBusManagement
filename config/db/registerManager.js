@@ -360,7 +360,7 @@ function getRoutes(routeId,cb) {
     // var query = "Select routes.id as rtId,routes.rtName as routeName,stops.id as stpId,stops.stpName,";
     // query += " stops.stpPosition,stops.stpTime from routes left join stops on routes.id = stops.rtId";
 
-    var query = "Select id,rtName,fromRoutePoints,toRoutePoints from routes";
+    var query = "Select id,rtName,fromRoutePoints,toRoutePoints,fromPlaceId,toPlaceId from routes";
     if(routeId){
         query += " where id = "+routeId;
     }
@@ -383,8 +383,10 @@ function getRoutes(routeId,cb) {
                         rtName: value.rtName,
                         fromRoutePoints : value.fromRoutePoints,
                         toRoutePoints : value.toRoutePoints,
+                        fromPlaceId : value.fromPlaceId,
+                        toPlaceId : value.toPlaceId,
                         stops: result
-                    }
+                    };
                     routes.push(data);
                     if ((i) == totalLength) {
                         cb(err, routes);
@@ -406,10 +408,12 @@ function updateRoutes(data,cb) {
     if(data.id){
         query = "Update routes set rtName = '"+data.rtName+"', fromRoutePoints = '";
         query += JSON.stringify(data.fromRoutePoints)+"', toRoutePoints = '";
-        query += JSON.stringify(data.toRoutePoints)+"' where id = "+data.id;
+        query += JSON.stringify(data.toRoutePoints)+"', fromPlaceId = '"+data.fromPlaceId+"'";
+        query += ", toPlaceId = '"+data.toPlaceId+"' where id = "+data.id;
     }else{
-        query = "Insert into routes(rtName,fromRoutePoints,toRoutePoints) values('"+data.rtName;
-        query += "','"+JSON.stringify(data.fromRoutePoints)+"','"+JSON.stringify(data.toRoutePoints)+"')";
+        query = "Insert into routes(rtName,fromRoutePoints,toRoutePoints,fromPlaceId,toPlaceId) values('"+data.rtName;
+        query += "','"+JSON.stringify(data.fromRoutePoints)+"','"+JSON.stringify(data.toRoutePoints);
+        query += "','"+data.fromPlaceId+"','"+data.toPlaceId+"')";
     }
 
     con.query(query,function (err,result) {

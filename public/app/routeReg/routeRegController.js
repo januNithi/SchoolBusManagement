@@ -16,6 +16,9 @@
 
     function routeRegController($scope,leafletData,$window,$filter,routeRegistrationService,loginService) {
 
+        $scope.from = {};
+        $scope.to = {};
+
         angular.extend($scope, {
             events: {
                 map: {
@@ -175,65 +178,72 @@
                 angular.forEach($scope.stops,function (value,index) {
 
                    if($scope.markerData.id == value.id){
-                       $scope.stops.slice(index,1)
+                       $scope.stops.splice(index,1);
+                       updateMarketData();
+
                    }
 
                 });
 
             }else {
-                var latLng = [$scope.markerData.lat, $scope.markerData.lng];
 
-                var stop = {
-                    stpName: $scope.markerData.stpName,
-                    stpTime: $filter('date')($scope.markerData.stpTime, 'HH:mm:ss'),
-                    stpPosition: {
-                        lat: $scope.markerData.lat,
-                        lng: $scope.markerData.lng
-                    }
-                };
-
-                $scope.stops.push(stop);
-                var time = $scope.markerData.stpTime;
-                $scope.markerData.message = '<div class="panel panel-primary">' +
-                    '<div class="panel-heading">' +
-                    '<h1 class="panel-title">' + $scope.markerData.stpName + '</h1> ' +
-                    '</div>' +
-                    '<div class="panel-body">' +
-                    '<div class="well" style="color: white">' +
-                    '<div class="form-group">' +
-                    '<label>' +
-                    'Stop Timing:' +
-                    '</label> ' +
-                    '<label>'
-                    + $scope.markerData.stpTime +
-                    '</label>' +
-                    '</div> ' +
-                    '<div class="form-group">' +
-                    '<label>' +
-                    'Latitude:' +
-                    '</label> ' +
-                    '<label>'
-                    + $scope.markerData.lat +
-                    '</label>' +
-                    '</div> ' +
-                    '<div class="form-group">' +
-                    '<label>' +
-                    'Longitude:' +
-                    '</label> ' +
-                    '<label>'
-                    + $scope.markerData.lng +
-                    '</label>' +
-                    '</div> ' +
-                    '</div> ' +
-                    '</div> ' +
-                    '</div>';
-                $scope.markers.push($scope.markerData);
+                updateMarketData();
 
             }
 
             $scope.markerData = {};
 
         };
+
+        var updateMarketData = function () {
+            var latLng = [$scope.markerData.lat, $scope.markerData.lng];
+
+            var stop = {
+                stpName: $scope.markerData.stpName,
+                stpTime: $filter('date')($scope.markerData.stpTime, 'HH:mm:ss'),
+                stpPosition: {
+                    lat: $scope.markerData.lat,
+                    lng: $scope.markerData.lng
+                }
+            };
+
+            $scope.stops.push(stop);
+            var time = $scope.markerData.stpTime;
+            $scope.markerData.message = '<div class="panel panel-primary">' +
+                '<div class="panel-heading">' +
+                '<h1 class="panel-title">' + $scope.markerData.stpName + '</h1> ' +
+                '</div>' +
+                '<div class="panel-body">' +
+                '<div class="well" style="color: white">' +
+                '<div class="form-group">' +
+                '<label>' +
+                'Stop Timing:' +
+                '</label> ' +
+                '<label>'
+                + $scope.markerData.stpTime +
+                '</label>' +
+                '</div> ' +
+                '<div class="form-group">' +
+                '<label>' +
+                'Latitude:' +
+                '</label> ' +
+                '<label>'
+                + $scope.markerData.lat +
+                '</label>' +
+                '</div> ' +
+                '<div class="form-group">' +
+                '<label>' +
+                'Longitude:' +
+                '</label> ' +
+                '<label>'
+                + $scope.markerData.lng +
+                '</label>' +
+                '</div> ' +
+                '</div> ' +
+                '</div> ' +
+                '</div>';
+            $scope.markers.push($scope.markerData);
+        }
 
         var getRoutes = function () {
             routeRegistrationService.getRoutes().then(function (result) {
@@ -260,10 +270,14 @@
 
         };
 
-        $scope.routeSelected = function (route,id) {
-            $scope.from = '';
-            $scope.to = '';
+        $scope.rteSelected = function (route,id) {
             $scope.selectedRow = id;
+        };
+
+        $scope.routeSelected = function (route,id) {
+            $scope.from = {};
+            $scope.to = {};
+
             // if($scope.selectedRow) {
             if(route.stops && route.stops.length) {
                 $scope.stops = route.stops;
@@ -370,7 +384,9 @@
             routeData.toRoutePoints = {
                 lat : $scope.to.geometry.location.lat(),
                 lng : $scope.to.geometry.location.lng()
-            }
+            };
+            routeData.fromPlaceId = $scope.from.place_id;
+            routeData.toPlaceId = $scope.to.place_id;
 
             $scope.saveRoutes(routeData);
 
@@ -405,7 +421,7 @@
             $scope.markerData ={
                 id:stop.id,
                 stpName : stop.stpName,
-                stpTime : stop.stpTime,
+                stpTime : new Date("2016-12-31 "+ stop.stpTime),
                 lat : stop.stpPosition.lat,
                 lng : stop.stpPosition.lng
             };
@@ -418,6 +434,8 @@
             // var latLng = JSON.parse(stop.stpPosition);
 
             $scope.routeData = route;
+            $scope.from.place_id = route.fromPlaceId;
+            $scope.to.place_id = route.toPlaceId;
             angular.element('#routeCreator').trigger('click');
 
         };
