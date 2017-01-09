@@ -37,14 +37,14 @@
         $scope.notify = false;
         $scope.notifyObj = {};
 
-        $scope.map = L.map('map', {
-            center: [11.0168, 76.9558],
-            zoom: 13
-        });
+        // $scope.map = L.map('map', {
+        //     center: [11.0168, 76.9558],
+        //     zoom: 13
+        // });
 
-        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap2525</a> contributors'
-        }).addTo($scope.map);
+        // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap2525</a> contributors'
+        // }).addTo($scope.map);
 
 
         angular.extend($scope, {
@@ -133,7 +133,7 @@
         };
 
         $scope.getBusPositions = function (id,date) {
-            $scope.clearMap();
+            //$scope.clearMap();
             $scope.busPosition = [];
             $scope.paths = [];
             $scope.center = {};
@@ -188,20 +188,29 @@
                     $scope.selectedDate = $filter('date')(result.data[0].date, "yyyy-MM-dd");
                     $scope.busPosition;
                     $scope.updateMap();
-                    $scope.markers = {
-                        marker: {
-                            lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
-                            lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
-                            icon: {
-                                iconUrl: 'images/bus.png',
-                            },
-                            iconSize: [38, 95],
-                            title: $filter('date')($scope.busPosition[$scope.busPosition.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
-                            riseOnHover: true,
-                            opacity: 5,
-                            riseOffset: 250
-                        }
-                    };
+
+                    // var marker=L.marker([$scope.busPosition[0].lat,$scope.busPosition[0].lng],).addTo($scope.map);marker.bindPopup('hi').openPopup();
+
+                    //
+                    // $scope.markers = {
+                    //     marker: {
+                    //         lat: value.lat,
+                    //         lng: value.lng,
+                    //         lat:$scope.busPosition[0].lat,
+                    //         lng:$scope.busPosition[0].lng,
+                    //         icon: {
+                    //             iconUrl: 'images/bus.png',
+                    //             color:'green'
+                    //         },
+                    //
+                    //         iconSize: [38, 95],
+                    //         title: $filter('date')($scope.busPosition[$scope.busPosition.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
+                    //         riseOnHover: true,
+                    //         opacity: 5,
+                    //         riseOffset: 250
+                    //     }
+                    // };
+
 
                     $scope.center = {
                         lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
@@ -224,6 +233,209 @@
         };
 
 
+
+
+
+        $scope.updateMap = function () {
+            var latLng = [];
+            angular.forEach($scope.busPosition, function (value, index) {
+
+                if ((index + 1) == $scope.busPosition.length) {
+                    // var points = {
+                    //     lat: value.lat,
+                    //     lng: value.lng,
+                    //     title: value.devicetime,
+                    //     riseOnHover: true,
+                    //     opacity: 5,
+                    //     riseOffset: 250
+                    // };
+                    // latLng.push(points);
+                    $scope.paths = {
+                        p1: {
+                            color:'#478bf7',
+                            weight: 4,
+                            latlngs: $scope.busPosition
+                        }
+
+                    };
+                    leafletData.getMap('map').then(function(map){
+
+
+                        
+                    });
+                    $scope.center = {
+                        lat: value.lat,
+                        lng: value.lng,
+                        zoom: 18
+                    };
+
+                    // var marker=L.marker([$scope.busPosition[0].lat,$scope.busPosition[0].lng]).addTo($scope.map);marker.bindPopup('hi').openPopup();
+                    //
+                    // var marker=L.marker([value.lat,value.lng]).addTo($scope.map);marker.bindPopup('hi').openPopup();
+                    // var line = L.polyline([$scope.busPosition]).addTo($scope.map)
+
+
+                    // var greenIcon = L.icon({
+                    //             iconUrl: 'images/green.png',
+                    //
+                    //             iconSize:     [38, 95], // size of the icon
+                    //             shadowSize:   [50, 64], // size of the shadow
+                    //             iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+                    //             shadowAnchor: [4, 62],  // the same for the shadow
+                    //             popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+                    //         });
+                    // var pathLine = L.polyline($scope.busPosition,{icon: greenIcon}).addTo($scope.map);
+                   // // var marker = L.marker([$scope.busPosition[0].lat,$scope.busPosition[0].lng]).addTo($scope.map);
+                    $scope.markers = {
+                        positionStart: {
+
+                            lat:$scope.busPosition[0].lat,
+                            lng:$scope.busPosition[0].lng,
+                            iconSize: [38, 95],
+                            icon:{
+
+                                iconUrl: 'images/school-bus.png',
+                                color:'green'
+                            },
+                            title: value.devicetime,
+                            message:'<strong>Start:></strong>'+'DeviceTime:'+new Date($scope.busPosition[0].devicetime).toLocaleString(),
+                            riseOnHover: true,
+                            opacity: 5,
+                            riseOffset: 250,
+                            move:true
+                        },
+                         positionEnd: {
+                            lat: $scope.busPosition[$scope.busPosition.length-1].lat,
+                            lng: $scope.busPosition[$scope.busPosition.length-1].lng,
+                            iconSize: [38, 95],
+                            icon:{
+
+                                iconUrl: 'images/school-bus.png',
+                                color:'green'
+                            },
+                            title: value.devicetime,
+                            message:'<strong>End:></strong>'+'DeviceTime:'+new Date($scope.busPosition[$scope.busPosition.length-1].devicetime).toLocaleString(),
+                            riseOnHover: true,
+                            opacity: 5,
+                            riseOffset: 250,
+                            move:true
+                        },
+
+
+                    }
+
+                } else {
+                    var points = {
+                        lat: value.lat,
+                        lng: value.lng,
+                        icon: {
+                            iconUrl: 'images/Circle_Blue.png',
+                        },
+                        title: value.devicetime,
+                        riseOnHover: true,
+                        opacity: 5,
+                        riseOffset: 250
+                    }
+                    latLng.push(points);
+                }
+
+            });
+
+        }
+
+
+
+        //
+        // $scope.updateMap = function () {
+        //     var latLng = [];
+        //     angular.forEach($scope.busPosition, function (value, index) {
+        //
+        //         if ((index + 1) == $scope.busPosition.length) {
+        //             // var points = {
+        //             //     lat: value.lat,
+        //             //     lng: value.lng,
+        //             //     title: value.devicetime,
+        //             //     riseOnHover: true,
+        //             //     opacity: 5,
+        //             //     riseOffset: 250
+        //             // }
+        //             // latLng.push(points);
+        //             $scope.paths = {
+        //                 p1: {
+        //                     color: 'red',
+        //                     weight: 4,
+        //                     latlngs: $scope.busPosition
+        //                 }
+        //
+        //             };
+        //             $scope.center = {
+        //                 lat: value.lat,
+        //                 lng: value.lng,
+        //                 zoom: 18
+        //             };
+        //             $scope.markers = {
+        //                 currentPosition: {
+        //                     lat: value.lat,
+        //                     lng: value.lng,
+        //                     icon: {
+        //                         iconUrl: 'images/green.png',
+        //                     },
+        //                     iconSize: [38, 95],
+        //                     title: value.devicetime,
+        //                     riseOnHover: true,
+        //                     opacity: 5,
+        //                     riseOffset: 250,
+        //                     move:true
+        //                 }
+        //             }
+
+                // } else {
+                //     var points = {
+                //         lat: value.lat,
+                //         lng: value.lng,
+                //         icon: {
+                //             iconUrl: 'images/Circle_Blue.png',
+                //         },
+                //         title: value.devicetime,
+                //         riseOnHover: true,
+                //         opacity: 5,
+                //         riseOffset: 250
+                //     }
+                //     latLng.push(points);
+               //  }
+
+           // });
+        //     var pathLine = L.polyline($scope.busPosition).addTo($scope.map);
+        //     var greenIcon = L.icon({
+        //         iconUrl: 'images/green.png',
+        //
+        //         iconSize:     [38, 95], // size of the icon
+        //         shadowSize:   [50, 64], // size of the shadow
+        //         iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        //         shadowAnchor: [4, 62],  // the same for the shadow
+        //         popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        //     });
+        //     var marker = L.marker([$scope.busPosition[0].lat,$scope.busPosition[0].lng],{icon: greenIcon}
+        //     ).addTo($scope.map);
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             // $scope.roadMap=function()
             // {
             //
@@ -233,219 +445,241 @@
             // };
             // $scope.roadMap();
 
-        $scope.updateMap = function () {
-            var data='';
-
-            angular.forEach($scope.busPosition, function (value, index) {
-            //
-            //
-            //    // if ((index + 1) == $scope.busPosition.length) {
-            //         data += (value.lat + "," + value.lng + "|");
-            //
-            //     //}
-            // });
-
-
-
-                // data=data.substring(0,data.length-1);
-
-
-
-                    // homeService.getRoadMap(data).then(function(result){
-                    //
-                    //     console.log(result.data.snappedPoints);
-                    //     $scope.points1=[];
-                    //     var latlon={};
-                    //     angular.forEach(result.data.snappedPoints,function(value,index){
-                    //
-                    //         latlon={};
-                    //
-                    //         latlon.lat=value.location.latitude;
-                    //         latlon.lng=value.location.longitude;
-
-
-                                 //$scope.point.push.lat(value.location.latitude,value.location.longitude);
-
-
-                            // }
-
-
-
-                            var firstpolyline = new L.Polyline($scope.busPosition, {
-                                color: '#e51010',
-                                weight: 4,
-                                opacity: 0.5,
-                                smoothFactor: 1
-                            });
-                            firstpolyline.addTo($scope.map);
-
-                            // var firstpolyline = new L.Polyline(latlong, {
-                            //     color: '#e51010',
-                            //     weight: 4,
-                            //     opacity: 0.5,
-                            //     smoothFactor: 1
-                            // });
-                            // firstpolyline.addTo($scope.map);
-
-                            // $scope.points1.push(latlon);
-
-
-                        // });
-
-
-                        //
-                        // var firstpolyline = new L.Polyline($scope.points1, {
-                        //     color: '#e51010',
-                        //     weight: 4,
-                        //     opacity: 0.5,
-                        //     smoothFactor: 1
-                        // });
-                        // firstpolyline.addTo($scope.map);
-                        // var pathLine = L.polyline($scope.point).addTo($scope.map)
-                        // var flightPath = new google.maps.Polyline({
-                        //     path: $scope.point,
-                        //     geodesic: true,
-                        //     strokeColor: '#FF0000',
-                        //     strokeOpacity: 1.0,
-                        //     strokeWeight: 2
-                        // });
-                        //
-                        // flightPath.setMap(map);
-
-
-                        $scope.center = {
-                            lat: value.lat,
-                            lng: value.lng,
-                            zoom: 18
-                        };
-                        $scope.markers = {
-                            currentPosition: {
-                                lat: value.lat,
-                                lng: value.lng,
-                                icon: {
-                                    iconUrl: 'images/bus.png',
-                                },
-                                iconSize: [38, 95],
-                                title: value.devicetime,
-                                riseOnHover: true,
-                                opacity: 5,
-                                riseOffset: 250,
-                                move: true
-                            }
-
-                        };
-
-
-                    });
-
-
-                    //
-                    // var point = {
-                    //     lat: Number(value.lat),
-                    //     lng: Number(value.lng),
-                    //     title: value.devicetime,
-                    //     riseOnHover: true,
-                    //     opacity: 5,
-                    //     riseOffset: 250
-                    // };
-                    // path.push(point);
-
-                    // L.Routing.control({
-                    //     waypoints: [
-                    //         L.latLng(11.635308, 77.22496),
-                    //         L.latLng(11.984461, 77.70641)
-                    //     ]
-                    // }).addTo($scope.map);
-
-
-
-
-                };
-                // else {
-                    //
-                    // var pos=Math.abs(new Date(value.devicetime).getTime()-new Date($scope.busPosition[index + 1].devicetime).getTime());
-                    //
-                    // if(pos<=70000){
-                    //     var point = {
-                    //         lat: value.lat,
-                    //         lng: value.lng,
-                    //         title: value.devicetime,
-                    //         riseOnHover: true,
-                    //         opacity: 5,
-                    //         riseOffset: 250
-                    //     };
-                    //     path.push(point);
-                    // }
-                   // else {
-                        // var point = {
-                        //     lat: value.lat,
-                        //     lng: value.lng,
-                        //     title: value.devicetime,
-                        //     riseOnHover: true,
-                        //     opacity: 5,
-                        //     riseOffset: 250
-                        // };
-                        // path.push(value);
-                        // var points = {
-                        //     color: '#e51010',
-                        //     weight: 4,
-                        //     latlngs: path
-                        // };
-                        // var firstpolyline = new L.Polyline($scope.busPosition, {
-                        //     color: '#e51010',
-                        //     weight: 4,
-                        //     opacity: 0.5,
-                        //     smoothFactor: 1
-                        // });
-                        // firstpolyline.addTo($scope.map);
-
-                        //$scope.paths['p'+i]=points;
-                        // path=[];
-                        // i++;
-
-                        // L.Routing.control({
-                        //     waypoints: [
-                        //         L.latLng(value.lat, value.lng),
-                        //         L.latLng($scope.busPosition[index+1].lat,$scope.busPosition[index+1].lng)
-                        //     ]
-                        // }).addTo($scope.map);
-
-                    // }
-                    // var points = {
-                    //     lat: value.lat,
-                    //     lng: value.lng,
-                    //     icon: {
-                    //         iconUrl: 'images/Circle_Blue.png',
-                    //     },
-                    //     title: value.devicetime,
-                    //     riseOnHover: true,
-                    //     opacity: 5,
-                    //     riseOffset: 250
-                    // }
-                    // latLng.push(points);
-               // }
-
-                // console.log($scope.path);
-                // $scope.paths.push($scope.path);
-
-            //});
-
-
-        //};
-
-        $scope.clearMap=function() {
-            for(i in $scope.map._layers) {
-                if($scope.map._layers[i]._path != undefined) {
-                    try {
-                        $scope.map.removeLayer($scope.map._layers[i]);
-                    }
-                    catch(e) {
-                        console.log("problem with " + e + $scope.map._layers[i]);
-                    }
-                }
-            }
-        };
-        $scope.clearMap();
+        // $scope.updateMap = function () {
+        //     var data='';
+        //
+        //     angular.forEach($scope.busPosition, function (value, index) {
+        //
+        //         var greenIcon = L.icon({
+        //             iconUrl: 'images/green.png',
+        //
+        //             iconSize:     [38, 95], // size of the icon
+        //             shadowSize:   [50, 64], // size of the shadow
+        //             iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+        //             shadowAnchor: [4, 62],  // the same for the shadow
+        //             popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+        //         });
+        //         var marker = L.marker([$scope.busPosition[0].lat,$scope.busPosition[0].lng],{icon: greenIcon}
+        //         ).addTo($scope.map);
+        //         //marker.bindPopup('DeviceTime:'+new Date($scope.busPosition[0].devicetime).toLocaleString()).openPopup();
+        //         //marker.valueOf()._icon.style.color = 'green'; //or any color
+        //     //
+        //     //    // if ((index + 1) == $scope.busPosition.length) {
+        //     //         data += (value.lat + "," + value.lng + "|");
+        //     //
+        //     //     //}
+        //     // });
+        //
+        //
+        //
+        //         // data=data.substring(0,data.length-1);
+        //
+        //
+        //
+        //             // homeService.getRoadMap(data).then(function(result){
+        //             //
+        //             //     console.log(result.data.snappedPoints);
+        //             //     $scope.points1=[];
+        //             //     var latlon={};
+        //             //     angular.forEach(result.data.snappedPoints,function(value,index){
+        //             //
+        //             //         latlon={};
+        //             //
+        //             //         latlon.lat=value.location.latitude;
+        //             //         latlon.lng=value.location.longitude;
+        //
+        //
+        //                          //$scope.point.push.lat(value.location.latitude,value.location.longitude);
+        //
+        //
+        //                     // }
+        //
+        //
+        //
+        //                     // var firstpolyline = new L.Polyline($scope.busPosition, {
+        //                     //     color: '#e51010',
+        //                     //     weight: 4,
+        //                     //     opacity: 0.5,
+        //                     //     smoothFactor: 1
+        //                     // });
+        //                     // firstpolyline.addTo($scope.map);
+        //
+        //         // var firstpolyline = new L.Polyline($scope.busPosition, {
+        //         //     color: '#e51010',
+        //         //     weight: 4,
+        //         //     opacity: 0.5,
+        //         //     smoothFactor: 1
+        //         // });
+        //         // firstpolyline.addTo($scope.map);
+        //         var pathLine = L.polyline($scope.busPosition).addTo($scope.map)
+        //
+        //                     // var firstpolyline = new L.Polyline(latlong, {
+        //                     //     color: '#e51010',
+        //                     //     weight: 4,
+        //                     //     opacity: 0.5,
+        //                     //     smoothFactor: 1
+        //                     // });
+        //                     // firstpolyline.addTo($scope.map);
+        //
+        //                     // $scope.points1.push(latlon);
+        //
+        //
+        //                 // });
+        //
+        //
+        //                 //
+        //                 // var firstpolyline = new L.Polyline($scope.points1, {
+        //                 //     color: '#e51010',
+        //                 //     weight: 4,
+        //                 //     opacity: 0.5,
+        //                 //     smoothFactor: 1
+        //                 // });
+        //                 // firstpolyline.addTo($scope.map);
+        //                 // var pathLine = L.polyline($scope.point).addTo($scope.map)
+        //                 // var flightPath = new google.maps.Polyline({
+        //                 //     path: $scope.point,
+        //                 //     geodesic: true,
+        //                 //     strokeColor: '#FF0000',
+        //                 //     strokeOpacity: 1.0,
+        //                 //     strokeWeight: 2
+        //                 // });
+        //                 //
+        //                 // flightPath.setMap(map);
+        //
+        //                 //
+        //                 // $scope.center = {
+        //                 //     lat: value.lat,
+        //                 //     lng: value.lng,
+        //                 //     zoom: 18
+        //                 // };
+        //                 // $scope.markers = {
+        //                 //     currentPosition: {
+        //                 //         lat: value.lat,
+        //                 //         lng: value.lng,
+        //                 //         icon: {
+        //                 //             iconUrl: 'images/bus.png',
+        //                 //         },
+        //                 //         iconSize: [38, 95],
+        //                 //         title: value.devicetime,
+        //                 //         riseOnHover: true,
+        //                 //         opacity: 5,
+        //                 //         riseOffset: 250,
+        //                 //         move: true
+        //                 //     }
+        //
+        //                 // };
+        //
+        //
+        //             });
+        //
+        //
+        //             //
+        //             // var point = {
+        //             //     lat: Number(value.lat),
+        //             //     lng: Number(value.lng),
+        //             //     title: value.devicetime,
+        //             //     riseOnHover: true,
+        //             //     opacity: 5,
+        //             //     riseOffset: 250
+        //             // };
+        //             // path.push(point);
+        //
+        //             // L.Routing.control({
+        //             //     waypoints: [
+        //             //         L.latLng(11.635308, 77.22496),
+        //             //         L.latLng(11.984461, 77.70641)
+        //             //     ]
+        //             // }).addTo($scope.map);
+        //
+        //
+        //
+        //
+        //         };
+        //         // else {
+        //             //
+        //             // var pos=Math.abs(new Date(value.devicetime).getTime()-new Date($scope.busPosition[index + 1].devicetime).getTime());
+        //             //
+        //             // if(pos<=70000){
+        //             //     var point = {
+        //             //         lat: value.lat,
+        //             //         lng: value.lng,
+        //             //         title: value.devicetime,
+        //             //         riseOnHover: true,
+        //             //         opacity: 5,
+        //             //         riseOffset: 250
+        //             //     };
+        //             //     path.push(point);
+        //             // }
+        //            // else {
+        //                 // var point = {
+        //                 //     lat: value.lat,
+        //                 //     lng: value.lng,
+        //                 //     title: value.devicetime,
+        //                 //     riseOnHover: true,
+        //                 //     opacity: 5,
+        //                 //     riseOffset: 250
+        //                 // };
+        //                 // path.push(value);
+        //                 // var points = {
+        //                 //     color: '#e51010',
+        //                 //     weight: 4,
+        //                 //     latlngs: path
+        //                 // };
+        //                 // var firstpolyline = new L.Polyline($scope.busPosition, {
+        //                 //     color: '#e51010',
+        //                 //     weight: 4,
+        //                 //     opacity: 0.5,
+        //                 //     smoothFactor: 1
+        //                 // });
+        //                 // firstpolyline.addTo($scope.map);
+        //
+        //                 //$scope.paths['p'+i]=points;
+        //                 // path=[];
+        //                 // i++;
+        //
+        //                 // L.Routing.control({
+        //                 //     waypoints: [
+        //                 //         L.latLng(value.lat, value.lng),
+        //                 //         L.latLng($scope.busPosition[index+1].lat,$scope.busPosition[index+1].lng)
+        //                 //     ]
+        //                 // }).addTo($scope.map);
+        //
+        //             // }
+        //             // var points = {
+        //             //     lat: value.lat,
+        //             //     lng: value.lng,
+        //             //     icon: {
+        //             //         iconUrl: 'images/Circle_Blue.png',
+        //             //     },
+        //             //     title: value.devicetime,
+        //             //     riseOnHover: true,
+        //             //     opacity: 5,
+        //             //     riseOffset: 250
+        //             // }
+        //             // latLng.push(points);
+        //        // }
+        //
+        //         // console.log($scope.path);
+        //         // $scope.paths.push($scope.path);
+        //
+        //     //});
+        //
+        //
+        // //};
+        //
+        // $scope.clearMap=function() {
+        //     for(i in $scope.map._layers) {
+        //         if($scope.map._layers[i]._path != undefined) {
+        //             try {
+        //                 $scope.map.removeLayer($scope.map._layers[i]);
+        //             }
+        //             catch(e) {
+        //                 console.log("problem with " + e + $scope.map._layers[i]);
+        //             }
+        //         }
+        //     }
+        // };
+        // $scope.clearMap();
 
         $scope.showDate = function () {
           console.log($scope.selectedDate);
@@ -496,5 +730,8 @@
         $scope.getBusDetails();
 
     }
+    
+    
+    
 })();
 
