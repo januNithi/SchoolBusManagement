@@ -130,27 +130,42 @@
         };
 
         $scope.add = function (data) {
-            $scope.data=data;
-            if(!data.id)
-
-                $scope.data.trpStart=data.trpStart.toLocaleTimeString();
-                $scope.data.trpEnd=data.trpEnd.toLocaleTimeString();
-
-                tripRegistrationService.postTripRegDetails($scope.data).then(function (result) {
-
-                    alert('Succesfully registered !!!');
-                    $scope.getTripRegDetails();
-                    $scope.trip={
-
-                        rtId:0,
-                        busId:0,
-                        drvId:0,
-                        trpStart:0,
-                        trpEnd:0
-                    };
-                });
+              if((data.rtId==0) || (data.busId==0) || (data.drvId==0) || (data.trpEnd==0) || (data.trpStart==0)){
 
 
+                   alert('fill all field!!!!!');
+                  $scope.getTripRegDetails();
+               }
+                  else {
+
+                    $scope.data=data;
+                 var startTime= angular.isString(data.trpStart);
+                  var endTime=angular.isString(data.trpEnd);
+                  if(startTime==false)
+                  {
+                      $scope.data.trpStart = data.trpStart.toLocaleTimeString();
+
+                  }
+                  if(endTime==false)
+                  {
+
+                      $scope.data.trpEnd = data.trpEnd.toLocaleTimeString();
+
+                  }
+                    tripRegistrationService.postTripRegDetails($scope.data).then(function(result) {
+
+                        alert('Succesfully registered !!!');
+                        $scope.getTripRegDetails();
+                        $scope.trip = {
+                            rtId: 0,
+                            busId: 0,
+                            drvId: 0,
+                            trpStart: 0,
+                            trpEnd: 0
+                        };
+                    });
+
+                }
 
 
 
