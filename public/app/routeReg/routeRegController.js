@@ -18,6 +18,7 @@
 
         $scope.from = {};
         $scope.to = {};
+        $scope.doubleTapped = false;
 
         angular.extend($scope, {
             events: {
@@ -277,6 +278,7 @@
         $scope.routeSelected = function (route,id) {
             $scope.from = {};
             $scope.to = {};
+            $scope.doubleTapped = true;
 
             // if($scope.selectedRow) {
             if(route.stops && route.stops.length) {
@@ -370,6 +372,7 @@
             $scope.routeData = {};
             $scope.stops = [];
             $scope.selectedRow = null;
+            $scope.doubleTapped = false;
         };
 
         $scope.updateRoutes = function (route) {
@@ -404,6 +407,7 @@
                     $scope.selected = 0;
                     $scope.stops = [];
                     $scope.selectedRow = 0;
+                    $scope.doubleTapped = false;
                     getRoutes();
                 }
             });
