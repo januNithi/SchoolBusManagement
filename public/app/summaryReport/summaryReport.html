@@ -1,4 +1,24 @@
 <script src="../template/navbar.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker2').datetimepicker();
+
+        $("#datetimepicker1").on("dp.change", function() {
+
+            angular.element(document.getElementById('wrapper')).scope().setFrom($("#datetimepicker1").find("input").val());
+
+        });
+
+        $("#datetimepicker2").on("dp.change", function() {
+
+            angular.element(document.getElementById('wrapper')).scope().setTo($("#datetimepicker2").find("input").val());
+
+        });
+
+
+    });
+</script>
 
 
 
@@ -48,11 +68,27 @@
                                 </div>
 
                                 <div class="col-sm-3">
-                                    <input class="form-control col-sm-12" ng-model="selFrom"  type="datetime-local">
+                                    <!--<input class="form-control col-sm-12" ng-model="selFrom"  type="datetime-local">-->
+                                    <div class="form-group">
+                                        <div class='input-group date' id='datetimepicker1'>
+                                            <input type='text' class="form-control" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-3">
-                                    <input class="form-control" ng-model="selTo" type="datetime-local">
+                                    <!--<input class="form-control" ng-model="selTo" type="datetime-local">-->
+                                    <div class="form-group">
+                                        <div class='input-group date' id='datetimepicker2'>
+                                            <input  type='text' class="form-control" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="col-sm-3">

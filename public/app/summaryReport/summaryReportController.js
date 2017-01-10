@@ -51,6 +51,16 @@
 
         };
 
+        $scope.setFrom=function(str){
+            $scope.selFrom=str;
+
+        };
+
+        $scope.setTo=function(str){
+            $scope.selTo=str;
+
+        };
+
 
         $scope.showSelectable = function (value) {
 
@@ -96,8 +106,11 @@
 
         loadSummary=function(id,from,to){
 
+            from=new Date(from);
+            to=new Date(to);
+
             var data={
-                device:JSON.stringify(id),
+                device:JSON.stringify($scope.selDevice),
                 from:$filter('date')(from,'yyyy-MM-dd HH:mm:ss'),
                 to:$filter('date')(to,'yyyy-MM-dd HH:mm:ss')
 

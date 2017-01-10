@@ -83,6 +83,17 @@
             $scope.selDevice.push(item);
         };
 
+        $scope.setFrom=function(str){
+            $scope.selFrom=str;
+
+        };
+
+        $scope.setTo=function(str){
+            $scope.selTo=str;
+
+        };
+
+        
         $scope.showReport=function(){
 
             if($scope.selDevice.length <=0){
@@ -108,6 +119,9 @@
         };
 
         loadEvents=function(id,from,to){
+
+            from=new Date(from);
+            to=new Date(to);
 
             var data={
                 device: JSON.stringify($scope.selDevice),

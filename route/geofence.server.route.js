@@ -13,6 +13,7 @@ module.exports=function(app) {
 
     app.post('/dao/mapGeofences', config.mapGeofenceData);
     app.get('/dao/getMapGeofenceById/:id', config.getMapGeofenceById);
+    app.get('/dao/getMapGeofenceByUser/:id', config.getMapGeofenceByUser);
 
     app.post('/not', config.notify);
 

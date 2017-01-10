@@ -91,14 +91,24 @@
                 return;
             }
 
+            console.log($scope.selFrom);
 
-            loadEvents($scope.selBus.gpsUnit,$scope.selFrom,$scope.selTo);;
+            loadEvents($scope.selBus.gpsUnit,$scope.selFrom,$scope.selTo);
         };
 
         $scope.removeDevice=function (index) {
             $scope.selDevice.splice(index,1);
         };
 
+        $scope.setFrom=function(str){
+            $scope.selFrom=str;
+
+        };
+
+        $scope.setTo=function(str){
+            $scope.selTo=str;
+
+        };
 
         getBusRegDetails=function () {
             busRegistrationService.getBusRegData().then(function(result){
@@ -110,11 +120,15 @@
 
         loadEvents=function(id,from,to){
 
+            from=new Date(from);
+            to=new Date(to);
             var data={
                 device: JSON.stringify($scope.selDevice),
                 from:$filter('date')(from,'yyyy-MM-dd HH:mm:ss'),
                 to:$filter('date')(to,'yyyy-MM-dd HH:mm:ss')
             };
+
+            console.log(data);
             eventReportService.getEvents(data).then(function(result){
 
                 $scope.events=result.data;
@@ -217,5 +231,9 @@
         getBusRegDetails();
 
     }
+
+
 })();
+
+
 

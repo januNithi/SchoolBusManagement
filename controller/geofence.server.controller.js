@@ -40,7 +40,7 @@ exports.getGeofences=function (req,res) {
 
 exports.getGeofenceById=function (req,res) {
 
-    var id=req.params.id;
+    var id=req.query.id;
     geofence.getGeofenceById(id,function (error,result) {
 
         if(error){
@@ -110,9 +110,14 @@ exports.mapGeofenceData=function (req,res) {
         gpsId: req.body.gpsUnit,
         geofenceId: req.body.geofenceId
     };
+var userId;
+    if(req.body.userId==undefined || req.body.userId=='')
+        userId=req.session.user.id;
+    else
+        userId=req.body.userId;
 
     console.log(data.geofenceId);
-    geofence.deleteMapping(data.gpsId,function (error,result) {
+    geofence.deleteMapping(data.gpsId,userId,function (error,result) {
 
         if(error)
             res.send(500,{error:error});
@@ -139,6 +144,20 @@ exports.getMapGeofenceById=function (req,res) {
 
     var id=req.params.id;
     geofence.getGeofenceMapping(id,function (error,result) {
+
+        if(error)
+            res.send(500,{error:error});
+        else {
+            res.send(result);
+        }
+    });
+
+};
+
+exports.getMapGeofenceByUser=function (req,res) {
+
+    var id=req.params.id;
+    geofence.getGeofenceMappingByUser(id,function (error,result) {
 
         if(error)
             res.send(500,{error:error});

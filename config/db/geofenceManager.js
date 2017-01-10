@@ -128,9 +128,10 @@ exports.mapGeofence = function (data,cb) {
     });
 };
 
-exports.deleteMapping = function (id,cb) {
+exports.deleteMapping = function (id,userid,cb) {
 
-    var query = "DELETE FROM device_geofence WHERE deviceid="+id;
+    var query = "DELETE FROM device_geofence WHERE deviceid="+id+" and geofenceid in (select geofenceid from user_geofence where userid="+userid+")";
+    console.log(query);
     con.query(query, function (err,results) {
         if (err) {
             console.log(err);
@@ -144,6 +145,19 @@ exports.deleteMapping = function (id,cb) {
 exports.getGeofenceMapping = function (id,cb) {
 
     var query = "SELECT deviceid,geofenceid FROM device_geofence WHERE deviceid="+id;
+    con.query(query, function (err,results) {
+        if (err) {
+            console.log(err);
+            cb(err,null);
+        } else {
+            cb(null,results);
+        }
+    });
+};
+
+exports.getGeofenceMappingByUser = function (userId,cb) {
+
+    var query = "SELECT deviceid,geofenceid FROM device_geofence WHERE geofenceid in (select geofenceid from user_geofence where userid="+userId+")";
     con.query(query, function (err,results) {
         if (err) {
             console.log(err);

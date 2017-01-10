@@ -17,7 +17,7 @@ exports.getSummary=function (req,res) {
 
     var arrayId=[];
     for(i=0;i<objId.length;i++){
-        arrayId.push(objId[i].id);
+        arrayId.push(objId[i].gpsUnit);
     }
 
 
