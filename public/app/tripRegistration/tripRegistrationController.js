@@ -32,7 +32,9 @@
         $scope.trip={
             drvId:0,
             rtId:0,
-            busId:0
+            busId:0,
+            start:0,
+            End:0
 
         };
 
@@ -112,17 +114,38 @@
             $scope.trip={
                 drvId:0,
                 rtId:0,
-                busId:0
+                busId:0,
+                Start:0,
+                End:0
 
             };
-
         };
 
         $scope.Edit = function (data) {
-
+            $scope.getTripRegDetails();
             $scope.trip = data;
-            $scope.trip.trpStart=new Date("2016-12-31 "+ data.trpStart);
-            $scope.trip.trpEnd=new Date("2016-12-31 "+ data.trpEnd);
+            $scope.trip.trpStart =new Date("2016-12-31 "+  data.trpStart);
+            $scope.trip.trpEnd = new Date("2016-12-31 " + data.trpEnd);
+
+            // var trpStart=angular.isString(data.trpStart);
+            // var trpEnd=angular.isString(data.trpEnd);
+            // if(trpStart==false) {
+            //     $scope.trip.trpStart = new Date("2016-12-31 " + data.trpStart).toTimeString();
+            // }
+            // else {
+            //     $scope.trip.trpStart = new Date("2016-12-31 " + data.trpStart);
+            //
+            //
+            //
+            // }
+            // if(trpEnd==false) {
+            //     $scope.trip.trpEnd = new Date("2016-12-31 " + data.trpEnd).toTimeString();
+            // }
+            // else {
+            //
+            //     $scope.trip.trpEnd = new Date("2016-12-31 " + data.trpEnd);
+            //
+            // }
 
         };
 
@@ -136,7 +159,14 @@
 
                 alert('Succesfully registered !!!');
                 $scope.getTripRegDetails();
-                $scope.trip='';
+                $scope.trip={
+                    drvId:0,
+                    rtId:0,
+                    busId:0,
+                    start:0,
+                    End:0
+
+                };
             });
 
         };
