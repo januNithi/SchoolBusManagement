@@ -26,7 +26,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="data in notificationObject" ng-style="{'background-color':data.dataRead == 0 ?  'black': 'darkslategray'}" style="cursor: pointer;" ng-dblclick="expandNotification(data)" ng-click="notificationSelected(data,$index)" ng-class="{'selectedRow':$index == selectedNotify}">
+                        <tr ng-repeat="data in notificationData" ng-style="{'background-color':data.dataRead == 0 ?  'black': 'darkslategray'}" style="cursor: pointer;" ng-dblclick="expandNotification(data)" ng-click="notificationSelected(data,$index)" ng-class="{'selectedRow':$index == selectedNotify}">
                             <!--<th><input type="checkbox" ng-model="selectedRte" ng-click="routeSelected(route,selectedRte)"></th>-->
                             <th>{{data.busCode}}</th>
                             <td>{{data.message}}</td>
@@ -79,5 +79,19 @@
         </div>
     </div>
     <!-- NotificationExpand Modal -->
+
+
+    <div class="pager">
+        <!-- Pagination -->
+        <pagination class = "pager"
+                    ng-model="curpage"
+                    total-items="totalItems"
+                    items-per-page="itemspage"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+        <!-- Pagination -->
+    </div>
+
 
 </div>

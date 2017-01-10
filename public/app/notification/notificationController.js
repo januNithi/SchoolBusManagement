@@ -16,6 +16,11 @@
         $scope.onlineEvents = [];
         $scope.offlineEvents = [];
         $scope.geofenceEvents =[];
+        $scope.curpage = 1;
+        $scope.itemspage = 15;
+        $scope.filteredDoc = [];
+        $scope.maxSize = 4;
+        $scope.totalItems = 0;
 
         $scope.selectedNotify;
         $scope.selectedunReadNotify;
@@ -80,6 +85,14 @@
                     alert(err);
                 }else {
                     $scope.notificationObject = result.data;
+
+                    $scope.totalItems = $scope.notificationObject.length;
+                    $scope.$watch('curpage + itemspage', function() {
+                        var begin = (($scope.curpage - 1) * $scope.itemspage),
+                            end = begin + $scope.itemspage;
+                        $scope.notificationData = $scope.notificationObject.slice(begin, end);
+                    });
+                    
                     $scope.readNotifyObj = [];
                     $scope.unReadNotifyObj = [];
                     angular.forEach($scope.notificationObject, function (value, index) {
