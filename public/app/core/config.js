@@ -78,6 +78,10 @@
             .when('/jsReport', {
                 controller: 'jsReportController',
                 templateUrl: '../app/jsReport/jsReport.html'
+            })
+            .when('/chartReport', {
+                controller: 'chartReportController',
+                templateUrl: '../app/chartReport/chartReport.html'
             });
 
         $locationProvider.html5Mode(true);

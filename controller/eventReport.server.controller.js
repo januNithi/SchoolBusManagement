@@ -23,6 +23,7 @@ exports.report=function(req,res){
 
     eventReport.getEvents(arrayId,from,to,function (error,result) {
 
+        console.log(result);
         var data={
             template:{"shortid":"r1ZRvDXHl","recipe" : "phantom-pdf"},
             data: {
@@ -65,6 +66,7 @@ exports.getEvents=function (req,res) {
 
 
 
+        // console.log(result);
         var response=[];
 
         if(error){
@@ -93,7 +95,7 @@ exports.getEvents=function (req,res) {
 
             }
 
-            console.log(response);
+            // console.log(response);
             res.send(response);
         }
 
@@ -221,4 +223,44 @@ exports.exportEvents= function(req, res){
 };
 
 
+exports.getEventsChart=function (req,res) {
 
+
+    var id=req.query.id;
+    var from=req.query.from;
+    var to=req.query.to;
+
+
+    eventReport.getEventsChart(id,from,to,function (error,result) {
+        
+
+        if(error){
+            res.send(500,{error:error});
+        }else{
+            res.send(result);
+        }
+
+    });
+
+};
+
+
+exports.getDelayChart=function (req,res) {
+
+
+    var from=req.query.from;
+    var to=req.query.to;
+
+
+    eventReport.getDelayChart(from,to,function (error,result) {
+
+
+        if(error){
+            res.send(500,{error:error});
+        }else{
+            res.send(result);
+        }
+
+    });
+
+};

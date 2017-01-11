@@ -365,9 +365,12 @@ function getRoutes(routeId,cb) {
         query += " where id = "+routeId;
     }
     con.query(query,function (err,result) {
+        console.log(err);
+        console.log(result);
         if(err){
             cb(err,result);
         }
+
         var totalLength = result.length;
         if(totalLength > 0) {
             result.forEach(function (value, index) {
