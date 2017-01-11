@@ -66,15 +66,26 @@
                         id: 'y-axis-1',
                         type: 'linear',
                         display: true,
-                        position: 'left'
-                    },
-                    // {
-                    //     id: 'y-axis-2',
-                    //     type: 'linear',
-                    //     display: true,
-                    //     position: 'right'
-                    // }
-                ]
+                        position: 'left',
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Count of Delay'
+                        }
+
+                    }
+
+                ],
+                xAxes: [{
+                    // type: 'linear',
+                    position: 'bottom',
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Months'
+                    }
+
+                }]
+
             }
         };
 
