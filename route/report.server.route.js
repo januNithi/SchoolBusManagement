@@ -25,6 +25,8 @@ module.exports=function(app) {
 
 
     app.get('/report/js', config.report);
+    app.get('/summaryReport/js', configSummary.report);
+    app.get('/studentReport/js', configStudent.report);
 
 
 };

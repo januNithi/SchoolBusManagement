@@ -4,6 +4,7 @@
 
 var eventReport = require('../config/db/studentReportManager');
 var excel = require('node-excel-export');
+var request = require('request');
 
 exports.getReport=function (req,res) {
 
@@ -53,6 +54,45 @@ exports.getReport=function (req,res) {
 
             console.log(response);
             res.send(response);
+        }
+
+    });
+
+
+
+};
+
+exports.report=function (req,res) {
+
+
+    var busId=req.query.busId;
+    var trpId=req.query.tripId;
+    var routeId=req.query.routeId;
+
+    eventReport.getReport(busId,trpId,routeId,function (error,result) {
+
+        var response=[];
+
+        if(error){
+            res.send(500,{error:error});
+        }else {
+
+            console.log(result);
+            var data = {
+                template: {"shortid": "Sk6X_DQHl", "recipe": "phantom-pdf"},
+                data: {
+                    "student": result
+
+                }
+            };
+            var options = {
+                uri: 'http://localhost:5488/api/report',
+                method: 'POST',
+                preview: 'true',
+                json: data
+            };
+
+            request(options).pipe(res);
         }
 
     });

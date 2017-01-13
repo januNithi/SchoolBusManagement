@@ -4,6 +4,7 @@
 
 var eventReport = require('../config/db/summaryReportManager');
 var excel = require('node-excel-export');
+var request = require('request');
 
 exports.getSummary=function (req,res) {
 
@@ -62,6 +63,48 @@ exports.getSummary=function (req,res) {
     });
 
 
+
+};
+
+
+
+exports.report=function (req,res) {
+
+
+
+    var id=req.query.id;
+    var objId=[];
+    objId=JSON.parse(id);
+    var from=req.query.from;
+    var to=req.query.to;
+
+    var arrayId=[];
+    for(i=0;i<objId.length;i++){
+        arrayId.push(objId[i].gpsUnit);
+    }
+
+
+    eventReport.getSummary(arrayId,from,to,function (error,result) {
+
+
+            console.log(result);
+            var data={
+                template:{"shortid":"ByG-dPmSl","recipe" : "phantom-pdf"},
+                data: {
+                    "summary": result,
+                    "from":from,
+                    "to":to
+                }
+            };
+            var options={
+                uri:'http://localhost:5488/api/report',
+                method:'POST',
+                preview:'true',
+                json:data
+            };
+
+            request(options).pipe(res);
+        });
 
 };
 

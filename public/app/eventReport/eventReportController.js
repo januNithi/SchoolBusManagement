@@ -149,6 +149,21 @@
 
         };
 
+        $scope.loadJsReportEvents=function(){
+
+            from=new Date($scope.selFrom);
+            to=new Date($scope.selTo);
+
+            var data={
+                device: JSON.stringify($scope.selDevice),
+                from:$filter('date')(from,'yyyy-MM-dd HH:mm:ss'),
+                to:$filter('date')(to,'yyyy-MM-dd HH:mm:ss')
+            };
+
+            $window.location.href="/report/js?id="+data.device +"&from="+data.from+"&to="+data.to;
+
+        };
+
         Array.prototype.remove = function() {
             var what, a = arguments, L = a.length, ax;
             while (L && this.length) {

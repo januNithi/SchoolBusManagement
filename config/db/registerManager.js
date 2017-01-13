@@ -375,7 +375,7 @@ function getRoutes(routeId,cb) {
         if(totalLength > 0) {
             result.forEach(function (value, index) {
 
-                query = "Select id,stpName,stpPosition,stpTime from stops where rtId = " + value.id + " order by time(stpTime) ASC";
+                query = "Select id,stpName,stpPosition from stops where rtId = " + value.id; //+ " order by time(stpTime) ASC";
 
                 con.query(query, function (err, result) {
                     if (err) {

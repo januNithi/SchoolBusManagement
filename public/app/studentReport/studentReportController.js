@@ -74,6 +74,19 @@
             });
         };
 
+        $scope.loadJsReportStudent=function(){
+
+            var url='';
+
+            url+=($scope.selBus==undefined) ?'busId=null':'busId='+$scope.selBus.id;
+            url+=$scope.selTrip==undefined?'&tripId=null':'&tripId='+$scope.selTrip.id;
+            url+=$scope.selRoute==undefined?'&routeId=null':'&routeId='+$scope.selRoute.id;
+
+            $window.location.href="/studentReport/js?"+url;
+
+        };
+
+
         $scope.exportReport=function(){
 
             var url='';
