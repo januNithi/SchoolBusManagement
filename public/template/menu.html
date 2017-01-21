@@ -8,30 +8,65 @@
         </button>
         <a class="navbar-brand" href="/home">Admin Panel</a>
     </div>
+
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul id="active" class="nav navbar-nav side-nav">
-            <li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Dashboard</a></li>
-            <li ng-class="showSelectable('home')"><a href="/home"><i class="fa fa-home"></i> Route Map </a></li>
-            <li ng-class="showSelectable('gps')"><a href="/gpsUnitRegistration"><i class="fa fa-globe"></i> GPS unit</a></li>
-            <li ng-class="showSelectable('bus')"><a href="/busRegistration"><i class="fa fa-bus"></i> Buses </a></li>
-            <li ng-class="showSelectable('driver')"><a href="/driverRegistration"><i class="fa fa-id-card-o"></i> Drivers</a></li>
-            <li ng-class="showSelectable('route')"><a href="/route"><i class="fa fa-road"></i> Routes </a></li>
-            <li ng-class="showSelectable('trip')"><a href="/tripRegistration"><i class="fa fa-plane"></i> Trips </a></li>
-            <li ng-class="showSelectable('student')"><a href="/studentRegistration"><i class="fa fa-graduation-cap"></i>  Students </a></li>
+
             <!--<li ng-class="showSelectable('#')"><a href="#"><i class="fa fa-user"></i> Profile</a></li>-->
             <!--<li ng-class="showSelectable('report')"><a href="/reports"><i class="fa fa-cog"></i> Reports </a></li>-->
             <!--<li ng-class="showSelectable('settings')"><a href="/settings"><i class="fa fa-cog"></i> Settings </a></li>-->
-            <li ng-class="showSelectable('notification')"><a href="/notification"><i class="fa fa-bell-o"></i> Notification</a></li>
+
             <!--<li ng-class="showSelectable('#')"><a href="/geofenceRegistration"><i class="fa fa-bell-o"></i> Geofence</a></li>-->
             <!--<li ng-class="showSelectable('#')"><a href="#"><i class="fa fa-bell-o"></i> Notification</a></li>-->
-            <li ng-class="showSelectable('geofence')"><a href="/geofenceRegistration"><i class="fa fa-bell-slash"></i> Geofence</a></li>
-            <li ng-class="showSelectable('eventReport')"><a href="/eventReport"><i class="fa fa-bell-o"></i> Event Report</a></li>
-            <li ng-class="showSelectable('summaryReport')"><a href="/summaryReport"><i class="fa fa-bell-o"></i> Summary Report</a></li>
-            <li ng-class="showSelectable('studentReport')"><a href="/studentReport"><i class="fa fa-bell-o"></i> Student Report</a></li>
-            <!--<li ng-class="showSelectable('jsReport')"><a href="/jsReport"><i class="fa fa-bell-o"></i> JS Report</a></li>-->
-            <li ng-class="showSelectable('chartReport')"><a href="/chartReport"><i class="fa fa-bell-o"></i>Chart Report</a></li>
 
 
+            <!--<li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Dashboard</a></li>-->
+            <li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Dashboard</a></li>
+            <li ng-class="showSelectable('home')"><a href="/home"><i class="fa fa-home"></i> Route Map </a></li>
+            <li ng-class="showSelectable('notification')"><a href="/notification"><i class="fa fa-bell-o"></i> Notification</a></li>
+
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse"  data-target="#collapse2"  style="cursor: pointer">Settings</a>
+                        </h4>
+                    </div>
+                    <div class="panel-collapse" id="collapse2" >
+                        <ul class="nav">
+                            <li ng-class="showSelectable('gps')"><a href="/gpsUnitRegistration"><i class="fa fa-globe"></i> GPS unit</a></li>
+                            <li ng-class="showSelectable('bus')"><a href="/busRegistration"><i class="fa fa-bus"></i> Buses </a></li>
+                            <li ng-class="showSelectable('driver')"><a href="/driverRegistration"><i class="fa fa-id-card-o"></i> Drivers</a></li>
+                            <li ng-class="showSelectable('route')"><a href="/route"><i class="fa fa-road"></i> Routes </a></li>
+                            <li ng-class="showSelectable('trip')"><a href="/tripRegistration"><i class="fa fa-plane"></i> Trips </a></li>
+                            <li ng-class="showSelectable('student')"><a href="/studentRegistration"><i class="fa fa-graduation-cap"></i>  Students </a></li>
+                            <li ng-class="showSelectable('geofence')"><a href="/geofenceRegistration"><i class="fa fa-bell-slash"></i> Geofence</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-target="#collapse1" style="cursor: pointer">Report</a>
+                        </h4>
+                    </div>
+                    <div   id="collapse1" >
+                        <ul class="nav ">
+                            <li ng-class="showSelectable('eventReport')"><a href="/eventReport"><i class="fa fa-bell-o"></i> Event Report</a></li>
+                            <li ng-class="showSelectable('summaryReport')"><a href="/summaryReport"><i class="fa fa-bell-o"></i> Summary Report</a></li>
+                            <li ng-class="showSelectable('studentReport')"><a href="/studentReport"><i class="fa fa-bell-o"></i> Student Report</a></li>
+                            <li ng-class="showSelectable('chartReport')"><a href="/chartReport"><i class="fa fa-bell-o"></i>Chart Report</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
 
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user">
@@ -80,7 +115,6 @@
                     <!--<li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>-->
                     <!--<li class="divider"></li>-->
                     <li><a ng-click="onLogout()"><i class="fa fa-power-off"></i> Log Out</a></li>
-
                 </ul>
             </li>
             <li class="divider-vertical"></li>
@@ -92,3 +126,18 @@
         </ul>
     </div>
 </nav>
+
+<!--<script type="text/javascript">-->
+    <!--$('.navbar-nav').on('click', 'li a', function() {-->
+        <!--console.log($(this).parent().parent().parent().hasClass("in"));-->
+        <!--if($(this).parent().parent().parent().hasClass("collapse")){-->
+            <!--$(this).parent().parent().parent().removeClass("collapse");-->
+            <!--$(this).parent().parent().parent().removeClass("in");-->
+        <!--}-->
+
+        <!--console.log($(this).parent().parent().parent());-->
+
+    <!--});-->
+
+
+<!--</script>-->
