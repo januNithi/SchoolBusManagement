@@ -126,20 +126,50 @@
 
         $scope.getStops = function () {
 
-            angular.forEach($scope.routeData,function (value,index) {
+            angular.forEach($scope.routeData, function (value, index) {
 
-                    if(value.id == $scope.trip.rtId){
+                if (value.id == $scope.trip.rtId) {
 
-                        $scope.stops = value.stops;
+                    $scope.stops = value.stops;
 
-                    }
+                    $scope.trip.stops = $scope.stops;
+
+                    angular.forEach($scope.stops, function (value, index) {
+
+                        if ($scope.trip['stop_' + value.id]) {
+                            $scope.trip['stop_' + value.id] = new Date("2016-12-31 " + $scope.trip['stop_' + value.id]);
+                        }
+
+                    });
+
+                }
 
             });
 
-        }
+        };
+
+        $scope.showStops = function (data) {
+
+           angular.forEach($scope.filteredDoc,function (value,index) {
+
+               if(data.id == value.id){
+                   value.showStops = true;
+               }else{
+                   value.showStops = false;
+               }
+
+           });
+
+        };
+        
+        $scope.showValue = function (data,stop) {
+          
+            return stop.stpName + ':' + data['stop_'+stop.id];
+            
+        };
 
         $scope.Edit = function (data) {
-            $scope.getTripRegDetails();
+            // $scope.getTripRegDetails();
             $scope.trip = data;
             $scope.trip.trpStart =new Date("2016-12-31 "+  data.trpStart);
             $scope.trip.trpEnd = new Date("2016-12-31 " + data.trpEnd);
@@ -171,6 +201,13 @@
             $scope.data=data;
             $scope.data.trpStart=$filter('date')(data.trpStart,'HH:mm:ss');
             $scope.data.trpEnd=$filter('date')(data.trpEnd,'HH:mm:ss');
+            angular.forEach($scope.stops,function (value,index) {
+
+                if($scope.data['stop_'+value.id]) {
+                    $scope.data['stop_' + value.id] = $filter('date')(data['stop_' + value.id],'HH:mm:ss');
+                }
+
+            });
             $scope.data.stops = $scope.stops;
             // $scope.data[stops = $scope.stops;
             tripRegistrationService.postTripRegDetails($scope.data).then(function (result) {

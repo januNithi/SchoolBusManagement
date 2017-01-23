@@ -28,6 +28,7 @@
                     <th>Route</th>
                     <th>Bus</th>
                     <th>Driver</th>
+                    <th>Stops</th>
                     <th>Option</th>
                 </tr>
                 </thead>
@@ -41,6 +42,16 @@
                     <td>{{data.rtName}}</td>
                     <td>{{data.busCode}}</td>
                     <td>{{data.drvName}}</td>
+                    <td>
+                        <button class="btn btn-warning" ng-hide="data.showStops" ng-click="showStops(data)">Stops/Time</button>
+                        <div ng-show="data.showStops">
+
+                            <li ng-repeat="stop in data.stops">
+                                {{showValue(data,stop)}}
+                            </li>
+
+                        </div>
+                    </td>
                     <td>
                         <span class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="Edit(data)" aria-hidden="true"></span>
                         <span class="fa fa-window-close"  style="color: red" ng-click="delete(data)" aria-hidden="true"></span>

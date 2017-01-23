@@ -154,17 +154,47 @@ function getTripRegDatas(tripId,cb) {
 
             data.forEach(function (value,index) {
 
-                var query = "Select time,stopId from stop_time where status = 'active'";
+                var query = "Select time,stopId from stop_time where status = 'active' and tripId = "+value.id;
 
                 con.query(query,function (err,result) {
 
+                    if(err){
+                        cb(err,result);
+                    }else{
+                        if(result.length > 0){
+                            result.forEach(function (value1,index1) {
 
+                                value['stop_'+value1.stopId] = value1.time;
 
+                                var query = "Select stpName,id,stpPosition from stops where rtId = "+value.rtId;
+
+                                con.query(query,function(err,result){
+
+                                    if(err){
+                                        cb(err,result);
+                                    }else {
+                                        value.stops = result;
+                                        value.showStops = false;
+                                        if((index + 1) == data.length && (index1 + 1) == result.length){
+                                            cb(err, data);
+
+                                        }
+                                    }
+                                });
+
+                            });
+                        }else{
+                            if((index + 1) == data.length){
+
+                                cb(err,data);
+
+                            }
+                        }
+                    }
                 });
 
             });
 
-            cb(err,results);
         }
     });
 
@@ -210,11 +240,17 @@ function updateStopTime(data,cb) {
         }else{
             data.stops.forEach(function (value,index) {
                 query = "Insert into stop_time(tripId,stopId,time,status) values(";
-                query += ""+data.tripId+","+value.id+","+data['stop_'+value.id]+",'active')";
+                query += ""+data.tripId+","+value.id+",'"+data['stop_'+value.id]+"','active')";
+                console.log(query);
                 con.query(query,function (err,result) {
-                   if((index +1 )==data.stops.length) {
-                       cb(err, result);
-                   }
+                    if(err){
+                        cb(err,result);
+                    }else{
+                        if((index +1 )==data.stops.length) {
+                            cb(err, result);
+                        }
+                    }
+
                 });
             });
         }
