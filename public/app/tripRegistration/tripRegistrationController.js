@@ -29,6 +29,8 @@
         $scope.maxSize = 4;
         $scope.totalItems = 0;
 
+        $scope.stops = [];
+
         $scope.trip={
             drvId:0,
             rtId:0,
@@ -119,13 +121,29 @@
                 End:0
 
             };
+            $scope.stops = [];
         };
+
+        $scope.getStops = function () {
+
+            angular.forEach($scope.routeData,function (value,index) {
+
+                    if(value.id == $scope.trip.rtId){
+
+                        $scope.stops = value.stops;
+
+                    }
+
+            });
+
+        }
 
         $scope.Edit = function (data) {
             $scope.getTripRegDetails();
             $scope.trip = data;
             $scope.trip.trpStart =new Date("2016-12-31 "+  data.trpStart);
             $scope.trip.trpEnd = new Date("2016-12-31 " + data.trpEnd);
+            $scope.getStops();
 
             // var trpStart=angular.isString(data.trpStart);
             // var trpEnd=angular.isString(data.trpEnd);
@@ -150,11 +168,11 @@
         };
 
         $scope.add = function (data) {
-
             $scope.data=data;
             $scope.data.trpStart=$filter('date')(data.trpStart,'HH:mm:ss');
             $scope.data.trpEnd=$filter('date')(data.trpEnd,'HH:mm:ss');
-
+            $scope.data.stops = $scope.stops;
+            // $scope.data[stops = $scope.stops;
             tripRegistrationService.postTripRegDetails($scope.data).then(function (result) {
 
                 alert('Succesfully registered !!!');
@@ -165,10 +183,9 @@
                     busId:0,
                     start:0,
                     End:0
-
                 };
+                $scope.stops = [];
             });
-
         };
 
         $scope.delete = function (data) {

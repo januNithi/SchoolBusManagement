@@ -116,7 +116,7 @@ exports.getTripRegData=function (req,res) {
 };
 exports.postTripRegDetail=function (req,res) {
     var data=req.body;
-    config.postTripRegDatas(data).then(function(result){
+    config.postTripRegDatas(data,function(result){
         res.send(result);
     });
 
@@ -146,7 +146,6 @@ exports.postDriverDetail=function (req,res) {
         if(files.driverLicence==undefined)
         {
             data.driverLicence= fields.driverLicence;
-
         }else
         {
             var driverLicence=files.driverLicence;

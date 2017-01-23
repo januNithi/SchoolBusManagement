@@ -109,6 +109,8 @@ module.exports = function(app, passport) {
     app.get('/verifyOTP',function (req,res) {
 
         var token = req.query.token;
+        var userid = req.query.userid;
+        var password = req.query.password;
 
         config.verifyOTPAppUser(req.query.otp, req.query.userid,function (err, result) {
 
@@ -124,7 +126,16 @@ module.exports = function(app, passport) {
                     if(err){
                         res.send(500,{error:err});
                     }else{
-                        res.send(studentData);
+                        config.updateAppUser(userid,password,function (err,result) {
+                           
+                            if(err){
+                                res.send(500,{error:err});
+                            }else{
+                                res.send(studentData);
+                            }
+                            
+                        });
+
                     }
                 });
             }

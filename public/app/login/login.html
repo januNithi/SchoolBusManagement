@@ -143,7 +143,7 @@ border-bottom-right-radius: 0;
             <span class="fa fa-spinner bigicon"></span>
             <h2>Login</h2>
             <div>
-                <input id="username" type="text" placeholder="username" ng-model="userName" onkeypress="check_values();">
+                <input id="username" type="text" only-digits placeholder="username" ng-model="userName" onkeypress="check_values();">
                 <input id="password" type="password" placeholder="password" ng-model="password" onkeypress="check_values();">
                 <button id="button1" class="btn btn-default wide hidden"  ng-click="login()"><span class="fa fa-check med">LOGIN</span></button>
                 <button id="lock1" style="background-color: red;" class="fa fa-user-o medhidden redborder">&nbsp;&nbsp;<font color="#fffafa">LOGIN</font></button>

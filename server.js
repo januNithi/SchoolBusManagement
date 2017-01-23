@@ -3,6 +3,7 @@ var FCM = require('fcm-node');
 var app=express();
 var config = require('./controller/clientApp.server.controller');
 var geolib = require('geolib');
+var dateFormat = require('dateformat');
 
 var serverKey = 'AAAAwDLf34Y:APA91bFPj38UR2AbkpqhblOOWg-vxkrfY2r5j2pEbg_OwjemLCWU5Iw-O1jYBaap-ZO3-wjx73vFMDaHQ6tbwpGu9lXmmDL0hQnl7_mLgkEbz2l0vHczXwdIIemtxl5kd0ftmN6NbNOOSmx3YLRNd8QD5lJaupqsMQ';
 var fcm = new FCM(serverKey);
@@ -149,19 +150,23 @@ function notificationAlgorithm(notificationData) {
                     if(value.gpsUnit == notificationData.device.id){
 
                         // var minDate = new Date(value.trpStart);
-                        var minDate = new Date('2017-01-09 '+value.trpStart);//IF trpStart is TIME
+                        var minDate = new Date(new Date().toLocaleDateString()+' '+value.trpStart);//IF trpStart is TIME
                         var minTime = minDate.getTime() - (10 * 60 * 1000);
-                        var maxDate = new Date('2017-01-09 '+value.trpStart);
+                        var maxDate = new Date(new Date().toLocaleDateString()+' '+value.trpStart);
                         var maxTime = maxDate.getTime() + (10 * 60 * 1000);
 
                         // var deviceTime = new Date(notificationData.position.deviceTime);
 
-                        if(new Date().getTime() > minTime && new Date().getTime() < maxTime){
+                        var date = new Date();
+
+                        if(date.getTime() > minTime && date.getTime() < maxTime){
                             var data = {
-                                message : 'Bus Started at '+ new Date().toLocaleTimeString(),
+                                message : 'Bus Started at '+ date.toLocaleTimeString(),
                                 bus_id : value.busId,
                                 gpsUnit : notificationData.device.id,
-                                gps : notificationData.device.name
+                                gps : notificationData.device.name,
+                                date : dateFormat(date, "yyyy-mm-dd h:MM:ss"),
+                                trip_id : value.id
                             };
                             config.updateNotification(data,function (err,result) {
                                
@@ -203,19 +208,23 @@ function notificationAlgorithm(notificationData) {
                     if(value.gpsUnit == notificationData.device.id){
 
                         // var minDate = new Date(value.trpStart);
-                        var minDate = new Date('2017-01-09 '+value.trpStart);
+                        var minDate = new Date(new Date().toLocaleDateString()+' '+value.trpEnd);
                         var minTime = minDate.getTime() - (10 * 60 * 1000);
-                        var maxDate = new Date('2017-01-09 '+value.trpStart);
+                        var maxDate = new Date(new Date().toLocaleDateString()+' '+value.trpEnd);
                         var maxTime = maxDate.getTime() + (10 * 60 * 1000);
 
                         // var deviceTime = new Date(notificationData.position.deviceTime);
 
-                        if(new Date().getTime() > minTime && new Date().getTime() < maxTime){
+                        var date = new Date();
+
+                        if(date.getTime() > minTime && date.getTime() < maxTime){
                             var data = {
-                                message : 'Bus Stopped at '+new Date().toLocaleTimeString(),
+                                message : 'Bus Stopped at '+date.toLocaleTimeString(),
                                 bus_id : value.busId,
                                 gpsUnit : notificationData.device.id,
-                                gps : notificationData.device.name
+                                gps : notificationData.device.name,
+                                date : dateFormat(date, "yyyy-mm-dd h:MM:ss"),
+                                trip_id : value.id
                             };
                             config.updateNotification(data,function (err,result) {
 
@@ -255,7 +264,7 @@ function stopReachAlgorithm(stopReachData) {
 
     config.sendNotification(stopReachData,function (err,result) {
         console.log(err);
-        if(result.length > 0){
+        if(result && result.length > 0){
             console.log(result);
             result.forEach(function (value,index) {
                 var stpPosition = JSON.parse(value.stop.stpPosition);

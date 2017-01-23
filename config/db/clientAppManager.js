@@ -63,7 +63,15 @@ function updateNotificationStopdup(stops,studId,cb) {
 }
 
 function getAppStartData(data,cb) {
-    var query = "Select trip,stop from student where MobileNo = '"+data.userid+"'";
+
+    var query = "Select s.id as studId,s.trip,s.stop,(select stpName from stops where id = s.stop) as stopName,";
+    query += "(Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId,";
+    query += "(Select gpsUnit from bus where id = (Select busId from trips where id = s.trip)) as gpsUnit,";
+    query += "(Select GROUP_CONCAT(stopId) from stop_notification where studId = s.id) as stop_notifyId";
+    query += " from student as s where s.MobileNo = '"+data.userid+"'";
+    // var query = "Select s.id as studId,s.trip,s.stop,(select stpName from stops where id = s.stop) as stopName,";
+    // var query = "(Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId";
+    // query += " from student as s where MobileNo = '"+data.userid+"'";
 
     con.query(query,function (err,result) {
 
@@ -89,7 +97,7 @@ function getUser(id,cb) {
 }
 
 function getNotificationTrip(cb) {
-    var query = "Select t.trpStart,t.trpEnd,t.busId,b.busCode,b.gpsUnit,g.uniqueId,g.unitName from";
+    var query = "Select t.trpStart,t.id,t.trpEnd,t.busId,b.busCode,b.gpsUnit,g.uniqueId,g.unitName from";
     query += " trips as t left join bus as b on t.busId = b.id left join gpsunit as g on b.gpsUnit=g.id";
 
     con.query(query,function (err,result) {
@@ -106,9 +114,9 @@ function getStopDetails(id,cb) {
 }
 
 function updateNotification(data,cb) {
-    var query = "Insert into notification(message,gps,gpsUnit,bus_id,dataRead)";
+    var query = "Insert into notification(message,gps,gpsUnit,bus_id,trip_id,date,dataRead)";
     query += " values('"+data.message+"','"+data.gps+"',"+data.gpsUnit;
-    query += ","+data.bus_id+","+0+")";
+    query += ","+data.bus_id+","+data.trip_id+",'"+data.date+"',"+0+")";
 
     con.query(query,function (err,result) {
         cb(err,result);
@@ -118,7 +126,7 @@ function updateNotification(data,cb) {
 
 function getAdminNotification(cb) {
     var query = "Select id,message,gps,gpsUnit,bus_id,(Select busCode from bus where id=bus_id) as busCode";
-    query += " ,dataRead from notification";
+    query += " ,dataRead,date,trip_id from notification";
 
     con.query(query,function (err,result) {
         cb(err,result);

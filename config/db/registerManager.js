@@ -150,15 +150,28 @@ function getTripRegDatas(tripId,cb) {
             cb(err,results);
         } else {
 
+            var data = results;
+
+            data.forEach(function (value,index) {
+
+                var query = "Select time,stopId from stop_time where status = 'active'";
+
+                con.query(query,function (err,result) {
+
+
+
+                });
+
+            });
+
             cb(err,results);
         }
     });
 
 };
 
-function postTripRegDatas(data) {
+function postTripRegDatas(data,cb) {
     var RegInfo='';
-    var deferred = q.defer();
     if(data.id==undefined)
     {
         RegInfo = "insert into trips(trpName,trpSession,trpStart,trpEnd,rtId,busId,drvId) values('" + data.trpName + "','" + data.trpSession + "','" + data.trpStart + "','" + data.trpEnd + "','" + data.rtId + "','" + data.busId + "','" + data.drvId + "')";
@@ -171,15 +184,43 @@ function postTripRegDatas(data) {
     con.query(RegInfo, function (err,results) {
         if (err) {
             console.log(err);
-            deferred.reject(err);
+            cb(err,results);
         } else {
 
-            deferred.resolve(results);
+            if(data.id){
+                data.tripId = data.id;
+            }else{
+                data.tripId = results.insertId;
+            }
+
+            updateStopTime(data,function (err,result) {
+                cb(err,results);
+            });
+
         }
     });
-    return deferred.promise;
 
 };
+
+function updateStopTime(data,cb) {
+    var query = "Update stop_time set status = 'Marked as Deleted' where tripId = "+data.tripId;
+    con.query(query,function (err,result) {
+        if(err){
+            cb(err,result);
+        }else{
+            data.stops.forEach(function (value,index) {
+                query = "Insert into stop_time(tripId,stopId,time,status) values(";
+                query += ""+data.tripId+","+value.id+","+data['stop_'+value.id]+",'active')";
+                con.query(query,function (err,result) {
+                   if((index +1 )==data.stops.length) {
+                       cb(err, result);
+                   }
+                });
+            });
+        }
+    });
+}
+
 function deleteTripRegDatas(data) {
 
     var deferred = q.defer();
@@ -375,7 +416,7 @@ function getRoutes(routeId,cb) {
         if(totalLength > 0) {
             result.forEach(function (value, index) {
 
-                query = "Select id,stpName,stpPosition from stops where rtId = " + value.id; //+ " order by time(stpTime) ASC";
+                query = "Select id,stpName,stpPosition from stops where rtId = " + value.id;
 
                 con.query(query, function (err, result) {
                     if (err) {
@@ -440,9 +481,9 @@ function updateRoutes(data,cb) {
                   if(data.stops && data.stops.length) {
 
                       data.stops.forEach(function (value, index) {
-                          query = "Insert into stops(stpName,stpPosition,stpTime,rtId)";
-                          query += " values('" + value.stpName + "','" + JSON.stringify(value.stpPosition) + "','";
-                          query += "" + value.stpTime + "'," + rtId + ")";
+                          query = "Insert into stops(stpName,stpPosition,rtId)";
+                          query += " values('" + value.stpName + "','" + JSON.stringify(value.stpPosition) + "',";
+                          query += rtId + ")";
                           con.query(query, function (err, result) {
 
                               if (err) {

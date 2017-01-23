@@ -55,7 +55,94 @@
             zoomProperty: 8,
             clickedLatitudeProperty: null,
             clickedLongitudeProperty: null,
+            layercontrol: {
+                icons: {
+                    uncheck: "fa fa-toggle-off",
+                    check: "fa fa-toggle-on"
+                }
+            },
+            controls: {
+                fullscreen: {
+                    position: 'topleft'
+                },
+                custom:[
+                     {
+                        player: {
+                            transitionTime: 100,
+                            loop: false,
+                            startOver:true,
+                        },
+                        timeDimension: {
+                            period: "PT5M",
+                        },
+                        position:      'bottomleft',
+                        autoPlay:      true,
+                        minSpeed:      1,
+                        speedStep:     0.5,
+                        maxSpeed:      15,
+                        timeSliderDragUpdate: true,
+                         addTo : function () {
+                             
+                         }
+                    }
+
+                ]
+            },
+            layers: {
+                baselayers: {
+
+                    osm: {
+                        name: "OpenStreetMap",
+                        type: "xyz",
+                        url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                        layerOptions: {
+                            subdomains: ["a", "b", "c"],
+                            attribution: "&copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+                            continuousWorld: true
+                        }
+                    },
+                    cycle: {
+                        name: "OpenCycleMap",
+                        type: "xyz",
+                        url: "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+                        layerOptions: {
+                            subdomains: ["a", "b", "c"],
+                            attribution: "&copy; <a href=\"http://www.opencyclemap.org/copyright\">OpenCycleMap</a> contributors - &copy; <a href=\"http://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors",
+                            continuousWorld: true
+                        }
+                    }
+                },
+                overlays: {
+
+                }
+            }
         });
+
+        function getCommonBaseLayers(map){
+            var osmLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            });
+            var bathymetryLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {
+                layers: 'emodnet:mean_atlas_land',
+                format: 'image/png',
+                transparent: true,
+                attribution: "EMODnet Bathymetry",
+                opacity: 0.8
+            });
+            var coastlinesLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {
+                layers: 'coastlines',
+                format: 'image/png',
+                transparent: true,
+                attribution: "EMODnet Bathymetry",
+                opacity: 0.8
+            });
+            var bathymetryGroupLayer = L.layerGroup([bathymetryLayer, coastlinesLayer]);
+            bathymetryGroupLayer.addTo(map);
+            return {
+                "EMODnet Bathymetry": bathymetryGroupLayer,
+                "OSM": osmLayer
+            };
+        }
 
         $scope.showSelectable = function (value) {
 
@@ -159,12 +246,12 @@
                         var lngitude=lngs.toFixed(4);
                         var lat=Math.abs(latitude);
                         var lng=Math.abs(lngitude);
-                        console.log(lat);
-                        console.log(lng);
+                        // console.log(lat);
+                        // console.log(lng);
                         if ((lat<4.5) && (lng<4.5)) {
                             if((lat>0)&& (lng>0)) {
                                 $scope.busPosition.push(value);
-                                console.log($scope.busPosition);
+                                // console.log($scope.busPosition);
                             }
 
                         }
@@ -258,6 +345,7 @@
                         }
 
                     };
+
                     leafletData.getMap('map').then(function(map){
 
 
@@ -268,6 +356,8 @@
                         lng: value.lng,
                         zoom: 18
                     };
+
+                   
 
                     // var marker=L.marker([$scope.busPosition[0].lat,$scope.busPosition[0].lng]).addTo($scope.map);marker.bindPopup('hi').openPopup();
                     //
@@ -292,6 +382,7 @@
                             lat:$scope.busPosition[0].lat,
                             lng:$scope.busPosition[0].lng,
                             iconSize: [38, 95],
+                            time: "2013-01-22 10:24:59+01",
                             icon:{
 
                                 iconUrl: 'images/school-bus.png',
@@ -314,6 +405,7 @@
                                 color:'green'
                             },
                             title: value.devicetime,
+                             time: "2013-01-22 10:24:59+01",
                             message:'<strong>End:></strong>'+'DeviceTime:'+new Date($scope.busPosition[$scope.busPosition.length-1].devicetime).toLocaleString(),
                             riseOnHover: true,
                             opacity: 5,
@@ -323,6 +415,95 @@
 
 
                     }
+                    leafletData.getMap('map').then(function (map) {
+
+//                         var startDate = new Date();
+//                         startDate.setUTCHours(0, 0, 0, 0);
+//
+//                         // var map = L.map('map', {
+//                         //     zoom: 12,
+//                         //     fullscreenControl: true,
+//                         //     center: [39.3, 4]
+//                         // });
+//                         // map = L.map('map', {
+//                         //     zoom: 12,
+//                         //     fullscreenControl: true,
+//                         //     center: [39.3, 4]
+//                         // });
+//
+// // start of TimeDimension manual instantiation
+//                         var timeDimension = new L.TimeDimension({
+//                             period: "PT5M",
+//                         });
+// // helper to share the timeDimension object between all layers
+//                         map.timeDimension = timeDimension;
+// // otherwise you have to set the 'timeDimension' option on all layers.
+//
+//                         var player        = new L.TimeDimension.Player({
+//                             transitionTime: 100,
+//                             loop: false,
+//                             startOver:true
+//                         }, timeDimension);
+//
+//                         var timeDimensionControlOptions = {
+//                             player:        player,
+//                             timeDimension: timeDimension,
+//                             position:      'bottomleft',
+//                             autoPlay:      true,
+//                             minSpeed:      1,
+//                             speedStep:     0.5,
+//                             maxSpeed:      15,
+//                             timeSliderDragUpdate: true
+//                         };
+//
+//                         var timeDimensionControl = new L.Control.TimeDimension(timeDimensionControlOptions);
+//                         map.addControl(timeDimensionControl);
+//
+//                         var icon = L.icon({
+//                             iconUrl: 'img/running.png',
+//                             iconSize: [22, 22],
+//                             iconAnchor: [5, 25]
+//                         });
+//
+//                         var customLayer = L.geoJson(null, {
+//                             pointToLayer: function (feature, latLng) {
+//                                 if (feature.properties.hasOwnProperty('last')) {
+//                                     return new L.Marker(latLng, {
+//                                         icon: icon
+//                                     });
+//                                 }
+//                                 return L.circleMarker(latLng);
+//                             }
+//                         });
+//
+//                         var gpxLayer = omnivore.gpx('data/running_mallorca.gpx', null, customLayer).on('ready', function() {
+//                             map.fitBounds(gpxLayer.getBounds(), {
+//                                 paddingBottomRight: [40, 40]
+//                             });
+//                         });
+//
+//                         var gpxTimeLayer = L.timeDimension.layer.geoJson(gpxLayer, {
+//                             updateTimeDimension: true,
+//                             addlastPoint: true,
+//                             waitForReady: true
+//                         });
+//
+//                         var kmlLayer = omnivore.kml('data/easy_currents_track.kml');
+//                         var kmlTimeLayer = L.timeDimension.layer.geoJson(kmlLayer, {
+//                             updateTimeDimension: true,
+//                             addlastPoint: true,
+//                             waitForReady: true
+//                         });
+//
+//
+//                         var overlayMaps = {
+//                             "GPX Layer": gpxTimeLayer,
+//                             "KML Layer": kmlTimeLayer
+//                         };
+//                         var baseLayers = getCommonBaseLayers(map); // see baselayers.js
+//                         L.control.layers(overlayMaps).addTo(map);
+//                         gpxTimeLayer.addTo(map);
+                    });
 
                 } else {
                     var points = {
@@ -331,17 +512,22 @@
                         icon: {
                             iconUrl: 'images/Circle_Blue.png',
                         },
-                        title: value.devicetime,
+                        time: value.devicetime,
                         riseOnHover: true,
                         opacity: 5,
                         riseOffset: 250
                     }
+
                     latLng.push(points);
+
                 }
 
             });
 
+
+
         }
+
 
 
 
@@ -682,7 +868,7 @@
         // $scope.clearMap();
 
         $scope.showDate = function () {
-          console.log($scope.selectedDate);
+          // console.log($scope.selectedDate);
         };
 
         socket.on('notification',function (data) {
@@ -702,8 +888,8 @@
                 riseOffset: 250
             }
             $scope.busPosition.push(points);
-            console.log(data.lat);
-            console.log(data.lng);
+            // console.log(data.lat);
+            // console.log(data.lng);
             $scope.markers.marker.lat = Number(data.lat);
             $scope.markers.marker.lng = Number(data.lng);
             $scope.center.lat = Number(data.lat);

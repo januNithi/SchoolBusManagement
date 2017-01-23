@@ -7,7 +7,7 @@ var con = mysql.createConnection(db);
 
 function authenticate(userName,password,cb) {
     var query = "Select id,userId,pwd,usrType from users where userId = '"+userName+"'";
-    query += " and pwd = '"+password+"'";
+    query += " and pwd = '"+password+"' and usrType = 'admin'";
     con.query(query,function (err,result) {
        if(err){
            cb(err,result);
@@ -67,18 +67,38 @@ function verifyOTPAppUser(otp,userNumber,cb) {
     });
 };
 
-function getUserDetails(userNumber,cb){
-
-    var query = "Select "
+function updateAppUser(userid,password,cb){
+    var query = "Select id from users where userid = '"+userid+"' and usrType ='parent'";
     con.query(query,function (err,result) {
-
         if(err){
             cb(err,result);
+        }else{
+            if(result.length > 0){
+                query = "Update users set pwd = '"+password+"'";
+            }else{
+                query = "Insert into users(userid,pwd,usrType) values("+userid;
+                query += ",'"+password+"','parent')";
+            }
+            con.query(query,function (err,result) {
+                cb(err,result);
+            });
         }
-        cb(err,result);
-
     });
-};
+
+}
+//
+// function getUserDetails(userNumber,cb){
+//
+//     var query = "Select "
+//     con.query(query,function (err,result) {
+//
+//         if(err){
+//             cb(err,result);
+//         }
+//         cb(err,result);
+//
+//     });
+// };
 
 function updateToken(id,token,cb) {
 
@@ -99,5 +119,6 @@ module.exports = {
     newAppUser:newAppUser,
     verifyAppUser:verifyAppUser,
     verifyOTPAppUser:verifyOTPAppUser,
-    updateToken:updateToken
+    updateToken:updateToken,
+    updateAppUser:updateAppUser
 };

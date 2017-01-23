@@ -108,7 +108,7 @@ exports.mapGeofenceData=function (req,res) {
 
     var data= {
         gpsId: req.body.gpsUnit,
-        geofenceId: req.body.geofenceId
+        geofenceId: JSON.parse(req.body.geofenceId)
     };
 var userId;
     if(req.body.userId==undefined || req.body.userId=='')
@@ -132,6 +132,8 @@ var userId;
                     }
 
                 });
+            }else{
+                res.send('Success');
             }
 
 

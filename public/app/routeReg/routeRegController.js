@@ -34,6 +34,9 @@
                     minZoom: 2,
                     maxZoom: 19
                 }
+            },
+            controls :{
+
             }
         });
 
@@ -82,12 +85,91 @@
         // };
 
         $scope.makeFitToMap = function (route) {
+
+            $scope.markerData1 = {
+                lat: route.fromRoutePoints.lat,
+                lng: route.fromRoutePoints.lng,
+            };
+            $scope.markerData2 = {
+                lat: route.toRoutePoints.lat,
+                lng: route.toRoutePoints.lng
+            };
+            var fromToArr = route.rtName.split('-');
+
+            $scope.markerData1.message = '<div class="panel panel-primary">' +
+                '<div class="panel-heading">' +
+                '<h1 class="panel-title">' + fromToArr[0] + '</h1> ' +
+                '</div>' +
+                '<div class="panel-body">' +
+                '<div class="well" style="color: white">' +
+                '<div class="form-group">' +
+                '<label>' +
+                'Latitude:' +
+                '</label> ' +
+                '<label>'
+                + $scope.markerData1.lat +
+                '</label>' +
+                '</div> ' +
+                '<div class="form-group">' +
+                '<label>' +
+                'Longitude:' +
+                '</label> ' +
+                '<label>'
+                + $scope.markerData1.lng +
+                '</label>' +
+                '</div> ' +
+                '</div> ' +
+                '</div> ' +
+                '</div>';
+            $scope.markerData2.message = '<div class="panel panel-primary">' +
+                '<div class="panel-heading">' +
+                '<h1 class="panel-title">' + fromToArr[1] + '</h1> ' +
+                '</div>' +
+                '<div class="panel-body">' +
+                '<div class="well" style="color: white">' +
+                '<div class="form-group">' +
+                '<label>' +
+                'Latitude:' +
+                '</label> ' +
+                '<label>'
+                + $scope.markerData2.lat +
+                '</label>' +
+                '</div> ' +
+                '<div class="form-group">' +
+                '<label>' +
+                'Longitude:' +
+                '</label> ' +
+                '<label>'
+                + $scope.markerData2.lng +
+                '</label>' +
+                '</div> ' +
+                '</div> ' +
+                '</div> ' +
+                '</div>';
+            $scope.markers = {
+                marker1 :$scope.markerData1,
+                marker2 :$scope.markerData2
+            };
             leafletData.getMap().then(function(map) {
 
-                map.fitBounds([
-                    [route.fromRoutePoints.lat,route.fromRoutePoints.lng],
-                    [route.toRoutePoints.lat,route.toRoutePoints.lng]
-                ]);
+                // fit map
+                map.fitBounds([[$scope.markerData1.lat, $scope.markerData1.lng], [$scope.markerData2.lat, $scope.markerData2.lng]]);
+
+                // clear route and controls
+
+                // $scope.routingControl =  L.Routing.control({
+                //     waypoints: [
+                //         L.latLng($scope.markerData1.lat, $scope.markerData1.lng),
+                //         L.latLng($scope.markerData2.lat, $scope.markerData2.lng)
+                //     ]
+                // }).addTo(map);
+                // add new routing
+                // L.Routing.control({
+                //     waypoints: [
+                //         L.latLng($scope.markerData1.lat, $scope.markerData1.lng),
+                //         L.latLng($scope.markerData2.lat, $scope.markerData2.lng)
+                //     ]
+                // }).addTo(map);
 
             });
             $scope.routeData = route;
@@ -201,7 +283,7 @@
 
             var stop = {
                 stpName: $scope.markerData.stpName,
-                stpTime: $filter('date')($scope.markerData.stpTime, 'HH:mm:ss'),
+                // stpTime: $filter('date')($scope.markerData.stpTime, 'HH:mm:ss'),
                 stpPosition: {
                     lat: $scope.markerData.lat,
                     lng: $scope.markerData.lng
@@ -209,21 +291,13 @@
             };
 
             $scope.stops.push(stop);
-            var time = $scope.markerData.stpTime;
+            // var time = $scope.markerData.stpTime;
             $scope.markerData.message = '<div class="panel panel-primary">' +
                 '<div class="panel-heading">' +
                 '<h1 class="panel-title">' + $scope.markerData.stpName + '</h1> ' +
                 '</div>' +
                 '<div class="panel-body">' +
                 '<div class="well" style="color: white">' +
-                '<div class="form-group">' +
-                '<label>' +
-                'Stop Timing:' +
-                '</label> ' +
-                '<label>'
-                + $scope.markerData.stpTime +
-                '</label>' +
-                '</div> ' +
                 '<div class="form-group">' +
                 '<label>' +
                 'Latitude:' +
@@ -294,7 +368,7 @@
                     $scope.markerData = {
                         id: stop.id,
                         stpName: value.stpName,
-                        stpTime: value.stpTime,
+                        // stpTime: value.stpTime,
                         lat: value.stpPosition.lat,
                         lng: value.stpPosition.lng
                     };
@@ -311,14 +385,14 @@
                         '</div>' +
                         '<div class="panel-body">' +
                         '<div class="well" style="color: white">' +
-                        '<div class="form-group">' +
-                        '<label>' +
-                        'Stop Timing:' +
-                        '</label> ' +
-                        '<label>'
-                        + $scope.markerData.stpTime +
-                        '</label>' +
-                        '</div> ' +
+                        // '<div class="form-group">' +
+                        // '<label>' +
+                        // 'Stop Timing:' +
+                        // '</label> ' +
+                        // '<label>'
+                        // + $scope.markerData.stpTime +
+                        // '</label>' +
+                        // '</div> ' +
                         '<div class="form-group">' +
                         '<label>' +
                         'Latitude:' +
@@ -425,7 +499,7 @@
             $scope.markerData ={
                 id:stop.id,
                 stpName : stop.stpName,
-                stpTime : new Date("2016-12-31 "+ stop.stpTime),
+                // stpTime : new Date("2016-12-31 "+ stop.stpTime),
                 lat : stop.stpPosition.lat,
                 lng : stop.stpPosition.lng
             };
