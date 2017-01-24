@@ -89,10 +89,18 @@
             $scope.markerData1 = {
                 lat: route.fromRoutePoints.lat,
                 lng: route.fromRoutePoints.lng,
+                icon: {
+                    iconUrl: 'images/Circle_Blue.png',
+                    iconSize: [30, 30]
+                },
             };
             $scope.markerData2 = {
                 lat: route.toRoutePoints.lat,
-                lng: route.toRoutePoints.lng
+                lng: route.toRoutePoints.lng,
+                icon: {
+                    iconUrl: 'images/Circle_Blue.png',
+                    iconSize: [30, 30]
+                },
             };
             var fromToArr = route.rtName.split('-');
 
@@ -356,12 +364,13 @@
 
             // if($scope.selectedRow) {
             if(route.stops && route.stops.length) {
+
                 $scope.stops = route.stops;
                 $scope.path = {};
                 $scope.markers = [];
                 $scope.center = {};
                 $scope.routeData = route;
-
+                $scope.makeFitToMap(route);
                 angular.forEach(route.stops, function (value, index) {
                     // var latLng = JSON.parse(value.stpPosition);
 
@@ -412,7 +421,7 @@
                         '</div> ' +
                         '</div> ' +
                         '</div>';
-                    $scope.markers.push($scope.markerData);
+                    $scope.markers['markers_'+index] = $scope.markerData;
 
                     $scope.markerData = {};
                     if ((index + 1) == route.stops.length) {

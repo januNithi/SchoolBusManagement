@@ -163,13 +163,9 @@ function getTripRegDatas(tripId,cb) {
                     }else{
                         if(result.length > 0){
                             result.forEach(function (value1,index1) {
-
                                 value['stop_'+value1.stopId] = value1.time;
-
                                 var query = "Select stpName,id,stpPosition from stops where rtId = "+value.rtId;
-
                                 con.query(query,function(err,result){
-
                                     if(err){
                                         cb(err,result);
                                     }else {
@@ -177,11 +173,9 @@ function getTripRegDatas(tripId,cb) {
                                         value.showStops = false;
                                         if((index + 1) == data.length && (index1 + 1) == result.length){
                                             cb(err, data);
-
                                         }
                                     }
                                 });
-
                             });
                         }else{
                             if((index + 1) == data.length){
