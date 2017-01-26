@@ -305,44 +305,34 @@
             $scope.readNotifyObj = [];
             $scope.unReadNotifyObj = [];
             angular.forEach(data,function (value,index) {
-
                 if(value.dataRead){
                     $scope.readNotifyObj.push(value);
                 }else{
                     $scope.unReadNotifyObj.push(value);
                 }
-
             });
-
         });
 
         socket.on('Bus Stop',function (data) {
-
-
             $scope.notify = true;
             $scope.notifyStopObj = data;
-
         });
 
         socket.on('bus position',function (data) {
-
             var points = {
                 lat: Number(data.lat),
                 lng: Number(data.lng),
                 riseOnHover: true,
                 opacity: 5,
                 riseOffset: 250
-            }
+            };
             // $scope.busPosition.push(points);
             angular.forEach($scope.choosenBuses,function (value,index) {
-
                 if(value.gpsUnit == Number(data.deviceId) && (new Date().toDateString() == new Date(Number(data.divTime)).toDateString())){
                     $scope.markers['marker_'+index].lat = Number(data.lat);
                     $scope.markers['marker_'+index].lng = Number(data.lng);
                     $scope.markers['marker_'+index].title = new Date(Number(data.divTime)).toLocaleString();
-                    // $scope.$apply();
                 }
-
             });
             // console.log(data.lat);
             // console.log(data.log);
@@ -360,46 +350,44 @@
         $scope.searchForBusPosition = function () {
             if ($scope.busPosition.length > 0) {
                 angular.forEach($scope.busPosition,function (value,index) {
-                    var obj = {
-                        date: value[value.length - 1].date,
-                        gpsUnit: value[value.length - 1].deviceid
-                    };
-                    socket.emit('stop track', obj);
+                    if(value.length > 0){
+                        var obj = {
+                            date: value[value.length - 1].date,
+                            gpsUnit: value[value.length - 1].deviceid
+                        };
+                        socket.emit('stop track', obj);
+                    }
                     if((index +1) == $scope.busPosition.length){
                         $scope.getBusPositions($filter('date')($scope.selectedDate, "yyyy-MM-dd"));
                     }
                 });
-
             }else{
                 $scope.getBusPositions($filter('date')($scope.selectedDate, "yyyy-MM-dd"));
             }
         };
 
         notificationService.getAdminNotification().then(function (result,err) {
-
             $scope.notificationObject = result.data;
             angular.forEach($scope.notificationObject,function (value,index) {
-
                 if(value.dataRead){
                     $scope.readNotifyObj.push(value);
                 }else{
                     $scope.unReadNotifyObj.push(value);
                 }
-
             });
-
         });
 
         $scope.$on("$destroy", function(){
             if ($scope.busPosition.length > 0) {
                 angular.forEach($scope.busPosition,function (value,index) {
-                    var obj = {
-                        date: value[value.length - 1].date,
-                        gpsUnit: value[value.length - 1].deviceid
-                    };
-                    socket.emit('stop track', obj);
+                    if(value.length > 0){
+                        var obj = {
+                            date: value[value.length - 1].date,
+                            gpsUnit: value[value.length - 1].deviceid
+                        };
+                        socket.emit('stop track', obj);
+                    }
                 });
-
             }
         });
 
