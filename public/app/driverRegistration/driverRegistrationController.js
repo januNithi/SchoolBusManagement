@@ -32,6 +32,12 @@
             }
 
         };
+
+        $scope.showSettings = function (value) {
+
+            return true;
+
+        };
         loginService.isLoggedIn().then(function (result) {
 
             if(!result.data.id){

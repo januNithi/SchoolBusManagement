@@ -59,6 +59,10 @@
                 controller: 'notificationController',
                 templateUrl: '../app/notification/notification.html'
             })
+            .when('/parentNotification', {
+                controller: 'parentNotificationController',
+                templateUrl: '../app/parentNotification/parentNotification.html'
+            })
             .when('/geofenceRegistration', {
                 controller: 'geofenceRegistrationController',
                 templateUrl: '../app/geofenceRegistration/geofenceRegistration.html'

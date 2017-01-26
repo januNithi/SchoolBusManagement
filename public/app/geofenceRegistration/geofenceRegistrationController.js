@@ -38,7 +38,11 @@
 
         };
 
+        $scope.showSettings = function (value) {
 
+            return true;
+
+        };
         
         $scope.postGeofencData=function(){
 

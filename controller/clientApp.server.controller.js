@@ -114,3 +114,23 @@ exports.updateNotificationRead = function (req,res) {
     });
 
 };
+
+exports.updateParentNotification = function (data,cb) {
+
+    manager.updateParentNotification(data,function (err,result) {
+        cb(err,result);
+    });
+
+};
+
+exports.getParentNotification = function (req,res) {
+
+    manager.getParentNotification(function (err,result) {
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
+    });
+
+};

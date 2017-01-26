@@ -11,4 +11,7 @@ module.exports=function(app) {
     app.get('/dao/updateNotificationRead',config.updateNotificationRead);
     app.get('/dao/adminNotification', config.getAdminNotifications);
     app.get('/dao/appStart',config.getAppStartData);
+    
+    app.get('/dao/getParentNotification',config.getParentNotification);
+    
 };

@@ -86,7 +86,7 @@ function getAppStartData(data,cb) {
 
 function getUser(id,cb) {
 
-    var query = "Select sn.id,sn.stopId,t.trpStart,t.trpEnd,s.token from stop_notification as sn";
+    var query = "Select sn.id,sn.stopId,t.trpStart,t.trpEnd,s.token,s.id as studId from stop_notification as sn";
     query += " left join student as s on s.id = sn.studId left join trips as t";
     query += " on t.id = s.trip left join bus as b on b.id = t.busId where b.gpsUnit = "+id;
 
@@ -142,6 +142,24 @@ function updateReadNotification(id,cb) {
     });
 }
 
+function updateParentNotification(data,cb) {
+    var query = "Insert into parent_notification(studId,message,date)";
+    query += " values('"+data.studId+"','"+data.message+"',"+data.date+")";
+
+    con.query(query,function (err,result) {
+        cb(err,result);
+    });
+}
+
+function getParentNotification(cb) {
+    var query = "Select studId,message,date,(Select Name from Student where id = studId) as studentName";
+    query += " from parent_notification order by date";
+
+    con.query(query,function (err,result) {
+        cb(err,result);
+    });
+}
+
 module.exports = {
     updateNotificationStop:updateNotificationStop,
     getUser:getUser,
@@ -151,5 +169,7 @@ module.exports = {
     updateNotificationStopdup:updateNotificationStopdup,
     updateNotification:updateNotification,
     getAdminNotification : getAdminNotification,
-    updateReadNotification : updateReadNotification
+    updateReadNotification : updateReadNotification,
+    updateParentNotification:updateParentNotification,
+    getParentNotification:getParentNotification
 };

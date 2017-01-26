@@ -5,4 +5,5 @@ module.exports=function (app)
 {
     var config=require('../controller/mapPosition.server.controller');
     app.get('/getMapPosition',config.mapPosition);
+    app.get('/getMapPositionByApp',config.mapPositionByApp);
 };

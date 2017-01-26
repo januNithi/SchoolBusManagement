@@ -23,7 +23,7 @@
     function homeController($scope,$window,$filter,homeService,busRegistrationService,$timeout,leafletData,loginService){
 
 
-        var socket = io.connect();
+        // var socket = io.connect();
 
         $scope.busData = [];
         $scope.currentBus = '1';
@@ -166,43 +166,6 @@
             });
         };
 
-        $scope.myChartObject = {};
-
-        $scope.myChartObject.type = "PieChart";
-
-        $scope.onions = [
-            {v: "Bus On Time Start"},
-            {v: 18},
-        ];
-
-        $scope.myChartObject.data = {"cols": [
-            {id: "t", label: "Topping", type: "string"},
-            {id: "s", label: "Slices", type: "number"}
-        ], "rows": [
-            {c: [
-                {v: "Bus On Time Arrival"},
-                {v: 15},
-            ]},
-            {c: $scope.onions},
-            {c: [
-                {v: "Bus Delay"},
-                {v: 5}
-            ]}
-        ]};
-
-        $scope.myChartObject.options = {
-            'title': 'Bus Travel Reports'
-        };
-
-        $scope.popup2 = {
-            opened: false
-        };
-
-        $scope.open2 = function() {
-            $scope.popup2.opened = true;
-        };
-
-
         $scope.dateOptions = {
             dateDisabled: 'disabled',
             formatYear: 'yy',
@@ -305,12 +268,12 @@
                         zoom: 18
                     };
 
-                    var obj = {
-                        date: $scope.busPosition[$scope.busPosition.length - 1].date,
-                        gpsUnit: $scope.busPosition[$scope.busPosition.length - 1].deviceid
-                    };
-
-                    socket.emit('bus track', obj);
+                    // var obj = {
+                    //     date: $scope.busPosition[$scope.busPosition.length - 1].date,
+                    //     gpsUnit: $scope.busPosition[$scope.busPosition.length - 1].deviceid
+                    // };
+                    //
+                    // socket.emit('bus track', obj);
                 }
 
             },function (error) {
@@ -871,43 +834,43 @@
           // console.log($scope.selectedDate);
         };
 
-        socket.on('notification',function (data) {
+        // socket.on('notification',function (data) {
+        //
+        //     $scope.notify = true;
+        //     $scope.notifyObj = data;
+        //
+        // });
 
-            $scope.notify = true;
-            $scope.notifyObj = data;
-
-        });
-
-        socket.on('bus position',function (data) {
-
-            var points = {
-                lat: Number(data.lat),
-                lng: Number(data.lng),
-                riseOnHover: true,
-                opacity: 5,
-                riseOffset: 250
-            }
-            $scope.busPosition.push(points);
-            // console.log(data.lat);
-            // console.log(data.lng);
-            $scope.markers.marker.lat = Number(data.lat);
-            $scope.markers.marker.lng = Number(data.lng);
-            $scope.center.lat = Number(data.lat);
-            $scope.center.lng = Number(data.lng);
-
-            leafletData.getMap(function (map) {
-               map.invalidateSize();
-            });
-        });
+        // socket.on('bus position',function (data) {
+        //
+        //     var points = {
+        //         lat: Number(data.lat),
+        //         lng: Number(data.lng),
+        //         riseOnHover: true,
+        //         opacity: 5,
+        //         riseOffset: 250
+        //     }
+        //     $scope.busPosition.push(points);
+        //     // console.log(data.lat);
+        //     // console.log(data.lng);
+        //     $scope.markers.marker.lat = Number(data.lat);
+        //     $scope.markers.marker.lng = Number(data.lng);
+        //     $scope.center.lat = Number(data.lat);
+        //     $scope.center.lng = Number(data.lng);
+        //
+        //     leafletData.getMap(function (map) {
+        //        map.invalidateSize();
+        //     });
+        // });
 
         $scope.searchForBusPosition = function () {
-            if ($scope.busPosition.length > 0) {
-                var obj = {
-                    date: $scope.busPosition[$scope.busPosition.length - 1].date,
-                    gpsUnit: $scope.busPosition[$scope.busPosition.length - 1].deviceid
-                };
-                socket.emit('stop track', obj);
-            }
+            // if ($scope.busPosition.length > 0) {
+            //     var obj = {
+            //         date: $scope.busPosition[$scope.busPosition.length - 1].date,
+            //         gpsUnit: $scope.busPosition[$scope.busPosition.length - 1].deviceid
+            //     };
+            //     socket.emit('stop track', obj);
+            // }
             $scope.getBusPositions($scope.currentBus,$filter('date')($scope.selectedDate, "yyyy-MM-dd"));
         };
 

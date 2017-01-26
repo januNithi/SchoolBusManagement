@@ -23,16 +23,30 @@
             <!--<li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Dashboard</a></li>-->
             <li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Dashboard</a></li>
             <li ng-class="showSelectable('home')"><a href="/home"><i class="fa fa-home"></i> Route Map </a></li>
-            <li ng-class="showSelectable('notification')"><a href="/notification"><i class="fa fa-bell-o"></i> Notification</a></li>
 
             <div class="panel-group">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a   data-target="#collapse2"  style="text-decoration: none">Settings</a> <!--data-toggle="collapse"-->
+                            <a   data-target="#collapse3" data-toggle="collapse" style="text-decoration: none">Notification</a> <!--data-toggle="collapse"-->
                         </h4>
                     </div>
-                    <div class="panel-collapse" id="collapse2" >
+                    <div class="panel-collapse collapse" id="collapse3" >
+                        <ul class="nav">
+                            <li ng-class="showSelectable('notification')"><a href="/notification"><i class="fa fa-bell-o"></i> Admin Notification</a></li>
+                            <li ng-class="showSelectable('parentNotification')"><a href="/parentNotification"><i class="fa fa-bell-o"></i> Parent Notification</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a  data-target="#collapse2" data-toggle="collapse" style="text-decoration: none">Settings</a> <!--data-toggle="collapse"-->
+                        </h4>
+                    </div>
+                    <div ng-class="(showSettings())?'': 'collapse'" class="panel-collapse" id="collapse2" >
                         <ul class="nav">
                             <li ng-class="showSelectable('gps')"><a href="/gpsUnitRegistration"><i class="fa fa-globe"></i> GPS unit</a></li>
                             <li ng-class="showSelectable('bus')"><a href="/busRegistration"><i class="fa fa-bus"></i> Buses </a></li>
@@ -53,10 +67,10 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a  data-target="#collapse1" style="text-decoration: none">Report</a>
+                            <a  data-target="#collapse1" data-toggle="collapse" style="text-decoration: none">Report</a>
                         </h4>
                     </div>
-                    <div   id="collapse1" >
+                    <div class="panel-collapse collapse" id="collapse1" >
                         <ul class="nav ">
                             <li ng-class="showSelectable('eventReport')"><a href="/eventReport"><i class="fa fa-bell-o"></i> Event Report</a></li>
                             <li ng-class="showSelectable('summaryReport')"><a href="/summaryReport"><i class="fa fa-bell-o"></i> Summary Report</a></li>

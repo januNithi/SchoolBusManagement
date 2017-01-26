@@ -15,7 +15,7 @@
 
             getBusPosition : function (id,date) {
 
-                return $http.get('/getMapPosition?id='+id+'&date='+date);
+                return $http.get('/getMapPositionByApp?id='+id+'&date='+date);
 
             }
 

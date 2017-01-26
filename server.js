@@ -95,7 +95,8 @@ app.get('/busPositionChange',function (req,res) {
                     lat: req.query.lat,
                     lng: req.query.log,
                     UniqueId: req.query.UniqueId,
-                    divTime: req.query.divTime
+                    divTime: req.query.divTime,
+                    deviceId : req.query.id
                 };
                 io.sockets.socket(value.id).emit("bus position", obj);
                 // io.(value.id).emit("bus position", req.query);
@@ -283,12 +284,19 @@ function stopReachAlgorithm(stopReachData) {
                         },
                         data : value
                     };
-
+                    var obj = {
+                        message : message.notification.body,
+                        date : new Date(Number(data.divTime)),
+                        studId
+                            : value.studId
+                    };
                     fcm.send(message, function(err, response){
                         if (err) {
                             console.log("Something has gone wrong!");
                         } else {
                             console.log("Successfully sent with response: ", response);
+                            
+                            config.updateParentNotification(obj);
                         }
                     });
                 }

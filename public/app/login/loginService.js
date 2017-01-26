@@ -24,7 +24,7 @@
                 return $http.get("/api/logout");
             },
             goToDashboard : function () {
-                $window.location.href = '/home';
+                $window.location.href = '/mappedRoute';
             },
             goToLogin : function () {
                 $window.location.href = '/';

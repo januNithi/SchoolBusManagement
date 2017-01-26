@@ -1,0 +1,64 @@
+
+<script src="'../../js/navbar.js'"></script>
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">
+
+                <h1 class="panel-title">Parent Notification</h1>
+
+            </div>
+
+            <div class="panel-body">
+
+                <table class="table table-bordered">
+                    <thead style="background-color: #337ab7">
+                        <tr>
+                            <!--<th>#</th>-->
+                            <th>Student Name</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="data in notificationData" dc ng-style="{'background-color':data.dataRead == 0 ?  'black': 'darkslategray'}" style="cursor: pointer;" ng-dblclick="expandNotification(data)" ng-click="notificationSelected(data,$index)" ng-class="{'selectedRow':$index == selectedNotify}">
+                            <!--<th><input type="checkbox" ng-model="selectedRte" ng-click="routeSelected(route,selectedRte)"></th>-->
+                            <th>{{data.studentName}}</th>
+                            <td>{{data.message}}</td>
+                            <td>{{data.date | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+
+                        </tr>
+                        <!--<tr ng-repeat="data in readNotifyObj" ng-style="{'background-color':data.dataRead == 0 ?  'black': 'darkslategray'}" style="cursor: pointer;" ng-click="notificationunReadSelected(data,$index)" ng-class="{'selectedRow':$index == selectedunReadNotify}">-->
+                            <!--&lt;!&ndash;<th><input type="checkbox" ng-model="selectedRte" ng-click="routeSelected(route,selectedRte)"></th>&ndash;&gt;-->
+                            <!--<th>{{data.busCode}}</th>-->
+                            <!--<td>{{data.message}}</td>-->
+
+                        <!--</tr>-->
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class="pager">
+        <!-- Pagination -->
+        <pagination class = "pager"
+                    ng-model="curpage"
+                    total-items="totalItems"
+                    items-per-page="itemspage"
+                    max-size="maxSize"
+                    boundary-links="true">
+        </pagination>
+        <!-- Pagination -->
+    </div>
+
+
+</div>
