@@ -288,8 +288,6 @@
 
             }
 
-            $scope.markerData = {};
-
         };
 
         var updateMarketData = function () {
