@@ -304,6 +304,7 @@
                 }
             };
 
+
             $scope.stops.push(stop);
             // var time = $scope.markerData.stpTime;
             $scope.markerData.message = '<div class="panel panel-primary">' +
@@ -331,8 +332,11 @@
                 '</div> ' +
                 '</div> ' +
                 '</div>';
-            $scope.markers.push($scope.markerData);
-        }
+            $scope.markers['marker_'+$scope.markerData.stpName] = $scope.markerData;
+
+            $scope.markersData ={};
+
+        };
 
         var getRoutes = function () {
             routeRegistrationService.getRoutes().then(function (result) {
