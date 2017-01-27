@@ -34,7 +34,9 @@
 
         $scope.stName='';
 
-
+        $scope.showReports = function () {
+            return true;
+        };
 
         $scope.showReport=function(){
             loadReport();

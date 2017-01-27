@@ -11,8 +11,9 @@ function authenticate(userName,password,cb) {
     con.query(query,function (err,result) {
        if(err){
            cb(err,result);
+       }else{
+           cb(err,result);
        }
-        cb(err,result);
     });
 };
 
@@ -26,8 +27,10 @@ function newAppUser(otp,userNumber,validDateTime,cb) {
 
         if(err){
             cb(err,result);
+        }else{
+            cb(err,result);
         }
-        cb(err,result);
+
 
     });
 
@@ -41,8 +44,10 @@ function verifyAppUser(userNumber,cb) {
 
         if(err){
             cb(err,result);
+        }else{
+            cb(err,result);
         }
-        cb(err,result);
+
 
     });
 
@@ -61,8 +66,10 @@ function verifyOTPAppUser(otp,userNumber,cb) {
 
         if(err){
             cb(err,result);
+        }else{
+            cb(err,result);
         }
-        cb(err,result);
+
 
     });
 };
@@ -74,7 +81,7 @@ function updateAppUser(userid,password,cb){
             cb(err,result);
         }else{
             if(result.length > 0){
-                query = "Update users set pwd = '"+password+"'";
+                query = "Update users set pwd = '"+password+"' where id = "+result[0].id;
             }else{
                 query = "Insert into users(userid,pwd,usrType) values("+userid;
                 query += ",'"+password+"','parent')";
@@ -107,8 +114,9 @@ function updateToken(id,token,cb) {
 
         if(err){
             cb(err,result);
+        }else{
+            cb(err,result);
         }
-        cb(err,result);
 
     });
 

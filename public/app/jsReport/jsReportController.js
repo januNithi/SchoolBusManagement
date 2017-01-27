@@ -34,6 +34,9 @@
             zoom: 16
         };
 
+        $scope.showReports = function () {
+            return true;
+        };
 
         $scope.selectDevice=function() {
             var flag = false;

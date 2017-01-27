@@ -4,6 +4,7 @@
 var mysql = require('mysql');
 var db = require('../db');
 var con = mysql.createConnection(db);
+var dateFormat = require('dateformat');
 
 function updateNotificationStop(stopId,studId,cb) {
 
@@ -67,7 +68,8 @@ function getAppStartData(data,cb) {
     var query = "Select s.id as studId,s.trip,s.stop,(select stpName from stops where id = s.stop) as stopName,";
     query += "(Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId,";
     query += "(Select gpsUnit from bus where id = (Select busId from trips where id = s.trip)) as gpsUnit,";
-    query += "(Select GROUP_CONCAT(stopId) from stop_notification where studId = s.id) as stop_notifyId";
+    query += "(Select group_concat(CONVERT(stopId,char(8))) from stop_notification where studId = s.id) as stop_notifyId";
+    // from student as s where s.MobileNo = '9443887438'
     query += " from student as s where s.MobileNo = '"+data.userid+"'";
     // var query = "Select s.id as studId,s.trip,s.stop,(select stpName from stops where id = s.stop) as stopName,";
     // var query = "(Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId";
@@ -106,7 +108,7 @@ function getNotificationTrip(cb) {
 }
 
 function getStopDetails(id,cb) {
-    var query = "Select id,stpName,stpPosition,stpTime from stops where id = "+id;
+    var query = "Select id,stpName,stpPosition from stops where id = "+id;
 
     con.query(query,function (err,result) {
         cb(err,result);
@@ -143,8 +145,9 @@ function updateReadNotification(id,cb) {
 }
 
 function updateParentNotification(data,cb) {
+    var day=dateFormat(data.date, "yyyy-mm-dd h:MM:ss");
     var query = "Insert into parent_notification(studId,message,date)";
-    query += " values('"+data.studId+"','"+data.message+"',"+data.date+")";
+    query += " values('"+data.studId+"','"+data.message+"','"+day+"')";
 
     con.query(query,function (err,result) {
         cb(err,result);

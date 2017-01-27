@@ -70,6 +70,10 @@
 
         };
 
+        $scope.showReports = function () {
+            return true;
+        };
+
         $scope.removeDevice=function (index) {
             $scope.selDevice.splice(index,1);
         };

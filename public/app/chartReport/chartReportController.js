@@ -24,6 +24,18 @@
         $scope.busList=[];
         $scope.selBus;
 
+        $scope.showReports = function () {
+            return true;
+        };
+
+        $scope.showSelectable = function (value) {
+
+            if (value == 'chartReport') {
+                return 'selected';
+            }
+
+        };
+
         // $scope.options = {legend: {display: true}};
         $scope.setFrom=function(str){
             $scope.selFrom=str;

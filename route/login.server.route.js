@@ -25,8 +25,7 @@ module.exports = function(app, passport) {
                 if (err) {
                     done(err);
                     req.res.send(500,{error:err});
-                }
-                if(result.length == 0){
+                }else if(result.length == 0){
                     done(null,false);
                     req.res.send(401,"failure");
                 }else{
