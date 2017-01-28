@@ -53,7 +53,7 @@
                     <td>
                         <span class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#myModal" ng-click="edit(data)" aria-hidden="true"></span>
                         <span class="fa fa-window-close"  style="color: red" ng-click="delete(data)" aria-hidden="true"></span>
-                        <span class="fa fa-gg-circle fa-1x" style="color: red" ng-click="openGeofence(data)" data-toggle="modal" data-target="#geofenceModal" ng-click="edit(data)" aria-hidden="true"></span>
+                        <span class="fa fa-gg-circle fa-1x" style="color: red" ng-click="openGeofence(data)" data-toggle="modal" data-target="#geofenceModal"  aria-hidden="true"></span>
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Edit</button>-->
                         <!--<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Delete</button>-->
 
@@ -84,7 +84,8 @@
                                 <div class="form-group">
                                     <label for="inputEmail3" class="col-sm-4 control-label" >Bus Number:</label>
                                     <div class="col-sm-6">
-                                        <input class="form-control" ng-model="busdata.busCode" id="inputEmail3" placeholder="Bus Number" required>
+                                        <input class="form-control" mandatory-field ng-model="busdata.busCode" id="inputEmail3" placeholder="Bus Number" required>
+                                   <span>{{}}</span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -102,11 +103,14 @@
                                     </div>
                                     <div><a style="cursor:pointer;" tooltip="select gps unit name .these gps unit you have already created on gps unit master page"><img style="width: 25px;height: 25px" src="/images/help.png"></a></div>
                                 </div>
+                                <div>
+                                  <span ng-show="required" style="color: red">Please Fill Mandatory Fields</span>
+                                </div>
                           </form>
 
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" ng-show="busdata.id==null" data-target="#myModal2" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-click="update(busdata)" ng-disabled="myForm.$invalid" aria-hidden="true">Save</button>
+                            <button type="submit" ng-show="busdata.id==null" data-target="#myModal2" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-click="update(busdata)"  aria-hidden="true">Save</button> <!--ng-disabled="myForm.$invalid">-->
                             <button type="submit" ng-show="busdata.id!=null" data-target="#myModal1" data-toggle="modal" data-dismiss="modal" class="btn btn-danger" ng-disabled="myForm.$invalid" aria-hidden="true">Confirm</button>
                             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="close()">Cancel</button>
                         </div>
@@ -156,7 +160,6 @@
 
                 </div>
             </div>
-
         </div>
 
         <!--geofence Modal -->

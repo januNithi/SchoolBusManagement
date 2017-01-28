@@ -11,7 +11,7 @@ module.exports=function(app) {
 
     app.get('/report/eventReport', config.getEvents);
     app.get('/report/exportEvents', config.exportEvents);
-    app.get('/report/exportEventsChart', config.getEventsChart);
+    app.get('/report/EventsChart', config.getEventsChart);
     app.get('/report/delayChart', config.getDelayChart);
     
     app.get('/report/summaryReport', configSummary.getSummary);

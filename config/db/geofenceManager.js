@@ -115,7 +115,7 @@ exports.mapGeofence = function (data,cb) {
 
         values.push([data.gpsId,data.geofenceId[i]]);
     }
- console.log(values);
+ console.log("vaaa"+values);
     var query = "INSERT INTO device_geofence (deviceid, geofenceid) VALUES ?";
 
     con.query(query,[values], function (err,results) {

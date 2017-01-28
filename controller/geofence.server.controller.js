@@ -106,10 +106,14 @@ exports.updateGeofence=function (req,res) {
 
 exports.mapGeofenceData=function (req,res) {
 
+console.log(req.body.gpsUnit);
+    console.log(req.body.geofenceId);
     var data= {
         gpsId: req.body.gpsUnit,
         geofenceId: JSON.parse(req.body.geofenceId)
     };
+
+
 var userId;
     if(req.body.userId==undefined || req.body.userId=='')
         userId=req.session.user.id;
@@ -150,6 +154,7 @@ exports.getMapGeofenceById=function (req,res) {
         if(error)
             res.send(500,{error:error});
         else {
+            console.log(result);
             res.send(result);
         }
     });

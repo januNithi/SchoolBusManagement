@@ -226,12 +226,12 @@ exports.exportEvents= function(req, res){
 exports.getEventsChart=function (req,res) {
 
 
-    var id=req.query.id;
+    // var id=req.query.id;
     var from=req.query.from;
     var to=req.query.to;
 
 
-    eventReport.getEventsChart(id,from,to,function (error,result) {
+    eventReport.getEventsChart(from,to,function (error,result) {
         
 
         if(error){
