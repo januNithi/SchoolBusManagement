@@ -36,6 +36,12 @@
 
         };
 
+        $scope.showNotificationMenu = function () {
+
+            return true;
+
+        };
+
         $scope.status = {
             isCustomHeaderOpen: false,
             isFirstOpen: true,

@@ -296,7 +296,13 @@ function stopReachAlgorithm(stopReachData) {
                         } else {
                             console.log("Successfully sent with response: ", response);
                             
-                            config.updateParentNotification(obj);
+                            config.updateParentNotification(obj,function (err,result) {
+                                if(err){
+                                    console.log(err);
+                                }else{
+                                    console.log(result);
+                                }
+                            });
                         }
                     });
                 }

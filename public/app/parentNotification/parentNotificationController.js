@@ -18,12 +18,17 @@
         $scope.maxSize = 4;
         $scope.totalItems = 0;
 
-
         $scope.showSelectable = function (value) {
 
             if(value == 'parentNotification'){
                 return 'selected';
             }
+
+        };
+
+        $scope.showNotificationMenu = function () {
+
+            return true;
 
         };
 
@@ -45,20 +50,9 @@
                     $scope.$watch('curpage + itemspage', function() {
                         var begin = (($scope.curpage - 1) * $scope.itemspage),
                             end = begin + $scope.itemspage;
-                        $scope.notificationData = $scope.notificationObject.slice(begin, end);
+                        $scope.parentNotificationData = $scope.notificationObject.slice(begin, end);
                     });
-                    
-                    $scope.readNotifyObj = [];
-                    $scope.unReadNotifyObj = [];
-                    angular.forEach($scope.notificationObject, function (value, index) {
 
-                        if (value.dataRead) {
-                            $scope.readNotifyObj.push(value);
-                        } else {
-                            $scope.unReadNotifyObj.push(value);
-                        }
-
-                    });
                 }
             });
 

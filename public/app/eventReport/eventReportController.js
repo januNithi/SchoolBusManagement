@@ -74,6 +74,11 @@
             }
 
         };
+
+        $scope.showReports = function () {
+            return true;
+        };
+
         $scope.isView=false;
 
         $scope.viewElement=function(){
