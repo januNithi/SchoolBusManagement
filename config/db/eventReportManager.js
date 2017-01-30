@@ -28,10 +28,10 @@ exports.getEvents = function (id,from,to,cb) {
     });
 };
 
-exports.getEventsChart = function (id,from,to,cb) {
+exports.getEventsChart = function (from,to,cb) {
 
-    var query = "SELECT  A.type,A.deviceid ,sum(TIMESTAMPDIFF(MINUTE,A.servertime,B.servertime)) AS timedifference";
-        query+=" FROM events A INNER JOIN events B ON B.id= (A.id+ 1) WHERE A.deviceid="+id+ " AND A.servertime between '"+from+ "' AND '"+to+"'  group by A.type,A.deviceid ORDER BY A.id DESC";
+    var query = "SELECT  A.type,A.deviceid ,sum(TIMESTAMPDIFF(MINUTE,A.servertime,B.servertime)) AS timedifference,v.busCode"; //A.deviceid="+id+ " AND
+        query+=" FROM events A INNER JOIN events B ON B.id= (A.id+ 1) INNER JOIN  bus v on A.deviceid=v.gpsUnit WHERE A.servertime between '"+from+ "' AND '"+to+"' and (A.type='deviceOnline' or A.type='deviceOffline' or  A.type='deviceMoving')  group by A.type,A.deviceid ORDER BY A.id DESC";
 
 
 
@@ -45,6 +45,7 @@ exports.getEventsChart = function (id,from,to,cb) {
         }
     });
 };
+
 
 exports.getDelayChart = function (from,to,cb) {
 

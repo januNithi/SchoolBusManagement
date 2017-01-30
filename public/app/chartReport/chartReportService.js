@@ -18,7 +18,7 @@
                 return $http({
 
                     method:'get',
-                    url:'/report/exportEventsChart?id='+data.device+'&from='+data.from+'&to='+data.to
+                    url:'/report/EventsChart?from='+data.from+'&to='+data.to
                 });
             },
             getDelayChart:function(data){

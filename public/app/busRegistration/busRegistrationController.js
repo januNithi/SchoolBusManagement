@@ -35,6 +35,9 @@
         $scope.selGeofences=[];
         $scope.selGeofenceArry=[];
 
+
+        $scope.required=false;
+
         $scope.showSelectable = function (value) {
 
             if(value == 'bus'){
@@ -102,6 +105,12 @@
 
         $scope.update=function(busdata){
 
+            // if($scope.validateForm()){
+            //     $scope.required=true;
+            //     return;
+            // }
+
+            // alert();
             busRegistrationService.addBusRegData(busdata).then(function(result){
 
                 $scope.successMsg='Successfully Data Register';
@@ -205,12 +214,16 @@
                 console.log('error');
             });
         };
+
+        $scope.validateForm=function(){
+            return $scope.myForm.$invalid;
+        };
         $scope.mapGeofenceToDevice=function(data){
 
 
             var mapData={
                 gpsUnit:$scope.busData.gpsUnit,
-                geofenceId:$scope.selGeofenceArry
+                geofenceId:JSON.stringify($scope.selGeofenceArry)
             };
 
 

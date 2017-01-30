@@ -23,7 +23,7 @@
 </script>
 
 
-<div id="wrapper">
+<div id="wrapper" ng-cloak>
 
     <div ng-include="'../../template/menu.html'"></div>
 
@@ -38,79 +38,82 @@
                     <div class="panel-body">
 
                         <div class=" col-sm-12 form-group">
-                            <div><h3>Event Chart</h3></div>
-                            <div class="col-md-6">
-                                <canvas id="pie" class="chart chart-pie" style="height: 250px;border:1px solid;padding: 5px"
-                                        chart-data="data" chart-labels="labels" chart-options="options">
+                            <div><h3>Event Chart Previous 30 Days</h3></div>
+                            <div class="col-md-12">
+                                <!--<canvas id="pie" class="chart chart-pie" style="height: 250px;border:1px solid;padding: 5px"-->
+                                        <!--chart-data="data" chart-labels="labels" chart-options="options">-->
+                                <!--</canvas>-->
+                                <canvas id="bar" class="chart chart-bar"
+                                        chart-data="data" chart-labels="labels" chart-options="bar.options" chart-series="series" style="border: 1px solid;padding: 5px">
                                 </canvas>
                             </div>
-                            <div class="col-md-6">
-                                <div class="col-sm-12 form-group">
+                            <!--<div class="col-md-6">-->
+                                <!--<div class="col-sm-12 form-group">-->
 
-                                    <div class="col-sm-12">
-                                        <div class="col-sm-3">
-                                            <label>Bus</label>
-                                        </div>
+                                    <!--<div class="col-sm-12">-->
+                                        <!--<div class="col-sm-3">-->
+                                            <!--<label>Bus</label>-->
+                                        <!--</div>-->
 
-                                        <div class="col-sm-9">
-                                            <select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList" ng-change="selectDevice()">
-                                            </select>
-                                        </div>
-
-
-                                        <div class="col-sm-3">
-                                            <label>From</label>
-                                        </div>
-                                        <div class="col-sm-9">
-                                            <!--<input class="form-control col-sm-12" ng-model="selFrom"  type="datetime-local">-->
-                                            <div class="form-group">
-                                                <div class='input-group date' id='datetimepicker1'>
-                                                    <input type='text' class="form-control" />
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <!--<div class="col-sm-9">-->
+                                            <!--<select ng-model="selBus"  class="form-control col-sm-12" ng-options="bus.busCode for bus in busList" ng-change="selectDevice()">-->
+                                            <!--</select>-->
+                                        <!--</div>-->
 
 
-                                        <div class="col-sm-3">
-                                            <label>To</label>
-                                        </div>
+                                        <!--<div class="col-sm-3">-->
+                                            <!--<label>From</label>-->
+                                        <!--</div>-->
+                                        <!--<div class="col-sm-9">-->
+                                            <!--&lt;!&ndash;<input class="form-control col-sm-12" ng-model="selFrom"  type="datetime-local">&ndash;&gt;-->
+                                            <!--<div class="form-group">-->
+                                                <!--<div class='input-group date' id='datetimepicker1'>-->
+                                                    <!--<input type='text' class="form-control" />-->
+                                                <!--<span class="input-group-addon">-->
+                                                    <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                                                <!--</span>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
 
-                                        <div class="col-sm-9">
-                                            <!--<input class="form-control" ng-model="selTo" type="datetime-local">-->
-                                            <div class="form-group">
-                                                <div class='input-group date' id='datetimepicker2'>
-                                                    <input  type='text' class="form-control" />
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                                </div>
-                                            </div>
-                                        </div>
 
-                                        <div class="col-sm-12 col-sm-offset-9">
-                                            <div class="col-sm-3">
-                                                <div class="col-sm-offset-1">
-                                                    <button class="btn btn-primary" ng-click="showReport()">Show</button>
-                                                </div>
+                                        <!--<div class="col-sm-3">-->
+                                            <!--<label>To</label>-->
+                                        <!--</div>-->
 
-                                            </div>
-                                        </div>
+                                        <!--<div class="col-sm-9">-->
+                                            <!--&lt;!&ndash;<input class="form-control" ng-model="selTo" type="datetime-local">&ndash;&gt;-->
+                                            <!--<div class="form-group">-->
+                                                <!--<div class='input-group date' id='datetimepicker2'>-->
+                                                    <!--<input  type='text' class="form-control" />-->
+                                                <!--<span class="input-group-addon">-->
+                                                    <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                                                <!--</span>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
 
-                                    </div>
+                                        <!--<div class="col-sm-12 col-sm-offset-9">-->
+                                            <!--<div class="col-sm-3">-->
+                                                <!--<div class="col-sm-offset-1">-->
+                                                    <!--<button class="btn btn-primary" ng-click="showReport()">Show</button>-->
+                                                <!--</div>-->
 
-                                </div>
-                            </div>
+                                            <!--</div>-->
+                                        <!--</div>-->
+
+                                    <!--</div>-->
+
+                                <!--</div>-->
+                            <!--</div>-->
                         </div>
 
                         <div class="col-sm-12 form-group">
                             <div><h3>Delay Chart on Previous 6 Month</h3></div>
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <canvas id="line" class="chart chart-line" chart-data="line.data"
                                         chart-labels="line.labels" chart-options="line.options"
-                                        chart-dataset-override="datasetOverride" chart-click="onClick" style="border: 1px solid;padding: 5px">
+                                        chart-dataset-override="datasetOverride" chart-series="line.series" chart-click="onClick" style="border: 1px solid;padding: 5px">
                                 </canvas>
 
                                 <!--<canvas id="bar" class="chart chart-bar"-->
