@@ -161,8 +161,9 @@ function getTripRegDatas(tripId,cb) {
                     if(err){
                         cb(err,result);
                     }else{
-                        if(result.length > 0){
-                            result.forEach(function (value1,index1) {
+                        var stopList = result;
+                        if(stopList.length > 0){
+                            stopList.forEach(function (value1,index1) {
                                 value['stop_'+value1.stopId] = value1.time;
                                 var query = "Select stpName,id,stpPosition from stops where rtId = "+value.rtId;
                                 con.query(query,function(err,result){
@@ -171,7 +172,7 @@ function getTripRegDatas(tripId,cb) {
                                     }else {
                                         value.stops = result;
                                         value.showStops = false;
-                                        if((index + 1) == data.length && (index1 + 1) == result.length){
+                                        if((index + 1) == data.length && (index1 + 1) == stopList.length){
                                             cb(err, data);
                                         }
                                     }
