@@ -4,7 +4,7 @@
 var mysql = require('mysql');
 var q=require('q');
 var db = require('../db');
-var con = mysql.createConnection(db);
+var con = mysql.createPool(db);
 
 
 exports.getSummary = function (id,from,to,cb) {

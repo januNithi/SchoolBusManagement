@@ -11,6 +11,8 @@
                         .format( this.getAttribute("data-date-format") )
         )
     }).trigger("change")
+    $('#slider-timestamp').html(options.markers[ui.value].feature.properties.time.substr(0, 19));
+
 </script>
 <style>
     .angular-google-map {

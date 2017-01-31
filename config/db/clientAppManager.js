@@ -3,7 +3,7 @@
  */
 var mysql = require('mysql');
 var db = require('../db');
-var con = mysql.createConnection(db);
+var con = mysql.createPool(db);
 var dateFormat = require('dateformat');
 
 function updateNotificationStop(stopId,studId,cb) {

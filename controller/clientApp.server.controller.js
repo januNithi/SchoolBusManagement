@@ -51,7 +51,7 @@ exports.sendNotification = function (stopReachData,cb) {
             if(result.length > 0) {
                 var data = result;
                 data.forEach(function (value,index) {
-                    manager.getStopDetails(result[0].stopId,function (err,result) {
+                    manager.getStopDetails(value.stopId,function (err,result) {
                         if(err){
                             cb(err,result);
                         }else{

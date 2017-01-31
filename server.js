@@ -267,50 +267,51 @@ function stopReachAlgorithm(stopReachData) {
         console.log(err);
         if(result && result.length > 0){
             console.log(result);
-            result.forEach(function (value,index) {
-                var stpPosition = JSON.parse(value.stop.stpPosition);
-                // var stpPosition = {
-                //     latitude : 11.023606431835102,
-                //     longitude : 77.00283245612809
-                // }
-                if(geolib.isPointInCircle({latitude:data.lat,longitude:data.log}, stpPosition, 50)){
-                    var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                        to: value.token,
-                        collapse_key: 'Stop Reached',
 
-                        notification: {
-                            title: 'Reached Stop',
-                            body: 'Reached '+value.stop.stpName+' at '+(new Date(Number(data.divTime))).toLocaleTimeString(),
-                        },
-                        data : value
-                    };
-                    var obj = {
-                        message : message.notification.body,
-                        date : new Date(Number(data.divTime)),
-                        studId
-                            : value.studId
-                    };
-                    fcm.send(message, function(err, response){
-                        if (err) {
-                            console.log("Something has gone wrong!");
-                        } else {
-                            console.log("Successfully sent with response: ", response);
-                            
-                            config.updateParentNotification(obj,function (err,result) {
-                                if(err){
-                                    console.log(err);
-                                }else{
-                                    console.log(result);
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+                result.forEach(function (value,index) {
+                    if(value.stop){
+                    var stpPosition = JSON.parse(value.stop.stpPosition);
+                    // var stpPosition = {
+                    //     latitude : 11.023606431835102,
+                    //     longitude : 77.00283245612809
+                    // }
+                    if(geolib.isPointInCircle({latitude:data.lat,longitude:data.log}, stpPosition, 50)){
+                        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                            to: value.token,
+                            collapse_key: 'Stop Reached',
+
+                            notification: {
+                                title: 'Reached Stop',
+                                body: 'Reached '+value.stop.stpName+' at '+(new Date(Number(data.divTime))).toLocaleTimeString(),
+                            },
+                            data : value
+                        };
+                        var obj = {
+                            message : message.data.body,
+                            date : new Date(Number(data.divTime)),
+                            studId
+                                : value.studId
+                        };
+                        fcm.send(message, function(err, response){
+                            if (err) {
+                                console.log("Something has gone wrong!");
+                            } else {
+                                console.log("Successfully sent with response: ", response);
+
+                                config.updateParentNotification(obj,function (err,result) {
+                                    if(err){
+                                        console.log(err);
+                                    }else{
+                                        console.log(result);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    }
+                });
         }
-
     });
-
 }
 
 

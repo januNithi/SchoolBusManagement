@@ -3,7 +3,7 @@
  */
 var mysql = require('mysql');
 var db = require('../db');
-var con = mysql.createConnection(db);
+var con = mysql.createPool(db);
 
 function authenticate(userName,password,cb) {
     var query = "Select id,userId,pwd,usrType from users where userId = '"+userName+"'";
