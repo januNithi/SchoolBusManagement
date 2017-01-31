@@ -4,7 +4,7 @@ module.exports={
    host:'localhost',
     user: 'root',
     password: 'schoolbus',
-    database: 'bustraking'
+    database: 'bustracking'
 
 
 };
