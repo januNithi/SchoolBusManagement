@@ -98,8 +98,10 @@ app.get('/busPositionChange',function (req,res) {
                     divTime: req.query.divTime,
                     deviceId : req.query.id
                 };
-                io.sockets.socket(value.id).emit("bus position", obj);
+                // io.sockets.socket(value.id).emit("bus position", obj);
                 // io.(value.id).emit("bus position", req.query);
+                io.sockets.sockets(value.id).emit("bus position", obj);
+
             }
 
         });
@@ -114,24 +116,24 @@ app.post('/busNotification',function (req,res) {
     notificationAlgorithm(req.body);
     // io.sockets.emit('notification', req.body);
 });
-var notificationObj = { event:
-{ serverTime: '2017-01-07T12:23:55.103+05:30',
-    positionId: 0,
-    geofenceId: 0,
-    type: 'deviceOnline',
-    deviceId: 1,
-    id: 24274,
-    attributes: {} },
-    device:
-    { name: 'Janani',
-        status: 'unknown',
-        groupId: 0,
-        uniqueId: '100',
-        lastUpdate: '2017-01-07T11:47:42.102+05:30',
-        positionId: 0,
-        geofenceIds: [],
-        id: 1,
-        attributes: {} } };
+// var notificationObj = { event:id
+// { serverTime: '2017-01-07T12:23:55.103+05:30',
+//     positionId: 0,
+//     geofenceId: 0,
+//     type: 'deviceOnline',
+//     deviceId: 1,
+//     id: 24274,
+//     attributes: {} },
+//     device:
+//     { name: 'Janani',
+//         status: 'unknown',
+//         groupId: 0,
+//         uniqueId: '100',
+//         lastUpdate: '2017-01-07T11:47:42.102+05:30',
+//         positionId: 0,
+//         geofenceIds: [],
+//         id: 1,
+//         attributes: {} } };
 // notificationAlgorithm(notificationObj);
 
 function notificationAlgorithm(notificationData) {
