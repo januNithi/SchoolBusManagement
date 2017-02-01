@@ -297,14 +297,19 @@
         };
 
         $scope.clearMap=function(map) {
+            var k = 0;
             for(i in map._layers) {
-                if(map._layers[i] != map._layers['32']) {
+                if(k != 0) {
                     try {
                         map.removeLayer(map._layers[i]);
+                        k++;
                     }
                     catch(e) {
                         console.log("problem with " + e + map._layers[i]);
+                        k++;
                     }
+                }else{
+                    k++;
                 }
             }
         };
