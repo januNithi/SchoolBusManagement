@@ -100,7 +100,7 @@ app.get('/busPositionChange',function (req,res) {
                 };
                 // io.sockets.socket(value.id).emit("bus position", obj);
                 // io.(value.id).emit("bus position", req.query);
-                io.sockets.sockets(value.id).emit("bus position", obj);
+                io.sockets.sockets[value.id].emit("bus position", obj);
 
             }
 
