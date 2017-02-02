@@ -198,6 +198,9 @@
         $scope.updateMap = function () {
             var latLng = [];
             var pointList = [];
+            var greenIcon = L.icon({
+                iconUrl: 'images/blueSpecial.png'
+            });
             angular.forEach($scope.busPosition, function (value, index) {
 
                 if ((index + 1) == $scope.busPosition.length) {
@@ -255,7 +258,7 @@
 
                     leafletData.getMap('map').then(function (map) {
 
-                        var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime});
+                        var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon: greenIcon});
                         // var pointA = new L.LatLng(value.lat, value.lng);
                         // var pointB = new L.LatLng($scope.busPosition[index+1].lat, $scope.busPosition[index+1].lng);
                         // var options = {
@@ -288,7 +291,7 @@
                     };
 
                     latLng.push(points);
-                    var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime});
+                    var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon:greenIcon});
                     pointList.push(marker1);
 
                 }
