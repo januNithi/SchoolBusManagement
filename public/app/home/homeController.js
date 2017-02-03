@@ -27,7 +27,7 @@
 
         $scope.busData = [];
         $scope.currentBus = '1';
-        $scope.paths = [];
+        $scope.paths = {};
         $scope.center = {};
         $scope.markers = {};
         $scope.selectedDate = '---- SELECT DATE ----';
@@ -124,7 +124,7 @@
         $scope.getBusPositions = function (id,date) {
             //$scope.clearMap();
             $scope.busPosition = [];
-            $scope.paths = [];
+            $scope.paths = {};
             $scope.center = {};
             $scope.markers = [];
             $scope.point=[];
@@ -176,18 +176,10 @@
                 // });
 
                 if(result.data.length > 0) {
-
-                    $scope.busPosition = result.data;
-                    pointsReduceAlgorithm();
-                    $scope.selectedDate = $filter('date')(result.data[0].date, "yyyy-MM-dd");
-                    $scope.busPosition;
-                    $scope.updateMap();
-                    $scope.center = {
-                        lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
-                        lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
-                        zoom: 18
-                    };
-
+                    var data = result.data;
+                    pointsReduceAlgorithm(data);
+                    // distanceBasedAlgorithm(data);
+                    $scope.selectedDate = $filter('date')(result.data[0].devicetime, "yyyy-MM-dd");
                 }
 
             },function (error) {
@@ -201,6 +193,7 @@
             var greenIcon = L.icon({
                 iconUrl: 'images/blueSpecial.png'
             });
+            var i = 1;
             angular.forEach($scope.busPosition, function (value, index) {
 
                 if ((index + 1) == $scope.busPosition.length) {
@@ -208,48 +201,54 @@
                     $scope.markers = {
                         positionStart: {
 
-                            lat:$scope.busPosition[0].lat,
-                            lng:$scope.busPosition[0].lng,
+                            lat: $scope.busPosition[0].lat,
+                            lng: $scope.busPosition[0].lng,
                             iconSize: [38, 95],
                             time: "2013-01-22 10:24:59+01",
-                            icon:{
+                            icon: {
 
                                 iconUrl: 'images/school-bus.png',
-                                color:'green'
+                                color: 'green'
                             },
                             title: value.devicetime,
-                            message:'<strong>Start:></strong>'+'DeviceTime:'+new Date($scope.busPosition[0].devicetime).toLocaleString(),
+                            message: '<strong>Start:></strong>' + 'DeviceTime:' + new Date($scope.busPosition[0].devicetime).toLocaleString(),
                             riseOnHover: true,
                             opacity: 5,
                             riseOffset: 250,
-                            move:true
+                            move: true
                         },
                         positionEnd: {
-                            lat: $scope.busPosition[$scope.busPosition.length-1].lat,
-                            lng: $scope.busPosition[$scope.busPosition.length-1].lng,
+                            lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
+                            lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
                             iconSize: [38, 95],
-                            icon:{
+                            icon: {
 
                                 iconUrl: 'images/school-bus.png',
-                                color:'green'
+                                color: 'green'
                             },
                             title: value.devicetime,
                             time: "2013-01-22 10:24:59+01",
-                            message:'<strong>End:></strong>'+'DeviceTime:'+new Date($scope.busPosition[$scope.busPosition.length-1].devicetime).toLocaleString(),
+                            message: '<strong>End:></strong>' + 'DeviceTime:' + new Date($scope.busPosition[$scope.busPosition.length - 1].devicetime).toLocaleString(),
                             riseOnHover: true,
                             opacity: 5,
                             riseOffset: 250,
-                            move:true
+                            move: true
                         }
                     };
-                    $scope.paths = {
-                        p1: {
-                            color:'#478bf7',
-                            weight: 4,
-                            latlngs: $scope.busPosition
-                        }
 
+                    $scope.paths['p'+i] = {
+                        color : '#478bf7',
+                        weight : 4,
+                        latlngs : latLng
                     };
+                    // $scope.paths = {
+                    //     p1: {
+                    //         color:'#478bf7',
+                    //         weight: 4,
+                    //         latlngs: $scope.busPosition
+                    //     }
+                    //
+                    // };
                     $scope.center = {
                         lat: value.lat,
                         lng: value.lng,
@@ -259,19 +258,12 @@
                     leafletData.getMap('map').then(function (map) {
 
                         var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon: greenIcon});
-                        // var pointA = new L.LatLng(value.lat, value.lng);
-                        // var pointB = new L.LatLng($scope.busPosition[index+1].lat, $scope.busPosition[index+1].lng);
-                        // var options = {
-                        //     time : value.devicetime
-                        // }
-                        // var points = [pointA, pointB];
-                        // points.options = options;
                         pointList.push(marker1);
                         if(map._controlContainer.children[1].children[1]){
                             map._controlContainer.children[1].children[1].remove();
                             $scope.clearMap(map);
                         }
-                        layerGroup = L.layerGroup(pointList);
+                        var layerGroup = L.layerGroup(pointList);
                         var sliderControl = L.control.sliderControl({layer:layerGroup, range:true});
                         map.addControl(sliderControl);
                         sliderControl.startSlider();
@@ -290,7 +282,19 @@
                         riseOffset: 250
                     };
 
-                    latLng.push(points);
+                    if(Math.abs(new Date(value.devicetime).getTime() - new Date($scope.busPosition[index+1].devicetime).getTime()) > 120000){
+                        $scope.paths['p'+i] = {
+                            color : '#478bf7',
+                            weight : 4,
+                            latlngs : latLng
+                        };
+                        latLng = [];
+                        i++;
+                    }else{
+                        latLng.push(points);
+                    }
+
+
                     var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon:greenIcon});
                     pointList.push(marker1);
 
@@ -321,64 +325,90 @@
           // console.log($scope.selectedDate);
         };
 
-        var pointsReduceAlgorithm = function () {
+        var pointsReduceAlgorithm = function (data) {
 
-            angular.forEach($scope.busPosition,function (value,index) {
+            var reducedData = [];
 
-                if((index+1)!=$scope.busPosition.length){
+            angular.forEach(data,function (value,index) {
 
-                    if((value.lat == $scope.busPosition[index+1].lat) && (value.lng == $scope.busPosition[index+1].lng)){
-                        $scope.busPosition.splice(index,1);
+                if((index+1) != data.length){
+
+                    if((value.lat != data[index+1].lat) && (value.lng != data[index+1].lng)){
+                        reducedData.push(value);
                     }
                 }else{
-                    InvalidPointReduceAlgorithm();
+                    InvalidPointReduceAlgorithm(reducedData);
                 }
             });
 
         };
 
-        var InvalidPointReduceAlgorithm = function () {
+        var InvalidPointReduceAlgorithm = function (data) {
 
-            angular.forEach($scope.busPosition,function (value,index) {
+            var reducedData = [];
 
-                if((index+1)!=$scope.busPosition.length){
+            angular.forEach(data,function (value,index) {
+
+                if((index+1)!=data.length){
 
                     var sum = value.lat + value.lng;
-                    var nextSum = $scope.busPosition[index+1].lat + $scope.busPosition[index+1].lng;
+                    var nextSum = data[index+1].lat + data[index+1].lng;
 
-                    if(Math.abs((sum - nextSum)) > 0.000800 || Math.abs((sum - nextSum)) < 0.000300){
-                        $scope.busPosition.splice(index,1);
+                    if(Math.abs((sum - nextSum)) < 0.000800 || Math.abs((sum - nextSum)) > 0.000300){
+                        reducedData.push(value);
                     }
+                }else{
+                    // distanceBasedAlgorithm(reducedData);
+                    $scope.busPosition = reducedData;
+                    $scope.updateMap();
+                    $scope.center = {
+                        lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
+                        lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
+                        zoom: 21
+                    };
                 }
+
             });
 
         };
 
-        // var distanceBasedAlgorithm = function () {
-        //
-        //     angular.forEach($scope.busPosition,function (value,index) {
-        //
-        //         if((index+1)!=$scope.busPosition.length){
-        //
-        //             var num = value.lat;
-        //             var slat = num.toFixed(8);
-        //             var num = value.lng;
-        //             var slng = num.toFixed(8);
-        //
-        //             var lat1 = slat * Math.PI / 180;
-        //             var lat2 = bl_lat * Math.PI / 180;
-        //             var lat = (bl_lat - slat) * Math.PI / 180;
-        //             var lng = (bl_lng - slng) * Math.PI / 180;
-        //             var a = Math.sin(lat / 2) * Math.sin(lat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(lng / 2) * Math.sin(lng / 2);
-        //             var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        //             var dis = (R * c);
-        //             if (dis < 20) {
-        //                 $scope.busPosition.splice(index,1);
-        //             }
-        //         }
-        //     });
-        //
-        // };
+        var distanceBasedAlgorithm = function (data) {
+
+            var reducedData = [];
+
+            angular.forEach(data,function (value,index) {
+
+                if((index+1)!=data.length){
+                    var R = 6371e3;
+                    var num = value.lat;
+                    var slat = num.toFixed(8);
+                    var num = value.lng;
+                    var slng = num.toFixed(8);
+                    var bl_lat = data[index+1].lat;
+                    var bl_lng = data[index+1].lng;
+
+                    var lat1 = slat * Math.PI / 180;
+                    var lat2 = bl_lat * Math.PI / 180;
+                    var lat = (bl_lat - slat) * Math.PI / 180;
+                    var lng = (bl_lng - slng) * Math.PI / 180;
+                    var a = Math.sin(lat / 2) * Math.sin(lat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(lng / 2) * Math.sin(lng / 2);
+                    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                    var dis = (R * c);
+                    if (dis > 30) {
+                        reducedData.push(value);
+                    }
+                }else{
+                    $scope.busPosition = reducedData;
+                    $scope.updateMap();
+                    $scope.center = {
+                        lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
+                        lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
+                        zoom: 18
+                    };
+                }
+            });
+
+        };
 
         $scope.searchForBusPosition = function () {
             $scope.getBusPositions($scope.currentBus,$filter('date')($scope.selectedDate, "yyyy-MM-dd"));
