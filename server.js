@@ -255,7 +255,49 @@ function notificationAlgorithm(notificationData) {
 
         });
 
-    }else{
+    }else if(notificationData.event.type == 'geofenceEnter' || notificationData.event.type == 'geofenceExit'){
+        config.getUserId(notificationData.event.deviceId,function (err,result) {
+            if(err){
+                console.log(err);
+            }else{
+                var data = result;
+                data.forEach(function (value,index) {
+                    if(value.token) {
+                        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                            to: value.token,
+                            collapse_key: notificationData.event.type,
+                            notification: {
+                                title: notificationData.event.type,
+                                body: notificationData.event.type + ' at ' + (new Date(Number(notificationData.position.deviceTime))).toLocaleTimeString(),
+                            },
+                            data: value
+                        };
+                        var obj = {
+                            message: message.notification.body,
+                            date: new Date(Number(notificationData.position.deviceTime)),
+                            studId: value.studId
+                        };
+                        fcm.send(message, function (err, response) {
+                            if (err) {
+                                console.log("Something has gone wrong!");
+                            } else {
+                                console.log("Successfully sent with response: ", response);
+
+                                config.updateParentNotification(obj, function (err, result) {
+                                    if (err) {
+                                        console.log(err);
+                                    } else {
+                                        console.log(result);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+    else{
         io.sockets.emit('notification', notificationData);
     }
 
@@ -289,7 +331,7 @@ function stopReachAlgorithm(stopReachData) {
                             data : value
                         };
                         var obj = {
-                            message : message.data.body,
+                            message : message.notification.body,
                             date : new Date(Number(data.divTime)),
                             studId
                                 : value.studId

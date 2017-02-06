@@ -77,6 +77,12 @@ exports.checkTripTime = function (cb) {
     });
 };
 
+exports.getUserId = function (deviceId,cb) {
+    manager.getGeofenceUserDetails(deviceId,function (err,result) {
+       cb(err,result);
+    });
+};
+
 exports.updateNotification = function (data,cb) {
 
     manager.updateNotification(data,function (err,result) {

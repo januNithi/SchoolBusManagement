@@ -41,7 +41,7 @@ function updateNotificationStopdup(stops,studId,cb) {
         if(err){
             cb(err,result);
         }else{
-            var stopsString = stops.substr(1,stops.length-2);
+            var stopsString = stops.substr(1,stops.length-3);
             var stopsArr = stopsString.split(',');
             if(stopsArr.length != 0) {
                 var query = "Insert into stop_notification(stopId,studId) VALUES ?";
@@ -101,6 +101,17 @@ function getUser(id,cb) {
 function getNotificationTrip(cb) {
     var query = "Select t.trpStart,t.id,t.trpEnd,t.busId,b.busCode,b.gpsUnit,g.uniqueId,g.unitName from";
     query += " trips as t left join bus as b on t.busId = b.id left join gpsunit as g on b.gpsUnit=g.id";
+
+    con.query(query,function (err,result) {
+        cb(err,result);
+    });
+}
+
+function getGeofenceUserDetails(deviceid,cb) {
+    var query = "Select users.id,users.usrType,student.id as studId,student.Name,student.MobileNo,student.token ";
+    query += "from users inner join student on student.MobileNo = users.userId and users.usrType = 'parent'";
+    query += " inner join trips on student.trip = trips.id where trips.busId =";
+    query += " (Select id from bus where bus.gpsUnit = "+deviceid+")";
 
     con.query(query,function (err,result) {
         cb(err,result);
@@ -174,5 +185,6 @@ module.exports = {
     getAdminNotification : getAdminNotification,
     updateReadNotification : updateReadNotification,
     updateParentNotification:updateParentNotification,
-    getParentNotification:getParentNotification
+    getParentNotification:getParentNotification,
+    getGeofenceUserDetails:getGeofenceUserDetails
 };
