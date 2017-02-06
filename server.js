@@ -4,9 +4,14 @@ var app=express();
 var config = require('./controller/clientApp.server.controller');
 var geolib = require('geolib');
 var dateFormat = require('dateformat');
+var fs = require('fs');
 
-var serverKey = 'AAAAwDLf34Y:APA91bFPj38UR2AbkpqhblOOWg-vxkrfY2r5j2pEbg_OwjemLCWU5Iw-O1jYBaap-ZO3-wjx73vFMDaHQ6tbwpGu9lXmmDL0hQnl7_mLgkEbz2l0vHczXwdIIemtxl5kd0ftmN6NbNOOSmx3YLRNd8QD5lJaupqsMQ';
-var fcm = new FCM(serverKey);
+var fs = require("fs");
+var content = fs.readFileSync("./config/auth/config.json");
+var configObj = JSON.parse(content);
+
+
+var fcm = new FCM(configObj.fcm.serverKey);
 
 var buses=[];
 
@@ -98,9 +103,9 @@ app.get('/busPositionChange',function (req,res) {
                     divTime: req.query.divTime,
                     deviceId : req.query.id
                 };
-                // io.sockets.socket(value.id).emit("bus position", obj);
+                io.sockets.socket(value.id).emit("bus position", obj);
                 // io.(value.id).emit("bus position", req.query);
-                io.sockets.sockets[value.id].emit("bus position", obj);
+                // io.sockets.sockets[value.id].emit("bus position", obj);
 
             }
 
@@ -164,7 +169,7 @@ function notificationAlgorithm(notificationData) {
 
                         if(date.getTime() > minTime && date.getTime() < maxTime){
                             var data = {
-                                message : 'Bus Started at '+ date.toLocaleTimeString(),
+                                message : 'Bus Started on '+ date.toLocaleTimeString(),
                                 bus_id : value.busId,
                                 gpsUnit : notificationData.device.id,
                                 gps : notificationData.device.name,
@@ -222,7 +227,7 @@ function notificationAlgorithm(notificationData) {
 
                         if(date.getTime() > minTime && date.getTime() < maxTime){
                             var data = {
-                                message : 'Bus Stopped at '+date.toLocaleTimeString(),
+                                message : 'Bus Stopped on '+date.toLocaleTimeString(),
                                 bus_id : value.busId,
                                 gpsUnit : notificationData.device.id,
                                 gps : notificationData.device.name,
@@ -268,13 +273,13 @@ function notificationAlgorithm(notificationData) {
                             collapse_key: notificationData.event.type,
                             notification: {
                                 title: notificationData.event.type,
-                                body: notificationData.event.type + ' at ' + (new Date(Number(notificationData.position.deviceTime))).toLocaleTimeString(),
+                                body: notificationData.geofence.name + ' ' + notificationData.event.type + ' on ' + (new Date(notificationData.position.deviceTime)).toLocaleTimeString(),
                             },
                             data: value
                         };
                         var obj = {
                             message: message.notification.body,
-                            date: new Date(Number(notificationData.position.deviceTime)),
+                            date: new Date(notificationData.position.deviceTime),
                             studId: value.studId
                         };
                         fcm.send(message, function (err, response) {
@@ -326,7 +331,7 @@ function stopReachAlgorithm(stopReachData) {
 
                             notification: {
                                 title: 'Reached Stop',
-                                body: 'Reached '+value.stop.stpName+' at '+(new Date(Number(data.divTime))).toLocaleTimeString(),
+                                body: 'Reached '+value.stop.stpName+' on '+(new Date(Number(data.divTime))).toLocaleTimeString(),
                             },
                             data : value
                         };

@@ -1,0 +1,24 @@
+{
+  "database": {
+      "host" : "localhost",
+      "user" : "root",
+      "password" : "",
+      "database" : "schoolbus"
+  },
+  "server": {
+      "port" : "3000"
+  },
+  "fcm": {
+      "serverKey": "AAAAwDLf34Y:APA91bFPj38UR2AbkpqhblOOWg-vxkrfY2r5j2pEbg_OwjemLCWU5Iw-O1jYBaap-ZO3-wjx73vFMDaHQ6tbwpGu9lXmmDL0hQnl7_mLgkEbz2l0vHczXwdIIemtxl5kd0ftmN6NbNOOSmx3YLRNd8QD5lJaupqsMQ"
+  },
+  "auth": {
+      "secret": "developmentSessionSecret"
+  },
+  "message": {
+      "msg91": {
+          "key": "118856AnX1aObPdz5780a27d",
+          "messageHeader": "CCSPVT",
+          "msgType": "4"
+      }
+  }
+}
