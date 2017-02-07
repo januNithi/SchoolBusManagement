@@ -115,28 +115,28 @@ module.exports = function(app, passport) {
 
             if (err) {
                 res.send(500, {error: err});
-            }
+            }else{
+                if(result && result.length == 0){
+                    res.send("OTP Doesn't Exist or Expired");
+                }else {
+                    var studentData = result[0];
+                    config.updateToken(studentData.id,token,function (err,result) {
+                        if(err){
+                            res.send(500,{error:err});
+                        }else{
+                            config.updateAppUser(userid,password,function (err,result) {
 
-            if(result && result.length == 0){
-                res.send("OTP Doesn't Exist or Expired");
-            }else {
-                var studentData = result[0];
-                config.updateToken(studentData.id,token,function (err,result) {
-                    if(err){
-                        res.send(500,{error:err});
-                    }else{
-                        config.updateAppUser(userid,password,function (err,result) {
-                           
-                            if(err){
-                                res.send(500,{error:err});
-                            }else{
-                                res.send(studentData);
-                            }
-                            
-                        });
+                                if(err){
+                                    res.send(500,{error:err});
+                                }else{
+                                    res.send(studentData);
+                                }
 
-                    }
-                });
+                            });
+
+                        }
+                    });
+                }
             }
 
         });
