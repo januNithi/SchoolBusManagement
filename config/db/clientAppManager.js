@@ -88,7 +88,7 @@ function getAppStartData(data,cb) {
 
 function getUser(id,cb) {
 
-    var query = "Select sn.id,sn.stopId,t.trpStart,t.trpEnd,s.token,s.id as studId from stop_notification as sn";
+    var query = "Select sn.id,sn.stopId,t.id as tripId,t.trpStart,t.trpEnd,s.token,s.id as studId from stop_notification as sn";
     query += " left join student as s on s.id = sn.studId left join trips as t";
     query += " on t.id = s.trip left join bus as b on b.id = t.busId where b.gpsUnit = "+id;
 

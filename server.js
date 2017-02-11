@@ -17,6 +17,8 @@ var buses=[];
 
 var socketDup;
 
+var notifications = [];
+
 var obj = {
     lat : 11.01503823,
     log : 76.96040946
@@ -319,44 +321,93 @@ function stopReachAlgorithm(stopReachData) {
 
                 result.forEach(function (value,index) {
                     if(value.stop){
-                    var stpPosition = JSON.parse(value.stop.stpPosition);
-                    // var stpPosition = {
-                    //     latitude : 11.023606431835102,
-                    //     longitude : 77.00283245612809
-                    // }
-                    if(geolib.isPointInCircle({latitude:data.lat,longitude:data.log}, stpPosition, 50)){
-                        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                            to: value.token,
-                            collapse_key: 'Stop Reached',
+                        var stpPosition = JSON.parse(value.stop.stpPosition);
+                        // var stpPosition = {
+                        //     latitude : 11.023606431835102,
+                        //     longitude : 77.00283245612809
+                        // }
+                        if(geolib.isPointInCircle({latitude:data.lat,longitude:data.log}, stpPosition, 50)){                                                       
+                            
+                            if(notifications.length){
+                                notifications.forEach(function (value1,index1) {
+                                   if(value1.tripId == value.tripId && value1.stopId == value.stopId && value1.studId == value.studId){
+                                       console.log("Notifications Already Send");
+                                   }else{
+                                       if((index1+1) == notifications.length){
+                                           notifications.push(value);
+                                           var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                                               to: value.token,
+                                               collapse_key: 'Stop Reached',
 
-                            notification: {
-                                title: 'Reached Stop',
-                                body: 'Reached '+value.stop.stpName+' on '+(new Date(Number(data.divTime))).toLocaleTimeString(),
-                            },
-                            data : value
-                        };
-                        var obj = {
-                            message : message.notification.body,
-                            date : new Date(Number(data.divTime)),
-                            studId
-                                : value.studId
-                        };
-                        fcm.send(message, function(err, response){
-                            if (err) {
-                                console.log("Something has gone wrong!");
-                            } else {
-                                console.log("Successfully sent with response: ", response);
+                                               notification: {
+                                                   title: 'Reached Stop',
+                                                   body: 'Reached '+value.stop.stpName+' on '+(new Date(Number(data.divTime))).toLocaleTimeString(),
+                                               },
+                                               data : value
+                                           };
+                                           var obj = {
+                                               message : message.notification.body,
+                                               date : new Date(Number(data.divTime)),
+                                               studId
+                                                   : value.studId
+                                           };
+                                           fcm.send(message, function(err, response){
+                                               if (err) {
+                                                   console.log("Something has gone wrong!");
+                                               } else {
+                                                   console.log("Successfully sent with response: ", response);
 
-                                config.updateParentNotification(obj,function (err,result) {
-                                    if(err){
-                                        console.log(err);
-                                    }else{
-                                        console.log(result);
+                                                   config.updateParentNotification(obj,function (err,result) {
+                                                       if(err){
+                                                           console.log(err);
+                                                       }else{
+                                                           console.log(result);
+                                                       }
+                                                   });
+                                               }
+                                           });
+                                       }
+                                   }
+
+                                    
+                                });
+                            }else{
+                                notifications.push(value);
+                                var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                                    to: value.token,
+                                    collapse_key: 'Stop Reached',
+
+                                    notification: {
+                                        title: 'Reached Stop',
+                                        body: 'Reached '+value.stop.stpName+' on '+(new Date(Number(data.divTime))).toLocaleTimeString(),
+                                    },
+                                    data : value
+                                };
+                                var obj = {
+                                    message : message.notification.body,
+                                    date : new Date(Number(data.divTime)),
+                                    studId
+                                        : value.studId
+                                };
+                                fcm.send(message, function(err, response){
+                                    if (err) {
+                                        console.log("Something has gone wrong!");
+                                    } else {
+                                        console.log("Successfully sent with response: ", response);
+
+                                        config.updateParentNotification(obj,function (err,result) {
+                                            if(err){
+                                                console.log(err);
+                                            }else{
+                                                console.log(result);
+                                            }
+                                        });
                                     }
                                 });
                             }
-                        });
-                    }
+                            
+                            
+                        }
                     }
                 });
         }
