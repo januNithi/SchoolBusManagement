@@ -1,9 +1,13 @@
 /**
  * Created by CSS on 22-12-2016.
  */
+
+var fs = require("fs");
+var content = fs.readFileSync("./config/auth/config.json");
+var configObj = JSON.parse(content);
+
 var mysql = require('mysql');
-var db = require('../db');
-var con = mysql.createPool(db);
+var con = mysql.createPool(configObj.database);
 
 function authenticate(userName,password,cb) {
     var query = "Select id,userId,pwd,usrType from users where userId = '"+userName+"'";
@@ -58,7 +62,7 @@ function verifyOTPAppUser(otp,userNumber,cb) {
     var query = "Select s.id,s.Name as studentName,s.Gender as studentGender,s.trip as tripId";
     query += " from otpmaster as o left join student as s  on s.MobileNo = o.number";
     query += " where o.generatedOTP = "+otp+" and o.number= " +userNumber+"";
-    query += " and TIME(o.validTill) >= TIME(DATE_FORMAT(NOW(),'%r'))";
+    query += " and o.validTill >= Date(NOW())";
 
     console.log(query);
 

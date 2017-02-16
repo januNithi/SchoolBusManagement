@@ -1,9 +1,13 @@
 /**
  * Created by CSS on 29-12-2016.
  */
+
+var fs = require("fs");
+var content = fs.readFileSync("./config/auth/config.json");
+var configObj = JSON.parse(content);
+
 var mysql = require('mysql');
-var db = require('../db');
-var con = mysql.createPool(db);
+var con = mysql.createPool(configObj.database);
 var dateFormat = require('dateformat');
 
 function updateNotificationStop(stopId,studId,cb) {
@@ -108,13 +112,20 @@ function getNotificationTrip(cb) {
 }
 
 function getGeofenceUserDetails(deviceid,cb) {
-    var query = "Select users.id,users.usrType,student.id as studId,student.Name,student.MobileNo,student.token ";
-    query += "from users inner join student on student.MobileNo = users.userId and users.usrType = 'parent'";
+    var query = "Select users.id,users.usrType,student.id as studId,student.Name,student.MobileNo,student.token,trips.busId,";
+    query += "trips.idas tripId from users inner join student on student.MobileNo = users.userId ";
     query += " inner join trips on student.trip = trips.id where trips.busId =";
     query += " (Select id from bus where bus.gpsUnit = "+deviceid+")";
 
     con.query(query,function (err,result) {
         cb(err,result);
+    });
+}
+
+function getGeofenceByUserid(geofenceid,userid,cb) {
+    var query = "Select id from user_geofence where geofenceid = "+geofenceid+ " and userid = "+userid;
+    con.query(query,function (err,result) {
+       cb(err,result);
     });
 }
 
@@ -186,5 +197,6 @@ module.exports = {
     updateReadNotification : updateReadNotification,
     updateParentNotification:updateParentNotification,
     getParentNotification:getParentNotification,
-    getGeofenceUserDetails:getGeofenceUserDetails
+    getGeofenceUserDetails:getGeofenceUserDetails,
+    getGeofenceByUserid:getGeofenceByUserid
 };

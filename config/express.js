@@ -7,6 +7,9 @@ var path=require('path');
 var session = require('express-session');
 var passport = require('passport');
 var methodOverride = require('method-override');
+var fs = require("fs");
+var content = fs.readFileSync("./config/auth/config.json");
+var configObj = JSON.parse(content);
 
 module.exports=function(){
     
@@ -23,7 +26,7 @@ module.exports=function(){
     app.use(session({
         saveUninitialized: true,
         resave: true,
-        secret: 'developmentSessionSecret'
+        secret: configObj.auth.secret
     }));
 
     app.use(function(req, res, next) {

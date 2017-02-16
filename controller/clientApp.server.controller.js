@@ -83,6 +83,14 @@ exports.getUserId = function (deviceId,cb) {
     });
 };
 
+exports.getGeofenceByUserid = function (geofenceid,userid,cb) {
+
+    manager.getGeofenceByUserid(geofenceid,userid,function (err,result) {
+       cb(err,result);
+    });
+
+};
+
 exports.updateNotification = function (data,cb) {
 
     manager.updateNotification(data,function (err,result) {

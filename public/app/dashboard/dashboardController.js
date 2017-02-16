@@ -149,7 +149,7 @@
                                         icon: {
                                             iconUrl: 'images/bus_' + index + '.png',
                                         },
-                                        message: 'Bus-' + bus_id[value[0].bus_id],
+                                        message: 'Bus-' + bus_id[value[0].bus_id] + ' on ' + $filter('date')(value[value.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
                                         iconSize: [38, 95],
                                         title: $filter('date')(value[value.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
                                         bus_id: value[0].bus_id,
@@ -332,6 +332,7 @@
                     $scope.markers['marker_'+index].lat = Number(data.lat);
                     $scope.markers['marker_'+index].lng = Number(data.lng);
                     $scope.markers['marker_'+index].title = new Date(Number(data.divTime)).toLocaleString();
+                    $scope.markers['marker_'+index].message = $scope.markers['marker_'+index].message.split('on')[0] + ' on '+ new Date(Number(data.divTime)).toLocaleString();
                 }
             });
             // console.log(data.lat);

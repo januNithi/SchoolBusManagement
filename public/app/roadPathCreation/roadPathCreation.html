@@ -1,0 +1,28 @@
+
+<script src="'../../js/navbar.js'"></script>
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Track Buses </h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="form form-horizontal" name="homeForm">
+                        <div class="form-group" style="height: 650px">
+
+                            <leaflet lf-center="map.center" lf-draw="map.drawOptions" height="480px" width="100%">
+                            </leaflet>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

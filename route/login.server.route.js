@@ -5,8 +5,10 @@
 var LocalStrategy = require('passport-local').Strategy;
 
 var config = require("../config/db/login");
-
-var msg91 = require("msg91")("118856AnX1aObPdz5780a27d", "CCSPVT", "4" );
+var fs = require("fs");
+var content = fs.readFileSync("./config/auth/config.json");
+var configObj = JSON.parse(content);
+var msg91 = require("msg91")(configObj.message.msg91.key, configObj.message.msg91.messageHeader, configObj.message.msg91.msgType);
 
 var dateFormat = require("dateformat");
 
@@ -89,7 +91,7 @@ module.exports = function(app, passport) {
 
                     var date = new Date();
                     var twentyMinutesLater = new Date(date.getTime() + (20 * 60 * 1000));
-                    var day=dateFormat(twentyMinutesLater, "yyyy-mm-dd h:MM:ss");
+                    var day=dateFormat(twentyMinutesLater, "yyyy-mm-dd H:MM:ss");
                     config.newAppUser(otp, req.query.userid, day, function (err, result) {
 
                         if (err) {

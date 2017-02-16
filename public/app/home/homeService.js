@@ -13,9 +13,9 @@
     function homeService($http){
         return{
 
-            getBusPosition : function (id,date) {
+            getBusPosition : function (id,fromTime,toTime) {
 
-                return $http.get('/getMapPositionByApp?id='+id+'&date='+date);
+                return $http.get('/getMapPositionByApp?id='+id+'&fromTime='+fromTime+'&toTime='+toTime);
 
             }
 

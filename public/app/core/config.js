@@ -43,6 +43,12 @@
                 controller : 'routeRegController',
                 templateUrl : '../app/routeReg/routeReg.html'
             })
+            .when('/routePathCreation', {
+                // controller: 'routeRegistrationController',
+                // templateUrl: '../app/routeRegistration/routeRegistration.html'
+                controller : 'roadPathCreationController',
+                templateUrl : '../app/roadPathCreation/roadPathCreation.html'
+            })
             .when('/reports', {
                 controller: 'reportsController',
                 templateUrl: '../app/reports/reports.html'

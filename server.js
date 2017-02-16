@@ -145,7 +145,7 @@ app.post('/busNotification',function (req,res) {
 function notificationAlgorithm(notificationData) {
 
     if(notificationData.event.type == 'deviceOnline'){
-        
+
         config.checkTripTime(function (err,result) {
 
             if(err){
@@ -178,7 +178,7 @@ function notificationAlgorithm(notificationData) {
                                 trip_id : value.id
                             };
                             config.updateNotification(data,function (err,result) {
-                               
+
                                 if(err){
                                     console.log(err);
                                 }else{
@@ -190,8 +190,34 @@ function notificationAlgorithm(notificationData) {
                                         }
                                     });
                                 }
-                                
+
                             });
+                        }else{
+
+                            var data = {
+                                message : 'Bus Started on '+ date.toLocaleTimeString() + ' Had a Delay/BreakDown/Traffic',
+                                bus_id : value.busId,
+                                gpsUnit : notificationData.device.id,
+                                gps : notificationData.device.name,
+                                date : dateFormat(date, "yyyy-mm-dd h:MM:ss"),
+                                trip_id : value.id
+                            };
+                            config.updateNotification(data,function (err,result) {
+
+                                if(err){
+                                    console.log(err);
+                                }else{
+                                    config.getAdminNotification(function (err,result) {
+                                        if(err){
+                                            console.log(err);
+                                        }else{
+                                            io.sockets.emit('adminNotification', result);
+                                        }
+                                    });
+                                }
+
+                            });
+
                         }
 
                     }
@@ -201,7 +227,7 @@ function notificationAlgorithm(notificationData) {
             }
 
         });
-        
+
     }else if(notificationData.event.type == 'deviceOffline'){
 
         config.checkTripTime(function (err,result) {
@@ -251,6 +277,32 @@ function notificationAlgorithm(notificationData) {
 
                             });
 
+                        }else{
+
+                            var data = {
+                                message : 'Bus Stopped on '+date.toLocaleTimeString()+ '! Had a Delay/BreakDown/Traffic',
+                                bus_id : value.busId,
+                                gpsUnit : notificationData.device.id,
+                                gps : notificationData.device.name,
+                                date : dateFormat(date, "yyyy-mm-dd h:MM:ss"),
+                                trip_id : value.id
+                            };
+                            config.updateNotification(data,function (err,result) {
+
+                                if(err){
+                                    console.log(err);
+                                }else{
+                                    config.getAdminNotification(function (err,result) {
+                                        if(err){
+                                            console.log(err);
+                                        }else{
+                                            io.sockets.emit('adminNotification', notificationData);
+                                        }
+                                    });
+                                }
+
+                            });
+
                         }
 
                     }
@@ -268,37 +320,72 @@ function notificationAlgorithm(notificationData) {
             }else{
                 var data = result;
                 data.forEach(function (value,index) {
-                    if(value.token) {
-                        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                            to: value.token,
-                            collapse_key: notificationData.event.type,
-                            notification: {
-                                title: notificationData.event.type,
-                                body: notificationData.geofence.name + ' ' + notificationData.event.type + ' on ' + (new Date(notificationData.position.deviceTime)).toLocaleTimeString(),
-                            },
-                            data: value
-                        };
-                        var obj = {
-                            message: message.notification.body,
-                            date: new Date(notificationData.position.deviceTime),
-                            studId: value.studId
-                        };
-                        fcm.send(message, function (err, response) {
-                            if (err) {
-                                console.log("Something has gone wrong!");
-                            } else {
-                                console.log("Successfully sent with response: ", response);
+                    config.getUserId(notificationData.event.geofenceId,value.id,function (err,results) {
+                        if(err){
+                            console.log(err);
+                        }else{
+                            if(results.length > 0){
+                                if(value.usrType == 'parent'){
+                                    if(value.token) {
+                                        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                                            to: value.token,
+                                            collapse_key: notificationData.event.type,
+                                            notification: {
+                                                title: notificationData.event.type,
+                                                body: notificationData.geofence.name + ' ' + notificationData.event.type + ' on ' + (new Date(notificationData.position.deviceTime)).toLocaleTimeString(),
+                                            },
+                                            data: value
+                                        };
+                                        var obj = {
+                                            message: message.notification.body,
+                                            date: new Date(notificationData.position.deviceTime),
+                                            studId: value.studId
+                                        };
+                                        fcm.send(message, function (err, response) {
+                                            if (err) {
+                                                console.log("Something has gone wrong!");
+                                            } else {
+                                                console.log("Successfully sent with response: ", response);
 
-                                config.updateParentNotification(obj, function (err, result) {
-                                    if (err) {
-                                        console.log(err);
-                                    } else {
-                                        console.log(result);
+                                                config.updateParentNotification(obj, function (err, result) {
+                                                    if (err) {
+                                                        console.log(err);
+                                                    } else {
+                                                        console.log(result);
+                                                    }
+                                                });
+                                            }
+                                        });
                                     }
-                                });
+                                }else{
+                                    var data = {
+                                        message : notificationData.geofence.name + ' ' + notificationData.event.type + ' on ' + (new Date(notificationData.position.deviceTime)).toLocaleTimeString(),
+                                        bus_id : value.busId,
+                                        gpsUnit : notificationData.device.id,
+                                        gps : notificationData.device.name,
+                                        date : dateFormat(new Date(notificationData.position.deviceTime), "yyyy-mm-dd h:MM:ss"),
+                                        trip_id : value.tripId
+                                    };
+                                    config.updateNotification(data,function (err,result) {
+
+                                        if(err){
+                                            console.log(err);
+                                        }else{
+                                            config.getAdminNotification(function (err,result) {
+                                                if(err){
+                                                    console.log(err);
+                                                }else{
+                                                    io.sockets.emit('adminNotification', notificationData);
+                                                }
+                                            });
+                                        }
+
+                                    });
+                                }
+
                             }
-                        });
-                    }
+                        }
+                    });
                 });
             }
         });
@@ -318,97 +405,97 @@ function stopReachAlgorithm(stopReachData) {
         if(result && result.length > 0){
             console.log(result);
 
-                result.forEach(function (value,index) {
-                    if(value.stop){
-                        var stpPosition = JSON.parse(value.stop.stpPosition);
-                        // var stpPosition = {
-                        //     latitude : 11.023606431835102,
-                        //     longitude : 77.00283245612809
-                        // }
-                        if(geolib.isPointInCircle({latitude:data.lat,longitude:data.log}, stpPosition, 50)){                                                       
-                            
-                            if(notifications.length){
-                                notifications.forEach(function (value1,index1) {
-                                   if(value1.tripId == value.tripId && value1.stopId == value.stopId && value1.studId == value.studId){
-                                       console.log("Notifications Already Send");
-                                   }else{
-                                       if((index1+1) == notifications.length){
-                                           notifications.push(value);
-                                           var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                                               to: value.token,
-                                               collapse_key: 'Stop Reached',
+            result.forEach(function (value,index) {
+                if(value.stop){
+                    var stpPosition = JSON.parse(value.stop.stpPosition);
+                    // var stpPosition = {
+                    //     latitude : 11.023606431835102,
+                    //     longitude : 77.00283245612809
+                    // }
+                    if(geolib.isPointInCircle({latitude:data.lat,longitude:data.log}, stpPosition, 50)){
 
-                                               notification: {
-                                                   title: 'Reached Stop',
-                                                   body: 'Reached '+value.stop.stpName+' on '+(new Date(Number(data.divTime))).toLocaleTimeString(),
-                                               },
-                                               data : value
-                                           };
-                                           var obj = {
-                                               message : message.notification.body,
-                                               date : new Date(Number(data.divTime)),
-                                               studId
-                                                   : value.studId
-                                           };
-                                           fcm.send(message, function(err, response){
-                                               if (err) {
-                                                   console.log("Something has gone wrong!");
-                                               } else {
-                                                   console.log("Successfully sent with response: ", response);
+                        if(notifications.length){
+                            notifications.forEach(function (value1,index1) {
+                                if(value1.tripId == value.tripId && value1.stopId == value.stopId && value1.studId == value.studId){
+                                    console.log("Notifications Already Send");
+                                }else{
+                                    if((index1+1) == notifications.length){
+                                        notifications.push(value);
+                                        var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                                            to: value.token,
+                                            collapse_key: 'Stop Reached',
 
-                                                   config.updateParentNotification(obj,function (err,result) {
-                                                       if(err){
-                                                           console.log(err);
-                                                       }else{
-                                                           console.log(result);
-                                                       }
-                                                   });
-                                               }
-                                           });
-                                       }
-                                   }
+                                            notification: {
+                                                title: 'Reached Stop',
+                                                body: 'Reached '+value.stop.stpName+' on '+(new Date(Number(data.divTime))).toLocaleTimeString(),
+                                            },
+                                            data : value
+                                        };
+                                        var obj = {
+                                            message : message.notification.body,
+                                            date : new Date(Number(data.divTime)),
+                                            studId
+                                                : value.studId
+                                        };
+                                        fcm.send(message, function(err, response){
+                                            if (err) {
+                                                console.log("Something has gone wrong!");
+                                            } else {
+                                                console.log("Successfully sent with response: ", response);
 
-                                    
-                                });
-                            }else{
-                                notifications.push(value);
-                                var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-                                    to: value.token,
-                                    collapse_key: 'Stop Reached',
-
-                                    notification: {
-                                        title: 'Reached Stop',
-                                        body: 'Reached '+value.stop.stpName+' on '+(new Date(Number(data.divTime))).toLocaleTimeString(),
-                                    },
-                                    data : value
-                                };
-                                var obj = {
-                                    message : message.notification.body,
-                                    date : new Date(Number(data.divTime)),
-                                    studId
-                                        : value.studId
-                                };
-                                fcm.send(message, function(err, response){
-                                    if (err) {
-                                        console.log("Something has gone wrong!");
-                                    } else {
-                                        console.log("Successfully sent with response: ", response);
-
-                                        config.updateParentNotification(obj,function (err,result) {
-                                            if(err){
-                                                console.log(err);
-                                            }else{
-                                                console.log(result);
+                                                config.updateParentNotification(obj,function (err,result) {
+                                                    if(err){
+                                                        console.log(err);
+                                                    }else{
+                                                        console.log(result);
+                                                    }
+                                                });
                                             }
                                         });
                                     }
-                                });
-                            }
-                            
-                            
+                                }
+
+
+                            });
+                        }else{
+                            notifications.push(value);
+                            var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+                                to: value.token,
+                                collapse_key: 'Stop Reached',
+
+                                notification: {
+                                    title: 'Reached Stop',
+                                    body: 'Reached '+value.stop.stpName+' on '+(new Date(Number(data.divTime))).toLocaleTimeString(),
+                                },
+                                data : value
+                            };
+                            var obj = {
+                                message : message.notification.body,
+                                date : new Date(Number(data.divTime)),
+                                studId
+                                    : value.studId
+                            };
+                            fcm.send(message, function(err, response){
+                                if (err) {
+                                    console.log("Something has gone wrong!");
+                                } else {
+                                    console.log("Successfully sent with response: ", response);
+
+                                    config.updateParentNotification(obj,function (err,result) {
+                                        if(err){
+                                            console.log(err);
+                                        }else{
+                                            console.log(result);
+                                        }
+                                    });
+                                }
+                            });
                         }
+
+
                     }
-                });
+                }
+            });
         }
     });
 }
@@ -417,7 +504,7 @@ function stopReachAlgorithm(stopReachData) {
 require('./route/layout.server.route.js')(app);
 
 module.exports={
-  app:app,
-  server:server
+    app:app,
+    server:server
 
 };

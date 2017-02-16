@@ -3,7 +3,7 @@
 
 
 <!--Date Picker-->
-<script>
+<!--<script>
     $("input").on("change", function() {
         this.setAttribute(
                 "data-date",
@@ -13,6 +13,30 @@
     }).trigger("change")
     $('#slider-timestamp').html(options.markers[ui.value].feature.properties.time.substr(0, 19));
 
+</script>-->
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
+        $('#datetimepicker2').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
+
+        $("#datetimepicker1").on("dp.change", function() {
+
+            angular.element(document.getElementById('wrapper')).scope().fromTime = $("#datetimepicker1").find("input").val();
+
+        });
+
+        $("#datetimepicker2").on("dp.change", function() {
+
+            angular.element(document.getElementById('wrapper')).scope().toTime = $("#datetimepicker2").find("input").val();
+
+        });
+
+
+    });
 </script>
 <style>
     .angular-google-map {
@@ -84,86 +108,121 @@
 
         <!--</div>-->
 
-        <div ng-show="notify" class="alert alert-info">
-            <!--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
-            <strong>Notification!</strong>
-            <label>Event : </label> <label>{{notifyObj.event.deviceOnline}}</label>
-            <label>Device : </label> <label>{{notifyObj.device.name}}</label>
-            <label ng-if="notifyObj.device.status != 'unknown'">Status : </label> <label ng-if="notifyObj.device.status != 'unknown'">{{notifyObj.device.status}}</label>
-            <label>Unique ID : </label> <label>{{notifyObj.device.uniqueId}}</label>
-        </div>
+            <div ng-show="notify" class="alert alert-info">
+                <!--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
+                <strong>Notification!</strong>
+                <label>Event : </label> <label>{{notifyObj.event.deviceOnline}}</label>
+                <label>Device : </label> <label>{{notifyObj.device.name}}</label>
+                <label ng-if="notifyObj.device.status != 'unknown'">Status : </label> <label ng-if="notifyObj.device.status != 'unknown'">{{notifyObj.device.status}}</label>
+                <label>Unique ID : </label> <label>{{notifyObj.device.uniqueId}}</label>
+            </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Track Buses </h3>
+            <div class="modal fade" id="Warning" role="dialog">
+                <div class="modal-dialog">
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> No Results found On Your Search!
+                        Current Position of the Vehicle dated on {{fromTime}} is provided.
+                        <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
                     </div>
-                    <div class="panel-body">
 
-                        <div class="form form-horizontal">
+                </div>
+            </div>
 
-                            <div class="form-group">
+            <span ng-hide="true" id="triggerWarning" class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#Warning" aria-hidden="true"></span>
 
-                                <div class="col-xs-6">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Track Buses </h3>
+                        </div>
+                        <div class="panel-body">
 
-                                    <select ng-model="currentBus" class="form-control">
+                            <div class="form form-horizontal" name="homeForm">
 
-                                        <option value="0">----SELECT BUS----</option>
+                                <div class="form-group">
 
-                                        <option value="{{bus.id}}" ng-repeat="bus in busData">
+                                    <div class="col-xs-3">
 
-                                            {{bus.regNo + ' - ' + bus.busCode}}
+                                        <select ng-model="currentBus" class="form-control">
 
-                                        </option>
+                                            <option value="0">----SELECT BUS----</option>
 
-                                    </select>
+                                            <option value="{{bus.id}}" ng-repeat="bus in busData">
+
+                                                {{bus.regNo + ' - ' + bus.busCode}}
+
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class='input-group date' id='datetimepicker1' >
+                                                <input type='text' ng-value="fromTime" class="form-control"/>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class='input-group date' id='datetimepicker2'>
+                                                <input type='text' ng-value="toTime" class="form-control"/>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                  <!--  <div class="col-xs-5">
+
+                                        <input type="date" data-date="" class="form-control" ng-model="selectedDate" data-date-format="YYYY-MM-DD" value="{{selectedDate}}">
+
+
+                                        &lt;!&ndash;<datepicker date-format="yyyy-MM-dd">&ndash;&gt;
+                                            &lt;!&ndash;<input ng-model="selectedDate" class="form-control" type="text"/>&ndash;&gt;
+                                        &lt;!&ndash;</datepicker>&ndash;&gt;
+
+                                        &lt;!&ndash;<p class="input-group">&ndash;&gt;
+                                            &lt;!&ndash;<input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />&ndash;&gt;
+                                            &lt;!&ndash;<span class="input-group-btn">&ndash;&gt;
+                                                &lt;!&ndash;<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>&ndash;&gt;
+                                            &lt;!&ndash;</span>&ndash;&gt;
+                                        &lt;!&ndash;</p>&ndash;&gt;
+
+                                    </div>-->
+
+                                    <div class="col-xs-1">
+
+                                        <button class="btn btn-success" ng-click="searchForBusPosition()"><i class="fa fa-search" aria-hidden="true"></i></button>
+
+                                    </div>
 
                                 </div>
 
-                                <div class="col-xs-5">
-
-                                    <input type="date" data-date="" class="form-control" ng-model="selectedDate" data-date-format="YYYY-MM-DD" value="{{selectedDate}}">
+                                <div class="form-group" style="height: 650px">
 
 
-                                    <!--<datepicker date-format="yyyy-MM-dd">-->
-                                        <!--<input ng-model="selectedDate" class="form-control" type="text"/>-->
-                                    <!--</datepicker>-->
+                                    <leaflet id="map" paths="paths" layers="layers" controls="controls" center="center" markers="markers" height="700px"></leaflet>
 
-                                    <!--<p class="input-group">-->
-                                        <!--<input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />-->
-                                        <!--<span class="input-group-btn">-->
-                                            <!--<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>-->
-                                        <!--</span>-->
-                                    <!--</p>-->
 
                                 </div>
-
-                                <div class="col-xs-1">
-
-                                    <button class="btn btn-success" ng-click="searchForBusPosition()"><i class="fa fa-search" aria-hidden="true"></i></button>
-
-                                </div>
-
-                            </div>
-
-                            <div class="form-group" style="height: 650px">
-
-
-                                <leaflet id="map" paths="paths" layers="layers" controls="controls" center="center" markers="markers" height="700px"></leaflet>
-
 
                             </div>
 
                         </div>
-
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>
-
-
 
 </div>

@@ -1,10 +1,13 @@
 /**
  * Created by CSS on 09-12-2016.
  */
+var fs = require("fs");
+var content = fs.readFileSync("./config/auth/config.json");
+var configObj = JSON.parse(content);
+
 var mysql = require('mysql');
 var q=require('q');
-var db = require('../db');
-var con = mysql.createPool(db);
+var con = mysql.createPool(configObj.database);
 
 
 exports.getEvents = function (id,from,to,cb) {
