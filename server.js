@@ -6,7 +6,6 @@ var geolib = require('geolib');
 var dateFormat = require('dateformat');
 var fs = require('fs');
 
-var fs = require("fs");
 var content = fs.readFileSync("./config/auth/config.json");
 var configObj = JSON.parse(content);
 
@@ -24,7 +23,7 @@ var obj = {
     log : 76.96040946
 };
 
-var server=app.listen(3000,function(){
+var server=app.listen(configObj.server.port,function(){
 
     var port=server.address().port;
 
@@ -105,6 +104,7 @@ app.get('/busPositionChange',function (req,res) {
                     divTime: req.query.divTime,
                     deviceId : req.query.id
                 };
+                console.log(JSON.stringify(io.sockets));
                 io.sockets.socket(value.id).emit("bus position", obj);
                 // io.(value.id).emit("bus position", req.query);
                 // io.sockets.sockets[value.id].emit("bus position", obj);
