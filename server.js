@@ -104,7 +104,6 @@ app.get('/busPositionChange',function (req,res) {
                     divTime: req.query.divTime,
                     deviceId : req.query.id
                 };
-                console.log(JSON.stringify(io.sockets));
                 io.sockets.socket(value.id).emit("bus position", obj);
                 // io.(value.id).emit("bus position", req.query);
                 // io.sockets.sockets[value.id].emit("bus position", obj);
