@@ -1,9 +1,9 @@
 {
   "database": {
       "host" : "localhost",
-      "user" : "root",
-      "password" : "",
-      "database" : "schoolbus"
+      "user" : "demo",
+      "password" : "demoschoolbus",
+      "database" : "demobustracking"
   },
   "server": {
       "port" : 30001
