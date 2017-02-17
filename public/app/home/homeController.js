@@ -293,7 +293,7 @@
                         riseOffset: 250
                     };
 
-                    if(Math.abs(new Date(value.devicetime).getTime() - new Date($scope.busPosition[index+1].devicetime).getTime()) > 60000){
+                    if(Math.abs(new Date(value.devicetime).getTime() - new Date($scope.busPosition[index+1].devicetime).getTime()) > 120000){
                         $scope.paths['p'+i] = {
                             color : '#478bf7',
                             weight : 4,
