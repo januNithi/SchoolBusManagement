@@ -43,6 +43,12 @@
             zoomProperty: 8,
             clickedLatitudeProperty: null,
             clickedLongitudeProperty: null,
+            events: {
+                map: {
+                    enable: ['click', 'drag', 'blur', 'touchstart'],
+                    logic: 'emit'
+                }
+            },
             layercontrol: {
                 icons: {
                     uncheck: "fa fa-toggle-off",
@@ -196,7 +202,8 @@
             var pointList = [];
             
             var greenIcon = L.icon({
-                iconUrl: 'images/blueSpecial.png'
+                iconUrl: 'images/slider-marker.png',
+                iconAnchor : [12,34]
             });
             var i = 1;
             angular.forEach($scope.busPosition, function (value, index) {
@@ -239,7 +246,7 @@
                             opacity: 5,
                             riseOffset: 250,
                             move: true
-                        }
+                        };
 
                     $scope.paths['p'+i] = {
                         color : '#478bf7',
@@ -269,9 +276,10 @@
                             // $scope.clearMap(map);
                         }
                         var layerGroup = L.layerGroup(pointList);
-                        var sliderControl = L.control.sliderControl({layer:layerGroup, range:true});
+                        var sliderControl = L.control.sliderControl({layer:layerGroup, follow: true, rezoom: 10});
                         map.addControl(sliderControl);
                         sliderControl.startSlider();
+
                     });
 
                     if(!(new Date(value.devicetime) < new Date($scope.toTime) && new Date(value.devicetime) > new Date($scope.fromTime))){
