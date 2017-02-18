@@ -203,7 +203,8 @@
             
             var greenIcon = L.icon({
                 iconUrl: 'images/slider-marker.png',
-                iconAnchor : [12,34]
+                iconAnchor : [12,34],
+                popupAnchor:  [1, -30]
             });
             var i = 1;
             angular.forEach($scope.busPosition, function (value, index) {
@@ -269,7 +270,8 @@
 
                     leafletData.getMap('map').then(function (map) {
 
-                        var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon: greenIcon});
+                        var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon: greenIcon,clickable:true, riseOnHover:true})
+                            .bindPopup('<strong>'+value.devicetime+'</strong>');
                         pointList.push(marker1);
                         if(map._controlContainer.children[1].children[1]){
                             map._controlContainer.children[1].children[1].remove();
@@ -335,7 +337,8 @@
                     }else{
                         latLng.push(points);
                     }
-                    var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon:greenIcon});
+                    var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon:greenIcon,clickable:true, riseOnHover:true})
+                        .bindPopup('<strong>'+value.devicetime+'</strong>');
                     pointList.push(marker1);
 
                 }
@@ -344,7 +347,7 @@
         };
 
         $scope.clearMap=function(map) {
-            var k = 0;
+            var k = 0; c
             for(i in map._layers) {
                 if(k != 0) {
                     try {
