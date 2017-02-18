@@ -272,6 +272,10 @@
 
                         var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon: greenIcon,clickable:true, riseOnHover:true})
                             .bindPopup('<strong>'+value.devicetime+'</strong>');
+                        marker1.on('add',function (event) {
+                            $scope.center.lat = event.target._latlng.lat;
+                            $scope.center.lng = event.target._latlng.lng;
+                        });
                         pointList.push(marker1);
                         if(map._controlContainer.children[1].children[1]){
                             map._controlContainer.children[1].children[1].remove();
@@ -339,6 +343,10 @@
                     }
                     var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon:greenIcon,clickable:true, riseOnHover:true})
                         .bindPopup('<strong>'+value.devicetime+'</strong>');
+                    marker1.on('add',function (event) {
+                        $scope.center.lat = event.target._latlng.lat;
+                        $scope.center.lng = event.target._latlng.lng;
+                    });
                     pointList.push(marker1);
 
                 }
@@ -407,7 +415,7 @@
                     $scope.center = {
                         lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
                         lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
-                        zoom: 21
+
                     };
                 }
 
