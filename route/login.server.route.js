@@ -78,7 +78,10 @@ module.exports = function(app, passport) {
             if(err){
                 res.send(500,{error:err});
             }else if(result.length == 0){
-                res.send(401,"User Number Not Registered");
+                var data = {
+                    status : 'User Number Not Registered'
+                };
+                res.send(data);
             }else {
 
                 var otp = Math.floor(1000 + Math.random() * 9000);
@@ -88,18 +91,21 @@ module.exports = function(app, passport) {
                 msg91.send(req.query.userid, msgBody, function (err, response) {
                     if (err)
                         res.send(500, {error: err});
+                    else{
+                        var date = new Date();
+                        var twentyMinutesLater = new Date(date.getTime() + (20 * 60 * 1000));
+                        var day=dateFormat(twentyMinutesLater, "yyyy-mm-dd H:MM:ss");
+                        config.newAppUser(otp, req.query.userid, day, function (err, result) {
 
-                    var date = new Date();
-                    var twentyMinutesLater = new Date(date.getTime() + (20 * 60 * 1000));
-                    var day=dateFormat(twentyMinutesLater, "yyyy-mm-dd H:MM:ss");
-                    config.newAppUser(otp, req.query.userid, day, function (err, result) {
+                            if (err) {
+                                res.send(500, {error: err});
+                            }else{
+                                res.send({status:'Success'});
+                            }
 
-                        if (err) {
-                            res.send(500, {error: err});
-                        }
-                        res.send('Success');
+                        });
+                    }
 
-                    });
                 });
             }
 
