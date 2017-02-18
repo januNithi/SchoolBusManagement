@@ -273,8 +273,9 @@
                         var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon: greenIcon,clickable:true, riseOnHover:true})
                             .bindPopup('<strong>'+value.devicetime+'</strong>');
                         marker1.on('add',function (event) {
-                            $scope.center.lat = event.target._latlng.lat;
-                            $scope.center.lng = event.target._latlng.lng;
+                            leafletData.getMap('map').then(function (map) {
+                                map.setView(marker1._latlng);
+                            });
                         });
                         pointList.push(marker1);
                         if(map._controlContainer.children[1].children[1]){
@@ -344,8 +345,9 @@
                     var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon:greenIcon,clickable:true, riseOnHover:true})
                         .bindPopup('<strong>'+value.devicetime+'</strong>');
                     marker1.on('add',function (event) {
-                        $scope.center.lat = event.target._latlng.lat;
-                        $scope.center.lng = event.target._latlng.lng;
+                        leafletData.getMap('map').then(function (map) {
+                            map.setView(marker1._latlng);
+                        });
                     });
                     pointList.push(marker1);
 
