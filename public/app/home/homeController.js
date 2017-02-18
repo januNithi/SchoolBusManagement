@@ -273,7 +273,7 @@
                         pointList.push(marker1);
                         if(map._controlContainer.children[1].children[1]){
                             map._controlContainer.children[1].children[1].remove();
-                            // $scope.clearMap(map);
+                            $scope.clearMap(map);
                         }
                         var layerGroup = L.layerGroup(pointList);
                         var sliderControl = L.control.sliderControl({layer:layerGroup, follow: true, rezoom: 10});
