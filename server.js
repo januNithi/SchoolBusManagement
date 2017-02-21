@@ -63,6 +63,8 @@ fcm.send(message, function(err, response){
 
 var io = require('socket.io').listen(server);
 
+io.set('log level',0);
+
 io.on('connection',function(socket){
 
     socket.on('bus track',function(busData){
