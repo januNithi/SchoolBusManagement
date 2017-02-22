@@ -357,7 +357,7 @@
         };
 
         $scope.clearMap=function(map) {
-            var k = 0; c
+            var k = 0;
             for(i in map._layers) {
                 if(k != 0) {
                     try {
