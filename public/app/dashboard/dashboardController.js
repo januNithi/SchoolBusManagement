@@ -17,11 +17,18 @@
         'notificationService',
         '$timeout',
         'leafletData',
-        'loginService'
+        'loginService',
+        'deviceOffline',
+        'deviceOnline',
+        'deviceStopped',
+        'unknown',
+        'deviceMoving'
 
     ];
 
-    function dashboardController($scope,$window,$filter,dashboardService,busRegistrationService,notificationService,$timeout,leafletData,loginService){
+    function dashboardController($scope,$window,$filter,dashboardService,busRegistrationService,
+                                 notificationService,$timeout,leafletData,loginService,
+                                 deviceOffline,deviceOnline,deviceStopped,unknown,deviceMoving){
 
 
         var socket = io.connect();
@@ -33,6 +40,15 @@
         $scope.markers = {};
         $scope.selectedDate = '---- SELECT DATE ----';
         $scope.busPosition = [];
+
+        $scope.deviceStatus = {
+            deviceOffline : deviceOffline,
+            deviceMoving : deviceMoving,
+            deviceStopped : deviceStopped,
+            deviceOnline : deviceOnline,
+            unknown : unknown,
+            undefined : unknown
+        };
 
         $scope.choosenBuses =[];
 
@@ -81,29 +97,38 @@
             startingDay: 1
         };
 
-        $scope.busChosen = function () {
-            angular.forEach($scope.busData,function (value,index) {
-                if(Number($scope.currentBus) == value.id){
-                    if($scope.choosenBuses.length) {
-                        var isExist = false;
-                        angular.forEach($scope.choosenBuses, function (value1, index1) {
-                            if(value1.id == value.id){
-                                isExist = true;
-                                alert('Already Selected');
-                            }
-                            if((index1 + 1) == $scope.choosenBuses.length){
-                                if(!isExist){
-                                    $scope.choosenBuses.push(value);
-                                }
-                            }
-                        });
-                    }else {
-                        $scope.choosenBuses.push(value);
-                    }
-                }
-            });
+        $scope.busChosen = function (bus,id) {
+            $scope.selectedRow = id;
+            $scope.choosenBuses = [];
+            $scope.choosenBuses.push(bus);
+            $scope.selectedDate = $filter('date')(new Date(), "yyyy-MM-dd");
+            $scope.searchForBusPosition();
 
         };
+
+        // $scope.busChosen = function () {
+        //     angular.forEach($scope.busData,function (value,index) {
+        //         if(Number($scope.currentBus) == value.id){
+        //             if($scope.choosenBuses.length) {
+        //                 var isExist = false;
+        //                 angular.forEach($scope.choosenBuses, function (value1, index1) {
+        //                     if(value1.id == value.id){
+        //                         isExist = true;
+        //                         alert('Already Selected');
+        //                     }
+        //                     if((index1 + 1) == $scope.choosenBuses.length){
+        //                         if(!isExist){
+        //                             $scope.choosenBuses.push(value);
+        //                         }
+        //                     }
+        //                 });
+        //             }else {
+        //                 $scope.choosenBuses.push(value);
+        //             }
+        //         }
+        //     });
+        //
+        // };
 
         $scope.removeBus = function (data) {
             angular.forEach($scope.choosenBuses,function (value,index) {
@@ -116,6 +141,73 @@
         $scope.getBusDetails = function () {
             busRegistrationService.getBusRegData().then(function (result) {
                 $scope.busData = result.data;
+                // var bus_image = '';
+                angular.forEach($scope.busData,function (value,index) {
+                    if(value.lastPosition) {
+                        if(Number(value.lastPosition.altitude) > 360){
+                            value.lastPosition.altitude = Number(value.lastPosition.altitude) - 360;
+                        }
+
+
+
+                        $scope.markers['marker_' + index] = {
+                            lat: value.lastPosition.lat,
+                            lng: value.lastPosition.lng,
+                            icon: {
+                                iconUrl: 'images/busIcon.png',
+                                iconAnchor : [12,34],
+                                popupAnchor:  [20, -10]
+                            },
+                            iconAngle : Number(value.lastPosition.altitude),
+                            // message: 'Bus-' + value.regNo + '-' + value.busCode + ' on ' + $filter('date')(value.lastPosition.devicetime, "dd-MM-yyyy h:mm:ss a"),
+                            message : '<div class="panel panel-primary">'+
+                            '<div class="panel-heading">'+
+                            'Bus-' + value.regNo + '-' + value.busCode +
+                            '</div>'+
+                            '<div class="panel-body">'+
+                            '<div class="form">'+
+                            '<div class="form-group">'+
+                            '<label>UniqueID:</label>'+
+                            '<label>'+value.lastPosition.deviceid+'</label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                            '<label>Time:</label>'+
+                            '<label>'+$filter('date')(value.lastPosition.devicetime, "dd-MM-yyyy h:mm:ss a")+'</label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                            '<label>Latitude:</label>'+
+                            '<label>'+value.lastPosition.lat+'</label>'+
+                            '</div>'+
+                            '<div class="form-group">'+
+                            '<label>Longitude:</label>'+
+                            '<label>'+value.lastPosition.lng+'</label>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>',
+                            iconSize: [38, 95],
+                            title: $filter('date')(value.lastPosition.devicetime, "dd-MM-yyyy h:mm:ss a"),
+                            // bus_id: value[0].bus_id,
+                            // gpsUnit: value[0].deviceid,
+                            riseOnHover: true,
+                            opacity: 5,
+                            riseOffset: 250
+                        };
+
+                        $scope.center = {
+                            lat: value.lastPosition.lat,
+                            lng: value.lastPosition.lng,
+                            zoom: 18
+                        };
+
+                        // var obj = {
+                        //     date: value[value.length - 1].date,
+                        //     gpsUnit: value[value.length - 1].deviceid
+                        // };
+                        //
+                        // socket.emit('bus track', obj);
+                    }
+                });
             },function (error) {
                 console.log(error);
             });
@@ -123,33 +215,72 @@
 
         $scope.getBusPositions = function (date) {
 
+
+            var date = $filter('date')(new Date, "yyyy-MM-dd");
+
             $scope.busPosition = [];
             $scope.paths = [];
             $scope.center = {};
             $scope.markers = [];
             var string = '';
-
+            var bus_id = {};
             angular.forEach($scope.choosenBuses,function (value,index) {
-                var bus_id = {};
+
                 angular.forEach($scope.choosenBuses,function (value,index) {
                     bus_id[value.id] = value.regNo + ' - ' + value.busCode;
                 });
                 if((index +1) == $scope.choosenBuses.length){
                     string += 'id_'+index+'='+value.id+'&length='+$scope.choosenBuses.length+'&date='+date;
                     dashboardService.getBusPosition(string).then(function (result) {
-                        if(result.data.length > 0) {
+                        if(result.data && result.data.length > 0) {
+
                             $scope.busPosition = result.data;
                             $scope.markers = {};
                             angular.forEach(result.data,function (value,index) {
-                                if(value.length > 0) {
+                                if(value && value.length > 0) {
+                                    if(!($scope.selectedDate == $filter('date')(value[value.length -1].date, "yyyy-MM-dd"))){
+                                        angular.element("#triggerWarning").trigger('click');
+                                    }
+                                    if(Number(value[value.length - 1].altitude) > 360){
+                                        value.altitude = Number(value[value.length - 1].altitude) - 360;
+                                    }
                                     $scope.selectedDate = $filter('date')(value[0].date, "yyyy-MM-dd");
-                                    $scope.markers['marker_' + index] = {
+                                    $scope.markers['marker_' + value[0].deviceid] = {
                                         lat: value[value.length - 1].lat,
                                         lng: value[value.length - 1].lng,
                                         icon: {
-                                            iconUrl: 'images/bus_' + index + '.png',
+                                            iconUrl: 'images/busIcon.png',
+                                            iconAnchor : [12,34],
+                                            popupAnchor:  [20, -10]
                                         },
-                                        message: 'Bus-' + bus_id[value[0].bus_id] + ' on ' + $filter('date')(value[value.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
+                                        iconAngle: Number(value[value.length - 1].altitude),
+                                        // message: 'Bus-' + bus_id[value[0].bus_id] + ' on ' + $filter('date')(value[value.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
+                                        message : '<div class="panel panel-primary">'+
+                                            '<div class="panel-heading">'+
+                                        'Bus-' + $scope.choosenBuses[0].regNo + '-' + $scope.choosenBuses[0].busCode +
+                                        '</div>'+
+                                        '<div class="panel-body">'+
+                                        '<div class="form">'+
+                                        '<div class="form-group">'+
+                                        '<label>Time:</label>'+
+                                        '<label>'+$filter('date')(value[value.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a")+'</label>'+
+                                        '</div>'+
+                                        '<div class="form-group">'+
+                                        '<label>UniqueID:</label>'+
+                                        '<label>'+value[value.length - 1].deviceid+'</label>'+
+                                        '</div>'+
+                                        '<div class="form-group">'+
+                                        '<label>Latitude:</label>'+
+                                        '<label>'+value[value.length - 1].lat+'</label>'+
+                                        '</div>'+
+                                        '<div class="form-group">'+
+                                        '<label>Longitude:</label>'+
+                                        '<label>'+value[value.length - 1].lng+'</label>'+
+                                        '</div>'+
+                                        '</div>'+
+                                        '</div>'+
+
+                                        '</div>',
                                         iconSize: [38, 95],
                                         title: $filter('date')(value[value.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
                                         bus_id: value[0].bus_id,
@@ -166,7 +297,7 @@
                                     };
 
                                     var obj = {
-                                        date: value[value.length - 1].date,
+                                        date: value[value.length - 1].devicetime,
                                         gpsUnit: value[value.length - 1].deviceid
                                     };
 
@@ -296,6 +427,24 @@
 
             $scope.notify = true;
             $scope.notifyObj = data;
+            $scope.busData.forEach(function (value,index) {
+
+                if($scope.notifyObj.event.deviceId == value.gpsUnit){
+                    value.status = $scope.notifyObj.event.type;
+                    // if($scope.notifyObj.event.type == 'deviceOnline'){
+                    //     value.status = "images/Circle_Green_small.png";
+                    // }else if($scope.notifyObj.event.type == 'deviceOffline'){
+                    //     value.status = "images/Circle_Red_small.png";
+                    // }else if($scope.notifyObj.event.type == 'deviceMoving'){
+                    //     value.status = "images/greendot.gif";
+                    // }else if($scope.notifyObj.event.type == 'deviceStopped'){
+                    //     value.status = "images/Circle_Orange_small.gif";
+                    // }else{
+                    //     value.status = "images/Circle_Yellow_small";
+                    // }
+                }
+
+            });
 
         });
         
@@ -329,17 +478,44 @@
             // $scope.busPosition.push(points);
             angular.forEach($scope.choosenBuses,function (value,index) {
                 if(value.gpsUnit == Number(data.deviceId) && (new Date().toDateString() == new Date(Number(data.divTime)).toDateString())){
-                    $scope.markers['marker_'+index].lat = Number(data.lat);
-                    $scope.markers['marker_'+index].lng = Number(data.lng);
-                    $scope.markers['marker_'+index].title = new Date(Number(data.divTime)).toLocaleString();
-                    $scope.markers['marker_'+index].message = $scope.markers['marker_'+index].message.split('on')[0] + ' on '+ new Date(Number(data.divTime)).toLocaleString();
+
+                    if(Number(data.altitude) > 360){
+                        data.altitude = Number(value.lastPosition.altitude) - 360;
+                    }
+                    $scope.markers['marker_'+value.gpsUnit].lat = Number(data.lat);
+                    $scope.markers['marker_'+value.gpsUnit].lng = Number(data.lng);
+                    $scope.markers['marker_'+value.gpsUnit].icon.iconUrl = 'images/busIcon.png';
+                    $scope.markers['marker_'+value.gpsUnit].iconAngle = Number(data.altitude);
+                    $scope.markers['marker_'+value.gpsUnit].title = new Date(Number(data.divTime)).toLocaleString();
+                    $scope.markers['marker_'+value.gpsUnit].message = $scope.markers['marker_'+value.gpsUnit].message.split('on')[0] + ' on '+ new Date(Number(data.divTime)).toLocaleString();
+                    $scope.markers['marker_'+value.gpsUnit].message = '<div class="panel panel-primary">'+
+                        '<div class="panel-heading">'+
+                        'Bus-' + value.regNo + '-' + value.busCode +
+                        '</div>'+
+                        '<div class="panel-body">'+
+                        '<div class="form">'+
+                        '<div class="form-group">'+
+                        '<label>UniqueID:</label>'+
+                        '<label>'+data.UniqueId+'</label>'+
+                        '</div>'+
+                        '<div class="form-group">'+
+                        '<label>Time:</label>'+
+                        '<label>'+$filter('date')(Number(data.divTime), "dd-MM-yyyy h:mm:ss a")+'</label>'+
+                        '</div>'+
+                        '<div class="form-group">'+
+                        '<label>Latitude:</label>'+
+                        '<label>'+data.lat+'</label>'+
+                        '</div>'+
+                        '<div class="form-group">'+
+                        '<label>Longitude:</label>'+
+                        '<label>'+data.lng+'</label>'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>'+
+
+                        '</div>';
                 }
             });
-            // console.log(data.lat);
-            // console.log(data.log);
-            // $scope.markers.marker.lat = Number(data.lat);
-            // $scope.markers.marker.lng = Number(data.lng);
-            // $scope.markers.marker.title = data.devicetime.toLocaleString,
             $scope.center.lat = Number(data.lat);
             $scope.center.lng = Number(data.lng);
 
@@ -351,9 +527,9 @@
         $scope.searchForBusPosition = function () {
             if ($scope.busPosition.length > 0) {
                 angular.forEach($scope.busPosition,function (value,index) {
-                    if(value.length > 0){
+                    if(value && value.length > 0){
                         var obj = {
-                            date: value[value.length - 1].date,
+                            date: value[value.length - 1].devicetime,
                             gpsUnit: value[value.length - 1].deviceid
                         };
                         socket.emit('stop track', obj);
@@ -383,7 +559,7 @@
                 angular.forEach($scope.busPosition,function (value,index) {
                     if(value.length > 0){
                         var obj = {
-                            date: value[value.length - 1].date,
+                            date: value[value.length - 1].devicetime,
                             gpsUnit: value[value.length - 1].deviceid
                         };
                         socket.emit('stop track', obj);

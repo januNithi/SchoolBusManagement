@@ -2,6 +2,7 @@
  * Created by CSS on 09-12-2016.
  */
 var config=require('../config/db/registerManager');
+var mapPostition = require('../config/db/mapPositionManager');
 var path = require('path');
 var multer=require('multer');
 var session = require('express-session');
@@ -37,10 +38,38 @@ var fs = require('fs');
 
 exports.busRegDetails=function (req,res) {
 
-    config.getBusRegDetail().then(function(result){
-        res.send(result);
-    },function (error) {
-        res.send(500,{error:error});
+    config.getBusRegDetail(function(err,result){
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            if(result.length == 0){
+                res.send(result);
+            }else{
+                var data = result;
+                var i = 0;
+                data.forEach(function(value,index){
+                    
+                    mapPostition.getLastPosition(value.gpsUnit,function (err,result) {
+
+                        if(err){
+                            res.send(500,{error : err});
+                        }else{
+
+                            value.lastPosition = result[0];
+                            if(data.length == (i+1)){
+                                res.send(data);
+                            }
+                            i++;
+
+                        }
+
+                    });
+                    
+                });
+            }
+            
+        }
+
     });
 
 };

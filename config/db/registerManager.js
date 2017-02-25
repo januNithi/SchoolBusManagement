@@ -9,20 +9,53 @@ var mysql = require('mysql');
 var q=require('q');
 var con = mysql.createPool(configObj.database);
 
-function getBusRegDetail() {
+function getBusRegDetail(cb) {
 
-    var deferred = q.defer();
+
     var RegInfo = "select b.id,b.regNo,b.busCode,b.gpsUnit,g.unitName from bus as b left join gpsunit as g on g.id = b.gpsUnit";
     con.query(RegInfo, function (err,results) {
         if (err) {
-            console.log(err);
-            return deferred.reject(err);
+            cb(err,results)
         } else {
+            var data = results;
+            var i = 1;
+            if(data.length>0){
+                data.forEach(function (value,index) {
 
-            deferred.resolve(results);
+                    var query = "Select type from events where servertime = ";
+                    query += " (Select MAX(servertime) from events where events.deviceid = "+value.gpsUnit ;
+                    query += " and (type = 'deviceOnline' OR type = 'deviceOffline'";
+                    query += " OR type = 'deviceMoving' OR type = 'deviceStopped')) limit 1";
+
+                    con.query(query,function (err,results) {
+
+                        if(err){
+                            cb(err,results);
+                        }else{
+                            if(results.length > 0){
+                                value.status = results[0].type;
+                                if(i == data.length){
+                                    cb(err,data);
+                                }
+                            }else{
+                                if(i == data.length){
+                                    cb(err,data);
+                                }
+                            }
+
+                        }
+                        i++;
+
+                    });
+
+                });
+            }else{
+                cb(err,results);
+            }
+
         }
     });
-    return deferred.promise;
+
 
 };
 

@@ -104,7 +104,8 @@ app.get('/busPositionChange',function (req,res) {
                     lng: req.query.log,
                     UniqueId: req.query.UniqueId,
                     divTime: req.query.divTime,
-                    deviceId : req.query.id
+                    deviceId : req.query.id,
+                    altitude : req.query.altitude
                 };
                 io.sockets.socket(value.id).emit("bus position", obj);
                 // io.(value.id).emit("bus position", req.query);
@@ -121,6 +122,7 @@ app.get('/busPositionChange',function (req,res) {
 
 app.post('/busNotification',function (req,res) {
     console.log(req.body);
+    io.sockets.emit('notification', req.body);
     notificationAlgorithm(req.body);
     // io.sockets.emit('notification', req.body);
 });
@@ -392,9 +394,6 @@ function notificationAlgorithm(notificationData) {
             }
         });
     }
-    else{
-        io.sockets.emit('notification', notificationData);
-    }
 
 }
 
@@ -405,7 +404,7 @@ function stopReachAlgorithm(stopReachData) {
     config.sendNotification(stopReachData,function (err,result) {
         console.log(err);
         if(result && result.length > 0){
-            console.log(result);
+            // console.log(result);
 
             result.forEach(function (value,index) {
                 if(value.stop){

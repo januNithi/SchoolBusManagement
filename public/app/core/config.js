@@ -1,7 +1,12 @@
 (function() {
     angular
         .module('myApp')
-        .config(config);
+        .config(config)
+        .constant('deviceOffline','images/redSpecial.png')
+        .constant('deviceOnline','images/Circle_Green_small.png')
+        .constant('deviceMoving','images/greendot.gif')
+        .constant('deviceStopped','images/Circle_Orange_small.png')
+        .constant('unknown','images/Circle_Yellow_small.png');
 
     config.$inject = ['$routeProvider', '$locationProvider'];
 

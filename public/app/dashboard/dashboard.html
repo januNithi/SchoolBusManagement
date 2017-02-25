@@ -1,177 +1,253 @@
 
-<script src="'../../js/navbar.js'"></script>
-
 <!--Date Picker-->
-<script>
-    $("input").on("change", function() {
-    this.setAttribute(
-    "data-date",
-    moment(this.value, "YYYY-MM-DD")
-    .format( this.getAttribute("data-date-format") )
-    )
-    }).trigger("change")
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+
+        $("#datetimepicker1").on("dp.change", function() {
+
+            angular.element(document.getElementById('page-wrapper')).scope().selectedDate = $("#datetimepicker1").find("input").val();
+
+        });
+
+    });
 </script>
+
+
+
 <style>
     .angular-google-map {
         display: block;
     }
 </style>
 
-<div id="wrapper">
+<div class="wrapper">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/home">Admin Panel</a>
+        </div>
 
-    <div ng-include="'../../template/menu.html'"></div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li>
+                    <a><img src="images/Circle_Orange_small.png">Stand By<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a><img src="images/redSpecial.png">Offline<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a><img src="images/Circle_Yellow_small.png">Unknown<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a><img src="images/greendot.gif">Moving<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a><img src="images/Circle_Green_small.png">Online<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a href="/home">Menu<span class="badge"></span></a>
+                </li>
+                <li class="dropdown messages-dropdown" ng-if="unReadNotifyObj">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell-o"></i> Notification <span ng-if="unReadNotifyObj.length" class="badge">{{unReadNotifyObj.length}}</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li ng-if="unReadNotifyObj.length" class="dropdown-header">{{unReadNotifyObj.length}} New Notifications</li>
+                        <li ng-if="unReadNotifyObj.length" class="message-preview">
+                            <a href="/notification">
+                                <span class="avatar"><i class="fa fa-bell"></i></span>
+                                <span class="message">{{unReadNotifyObj[0].message}}</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+
+                        <li ng-if="unReadNotifyObj.length > 1"><a href="/notification">View More <span class="badge">{{unReadNotifyObj.length-1}}</span></a></li>
+
+                    </ul>
+                </li>
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>-->
+                        <!--<li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>-->
+                        <!--<li class="divider"></li>-->
+                        <li><a ng-click="onLogout()"><i class="fa fa-power-off"></i> Log Out</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="Warning" role="dialog">
+        <div class="modal-dialog">
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> No Results found On Current Date!
+                Current Position of the Vehicle dated on {{selectedDate}} is provided.
+                <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+            </div>
+
+        </div>
+    </div>
+
+    <span ng-hide="true" id="triggerWarning" class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#Warning" aria-hidden="true"></span>
 
     <div id="page-wrapper">
         <div class="row">
-            <!--<div>-->
-            <!--<div class="panel panel-primary">-->
-            <!--<div class="panel-heading">-->
-            <!--<h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Today's Bus Report </h3>-->
-            <!--</div>-->
-            <!--<div class="panel-body">-->
-            <!--<div google-chart chart="myChartObject"></div>-->
-            <!--</div>-->
-            <!--</div>-->
+            <!--<div ng-show="notify" class="alert alert-info">-->
+                <!--&lt;!&ndash;<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>&ndash;&gt;-->
+                <!--<strong>Notification!</strong>-->
+                <!--<label>Event : </label> <label>{{notifyObj.event.deviceOnline}}</label>-->
+                <!--<label>Device : </label> <label>{{notifyObj.device.name}}</label>-->
+                <!--<label ng-if="notifyObj.device.status != 'unknown'">Status : </label> <label ng-if="notifyObj.device.status != 'unknown'">{{notifyObj.device.status}}</label>-->
+                <!--<label>Unique ID : </label> <label>{{notifyObj.device.uniqueId}}</label>-->
             <!--</div>-->
 
-            <!--<div class="col-xs-4">-->
+            <div class="col-md-3" style="height: 86vh;">
 
-            <!--<div class="panel panel-primary">-->
+                <div class="panel panel-primary" style="height: 100%;">
 
-            <!--<div class="panel-heading">-->
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Bus Status </h3>
+                    </div>
 
-            <!--<h3 class="panel-title"><i class="fa fa-rss"></i> Recent Views </h3>-->
+                    <div class="panel-body">
 
-            <!--</div>-->
+                        <table class="table table-bordered table-striped" style="cursor: pointer;">
 
-            <!--<div class="panel-body">-->
+                            <thead>
 
-            <!--<ul><a href="#"> Charts </a></ul>-->
+                            <th>#</th>
+                            <th>Bus</th>
+                            <th>Status</th>
 
-            <!--<ul><a href="#"> Notifications </a></ul>-->
+                            </thead>
 
-            <!--<ul><a href="#"> Bus Status </a></ul>-->
+                            <tbody>
 
-            <!--<ul><a href="#"> Student Details </a></ul>-->
+                            <tr ng-repeat="bus in busData" ng-click="busChosen(bus,$index)" ng-class="{'selectedRow':$index == selectedRow}">
 
-            <!--<ul><a href="#"> Settings Changes </a></ul>-->
+                                <td>{{bus.id}}</td>
+                                <td>{{bus.regNo + ' - ' + bus.busCode}}</td>
+                                <td><img src="{{deviceStatus[bus.status]}}"></td>
 
-            <!--<ul><a href="#"> Password Changes </a></ul>-->
+                            </tr>
 
-            <!--<ul><a href="#"> View More </a></ul>-->
+                            </tbody>
 
-            <!--</div>-->
+                        </table>
 
-            <!--</div>-->
+                    </div>
 
-            <!--</div>-->
+                </div>
 
-            <!--</div>-->
-
-            <div ng-show="notify" class="alert alert-info">
-                <!--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
-                <strong>Notification!</strong>
-                <label>Event : </label> <label>{{notifyObj.event.deviceOnline}}</label>
-                <label>Device : </label> <label>{{notifyObj.device.name}}</label>
-                <label ng-if="notifyObj.device.status != 'unknown'">Status : </label> <label ng-if="notifyObj.device.status != 'unknown'">{{notifyObj.device.status}}</label>
-                <label>Unique ID : </label> <label>{{notifyObj.device.uniqueId}}</label>
             </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Track Buses </h3>
-                        </div>
-                        <div class="panel-body">
+            <div class="col-md-9" style="height: 86vh;">
 
-                            <div class="form form-horizontal">
 
-                                <div class="form-group">
+                <div class="panel panel-primary"  style="height: 100%;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Track Buses </h3>
+                    </div>
+                    <div class="panel-body">
 
-                                    <div class="col-xs-6">
+                        <div class="form form-horizontal">
 
-                                        <select ng-model="currentBus" class="form-control" ng-change="busChosen()">
+                            <!--<div class="form-group">-->
 
-                                            <option value="0">----SELECT BUS----</option>
+                                <!--<div class="col-xs-6">-->
 
-                                            <option value="{{bus.id}}" ng-repeat="bus in busData">
+                                    <!--<select ng-model="currentBus" class="form-control" ng-change="busChosen()">-->
 
-                                                {{bus.regNo + ' - ' + bus.busCode}}
+                                        <!--<option value="0">&#45;&#45;&#45;&#45;SELECT BUS&#45;&#45;&#45;&#45;</option>-->
 
-                                            </option>
+                                        <!--<option value="{{bus.id}}" ng-repeat="bus in busData">-->
 
-                                        </select>
-                                        <div ng-repeat="data in choosenBuses" style="display: inline;">
+                                            <!--{{bus.regNo + ' - ' + bus.busCode}}-->
 
-                                            <div class="chip" style="margin-top: 5px">
-                                                {{data.regNo + ' - ' + data.busCode}}
-                                                <span class="closebtn" ng-click="removeBus(data)" onclick="this.parentElement.style.display='none'">&times;</span>
-                                            </div>
-                                        </div>
+                                        <!--</option>-->
 
-                                    </div>
+                                    <!--</select>-->
+                                    <!--<div ng-repeat="data in choosenBuses" style="display: inline;">-->
 
-                                    <!---->
-                                    <!--<div class="col-xs-6">-->
-
-                                        <!--<select ng-model="currentBus" class="form-control">-->
-
-                                            <!--<option value="0">&#45;&#45;&#45;&#45;SELECT BUS&#45;&#45;&#45;&#45;</option>-->
-
-                                            <!--<option value="{{bus.id}}" ng-repeat="bus in busData">-->
-
-                                                <!--{{bus.regNo + ' - ' + bus.busCode}}-->
-
-                                            <!--</option>-->
-
-                                        <!--</select>-->
-
+                                        <!--<div class="chip" style="margin-top: 5px">-->
+                                            <!--{{data.regNo + ' - ' + data.busCode}}-->
+                                            <!--<span class="closebtn" ng-click="removeBus(data)" onclick="this.parentElement.style.display='none'">&times;</span>-->
+                                        <!--</div>-->
                                     <!--</div>-->
 
-                                    <div class="col-xs-5">
+                                <!--</div>-->
 
-                                        <!--<datepicker date-format="yyyy-MM-dd">-->
-                                        <!--<input ng-model="selectedDate" class="form-control" type="text"/>-->
-                                        <!--</datepicker>-->
+                                <!---->
+                                <!--<div class="col-xs-6">-->
 
-                                        <!--<p class="input-group">-->
-                                            <!--<input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="{{popup2.opened}}" datepicker-options="{{dateOptions}}" ng-required="true" close-text="Close" />-->
-                                        <!--<span class="input-group-btn">-->
-                                            <!--<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>-->
-                                        <!--</span>-->
-                                        <!--</p>-->
-                                        <!--<input class="form-control col-sm-12" ng-model="selectedDate"  type="datetime-local">-->
-                                        <input type="date" data-date="" class="form-control" ng-model="selectedDate" data-date-format="YYYY-MM-DD" value="{{selectedDate}}">
-                                    </div>
+                                <!--<select ng-model="currentBus" class="form-control">-->
 
-                                    <div class="col-xs-1">
+                                <!--<option value="0">&#45;&#45;&#45;&#45;SELECT BUS&#45;&#45;&#45;&#45;</option>-->
 
-                                        <button class="btn btn-success" ng-click="searchForBusPosition()"><i class="fa fa-search" aria-hidden="true"></i></button>
+                                <!--<option value="{{bus.id}}" ng-repeat="bus in busData">-->
 
-                                    </div>
+                                <!--{{bus.regNo + ' - ' + bus.busCode}}-->
 
-                                </div>
+                                <!--</option>-->
 
-                                <div class="form-group" style="height: 650px">
+                                <!--</select>-->
+
+                                <!--</div>-->
+
+                                <!--<div class="col-xs-5">-->
+
+                                    <!--&lt;!&ndash;<datepicker date-format="yyyy-MM-dd">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<input ng-model="selectedDate" class="form-control" type="text"/>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</datepicker>&ndash;&gt;-->
+
+                                    <!--&lt;!&ndash;<p class="input-group">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="{{popup2.opened}}" datepicker-options="{{dateOptions}}" ng-required="true" close-text="Close" />&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<span class="input-group-btn">&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;</p>&ndash;&gt;-->
+                                    <!--&lt;!&ndash;<input class="form-control col-sm-12" ng-model="selectedDate"  type="datetime-local">&ndash;&gt;-->
+                                    <!--<div class="form-group">-->
+                                        <!--<div class='input-group date' id='datetimepicker1' >-->
+                                            <!--<input type='text' ng-value="selectedDate" class="form-control"/>-->
+                                            <!--<span class="input-group-addon">-->
+                                                <!--<span class="glyphicon glyphicon-calendar"></span>-->
+                                            <!--</span>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+
+                                <!--<div class="col-xs-1">-->
+
+                                    <!--<button class="btn btn-success" ng-click="searchForBusPosition()"><i class="fa fa-search" aria-hidden="true"></i></button>-->
+
+                                <!--</div>-->
+
+                            <!--</div>-->
+
+                            <div class="form-group" style="height: 650px">
 
 
-                                    <leaflet id="map" paths="paths" center="center" markers="markers" height="700px"></leaflet>
+                                <leaflet id="map" paths="paths" center="center" markers="markers" height="600px"></leaflet>
 
-
-                                </div>
 
                             </div>
 
                         </div>
+
                     </div>
                 </div>
             </div>
 
         </div>
 
-
-
     </div>
-
-    </div>
+</div>
