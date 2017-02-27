@@ -144,8 +144,8 @@
                 // var bus_image = '';
                 angular.forEach($scope.busData,function (value,index) {
                     if(value.lastPosition) {
-                        if(Number(value.lastPosition.altitude) > 360){
-                            value.lastPosition.altitude = Number(value.lastPosition.altitude) - 360;
+                        if(Number(value.lastPosition.course) > 360){
+                            value.lastPosition.course = Number(value.lastPosition.course) - 360;
                         }
 
 
@@ -158,7 +158,7 @@
                                 iconAnchor : [12,34],
                                 popupAnchor:  [20, -10]
                             },
-                            iconAngle : Number(value.lastPosition.altitude),
+                            iconAngle : Number(value.lastPosition.course),
                             // message: 'Bus-' + value.regNo + '-' + value.busCode + ' on ' + $filter('date')(value.lastPosition.devicetime, "dd-MM-yyyy h:mm:ss a"),
                             message : '<div class="panel panel-primary">'+
                             '<div class="panel-heading">'+
@@ -241,8 +241,8 @@
                                     if(!($scope.selectedDate == $filter('date')(value[value.length -1].date, "yyyy-MM-dd"))){
                                         angular.element("#triggerWarning").trigger('click');
                                     }
-                                    if(Number(value[value.length - 1].altitude) > 360){
-                                        value.altitude = Number(value[value.length - 1].altitude) - 360;
+                                    if(Number(value[value.length - 1].course) > 360){
+                                        value.course = Number(value[value.length - 1].course) - 360;
                                     }
                                     $scope.selectedDate = $filter('date')(value[0].date, "yyyy-MM-dd");
                                     $scope.markers['marker_' + value[0].deviceid] = {
@@ -253,7 +253,7 @@
                                             iconAnchor : [12,34],
                                             popupAnchor:  [20, -10]
                                         },
-                                        iconAngle: Number(value[value.length - 1].altitude),
+                                        iconAngle: Number(value[value.length - 1].course),
                                         // message: 'Bus-' + bus_id[value[0].bus_id] + ' on ' + $filter('date')(value[value.length - 1].devicetime, "dd-MM-yyyy h:mm:ss a"),
                                         message : '<div class="panel panel-primary">'+
                                             '<div class="panel-heading">'+
@@ -479,13 +479,13 @@
             angular.forEach($scope.choosenBuses,function (value,index) {
                 if(value.gpsUnit == Number(data.deviceId) && (new Date().toDateString() == new Date(Number(data.divTime)).toDateString())){
 
-                    if(Number(data.altitude) > 360){
-                        data.altitude = Number(value.lastPosition.altitude) - 360;
+                    if(Number(data.course) > 360){
+                        data.course = Number(value.lastPosition.course) - 360;
                     }
                     $scope.markers['marker_'+value.gpsUnit].lat = Number(data.lat);
                     $scope.markers['marker_'+value.gpsUnit].lng = Number(data.lng);
                     $scope.markers['marker_'+value.gpsUnit].icon.iconUrl = 'images/busIcon.png';
-                    $scope.markers['marker_'+value.gpsUnit].iconAngle = Number(data.altitude);
+                    $scope.markers['marker_'+value.gpsUnit].iconAngle = Number(data.course);
                     $scope.markers['marker_'+value.gpsUnit].title = new Date(Number(data.divTime)).toLocaleString();
                     $scope.markers['marker_'+value.gpsUnit].message = $scope.markers['marker_'+value.gpsUnit].message.split('on')[0] + ' on '+ new Date(Number(data.divTime)).toLocaleString();
                     $scope.markers['marker_'+value.gpsUnit].message = '<div class="panel panel-primary">'+

@@ -105,7 +105,8 @@ app.get('/busPositionChange',function (req,res) {
                     UniqueId: req.query.UniqueId,
                     divTime: req.query.divTime,
                     deviceId : req.query.id,
-                    altitude : req.query.altitude
+                    altitude : req.query.altitude,
+                    course : req.query.course
                 };
                 io.sockets.socket(value.id).emit("bus position", obj);
                 // io.(value.id).emit("bus position", req.query);
