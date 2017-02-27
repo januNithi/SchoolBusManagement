@@ -302,6 +302,12 @@
                 }
             };
 
+            $scope.markerData.icon = {
+                iconUrl: 'images/marker.png',
+                    iconAnchor : [12,34],
+                    popupAnchor:  [20, -10]
+            };
+
 
             $scope.stops.push(stop);
             // var time = $scope.markerData.stpTime;
@@ -387,7 +393,12 @@
                         stpName: value.stpName,
                         // stpTime: value.stpTime,
                         lat: value.stpPosition.lat,
-                        lng: value.stpPosition.lng
+                        lng: value.stpPosition.lng,
+                        icon: {
+                            iconUrl: 'images/marker.png',
+                            iconAnchor : [12,34],
+                            popupAnchor:  [20, -10]
+                        },
                     };
 
                     $scope.center = {
