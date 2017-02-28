@@ -304,7 +304,7 @@
 
             $scope.markerData.icon = {
                 iconUrl: 'images/marker.png',
-                    iconAnchor : [12,34],
+                    iconAnchor : [12,30],
                     popupAnchor:  [20, -10]
             };
 
@@ -338,7 +338,7 @@
                 '</div>';
             $scope.markers['marker_'+$scope.markerData.stpName] = $scope.markerData;
 
-            $scope.markersData ={};
+            $scope.markerData ={};
 
         };
 
@@ -396,7 +396,7 @@
                         lng: value.stpPosition.lng,
                         icon: {
                             iconUrl: 'images/marker.png',
-                            iconAnchor : [12,34],
+                            iconAnchor : [12,30],
                             popupAnchor:  [20, -10]
                         },
                     };
@@ -554,6 +554,13 @@
                     console.log(err);
                 }else{
                     getRoutes();
+                    $scope.path = {};
+                    $scope.markers = [];
+                    $scope.center = {};
+                    $scope.routeData = {};
+                    $scope.stops = [];
+                    $scope.selectedRow = null;
+                    $scope.doubleTapped = false;
                     alert("Successfully Deleted");
                 }
 
