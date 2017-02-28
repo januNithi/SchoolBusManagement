@@ -514,10 +514,12 @@
                         '</div>'+
 
                         '</div>';
+
+                    $scope.center.lat = Number(data.lat);
+                    $scope.center.lng = Number(data.lng);
                 }
             });
-            $scope.center.lat = Number(data.lat);
-            $scope.center.lng = Number(data.lng);
+
 
             leafletData.getMap(function (map) {
                 map.invalidateSize();
