@@ -38,15 +38,20 @@ exports.getSummary=function (req,res) {
                     bus:{}
                 };
 
-                var  attribute=JSON.parse(result[i].attrib);
+                var  attribute1=JSON.parse(result[i].attributes1);
+                var  attribute2=JSON.parse(result[i].attributes2);
 
                 data.device.name=result[i].unitName;
                 data.device.id=result[i].id;
 
                 data.position.id=result[i].deviceid;
-                data.position.avgSpeed=result[i].avgspeed;
-                data.position.maxSpeed=result[i].maxspeed;
-                data.position.dist=attribute.distance;
+                data.position.avgSpeed=Math.round(result[i].avgspeed*1.852);
+                data.position.maxSpeed=Math.round(result[i].maxspeed*1.852);
+                console.log(attribute1.totalDistance);
+                console.log(attribute2.totalDistance);
+                var distance=(attribute2.totalDistance)-(attribute1.totalDistance);
+                data.position.dist=Math.round(distance/1000);
+                console.log(data.position.dist);
 
                 data.bus.busCode=result[i].busCode;
                 data.bus.gpsUnit=result[i].gpsUnit;

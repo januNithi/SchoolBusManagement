@@ -121,7 +121,6 @@
                                     <th>Distance</th>
                                     <th>Average Speed</th>
                                     <th>Maximum Speed</th>
-                                    <th>Engine Hourse</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -129,10 +128,10 @@
                                 <tr ng-repeat="Data in filteredSummary" style="cursor: pointer;" ng-click="updateMap($index)" ng-class="{'selectedRow':$index == selectedRow}">
                                     <th scope="row">{{$index+1}}</th>
                                     <td>{{ Data.device.name}}</td>
-                                    <td>{{Data.position.dist}}</td>
-                                    <td>{{Data.position.avgSpeed}}</td>
-                                    <td>{{Data.position.maxSpeed}}</td>
-                                    <td></td>
+                                    <td>{{Data.position.dist}}&nbsp;Km</td>
+                                    <td>{{Data.position.avgSpeed}}&nbsp;Km/Ph</td>
+                                    <td>{{Data.position.maxSpeed}}&nbsp;Km/Ph</td>
+
 
 
                                 </tr>
