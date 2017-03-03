@@ -52,7 +52,10 @@ exports.busRegDetails=function (req,res) {
                     mapPostition.getLastPosition(value.gpsUnit,function (err,result) {
 
                         if(err){
-                            res.send(500,{error : err});
+                            if(data.length == (i+1)) {
+                                res.send(500, {error: err});
+                            }
+                            i++;
                         }else{
 
                             value.lastPosition = result[0];

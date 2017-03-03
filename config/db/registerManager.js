@@ -204,7 +204,9 @@ function getTripRegDatas(tripId,cb) {
                                 var query = "Select stpName,id,stpPosition from stops where rtId = "+value.rtId;
                                 con.query(query,function(err,result){
                                     if(err){
-                                        cb(err,result);
+                                        if((index + 1) == data.length && (index1 + 1) == stopList.length){
+                                            cb(err,result);
+                                        }
                                     }else {
                                         value.stops = result;
                                         value.showStops = false;
