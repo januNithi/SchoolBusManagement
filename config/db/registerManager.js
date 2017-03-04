@@ -489,22 +489,27 @@ function getRoutes(routeId,cb) {
 
                 con.query(query, function (err, result) {
                     if (err) {
-                        cb(err, result);
+                        if ((i) == totalLength) {
+                            cb(err, result);
+                        }
+                        i++;
+                    }else{
+                        var data = {
+                            id: value.id,
+                            rtName: value.rtName,
+                            fromRoutePoints : value.fromRoutePoints,
+                            toRoutePoints : value.toRoutePoints,
+                            fromPlaceId : value.fromPlaceId,
+                            toPlaceId : value.toPlaceId,
+                            stops: result
+                        };
+                        routes.push(data);
+                        if ((i) == totalLength) {
+                            cb(err, routes);
+                        }
+                        i++;
                     }
-                    var data = {
-                        id: value.id,
-                        rtName: value.rtName,
-                        fromRoutePoints : value.fromRoutePoints,
-                        toRoutePoints : value.toRoutePoints,
-                        fromPlaceId : value.fromPlaceId,
-                        toPlaceId : value.toPlaceId,
-                        stops: result
-                    };
-                    routes.push(data);
-                    if ((i) == totalLength) {
-                        cb(err, routes);
-                    }
-                    i++;
+
                 });
 
             });
