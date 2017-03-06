@@ -128,6 +128,7 @@ module.exports = function(app, passport) {
                     res.send({status:"OTP Doesn't Exist or Expired"});
                 }else {
                     var studentData = result[0];
+                    studentData.status = "OTP verified";
                     config.updateToken(studentData.id,token,function (err,result) {
                         if(err){
                             res.send(500,{error:err});
