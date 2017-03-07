@@ -47,7 +47,7 @@
                 configService.getConfiguration().then(function (result) {
                     $scope.config = result.data;
                     $scope.legend = {
-                            position: 'topright',
+                            position: 'bottomright',
                             colors: [ $scope.config.overSpeedColor, $scope.config.rashTurnColor, '#478bf7'],
                             labels: [ 'Over Speed', 'Rash Turn', 'Route Path' ]
                     }
@@ -254,8 +254,8 @@
                             });
                         });
                         pointList.push(marker1);
-                        if(map._controlContainer.children[1].children[2]){
-                            map._controlContainer.children[1].children[2].remove();
+                        if(map._controlContainer.children[1].children[1]){
+                            map._controlContainer.children[1].children[1].remove();
                             $scope.clearMap(map);
                         }
                         var layerGroup = L.layerGroup(pointList);
