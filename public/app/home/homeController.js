@@ -324,8 +324,7 @@
                     var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon:greenIcon,clickable:true, riseOnHover:true})
                         .bindPopup(
                             '<strong>Time :' + value.devicetime+'</strong><br>'+
-                            '<strong>Speed :' + (value.speed*1.852)+'</strong>'+
-                            '<strong>Course :' + (value.course)+'</strong>'
+                            '<strong>Speed :' + (value.speed*1.852)+'</strong>'
                         );
                     marker1.on('add',function (event) {
                         leafletData.getMap('map').then(function (map) {
