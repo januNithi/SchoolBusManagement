@@ -17,7 +17,7 @@
                 var userData = {
                     userName : userName,
                     password : password
-                }
+                };
                 return $http.post("/api/login",userData);
             },
             onLogout:function () {

@@ -16,7 +16,7 @@ exports.getBusPosition = function (data,cb) {
     var resultData = [];
     for(var i = 0; i < Number(data.length); i++){
         query = "select "+data['id_'+i]+" as bus_id,latitude as lat,longitude as lng,date(devicetime) as date,";
-        query += " DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid,altitude ";
+        query += " DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid,course,speed ";
         query += " from positions where date(devicetime) ='"+data.date+"'";
         query += " and deviceid = (select gpsUnit from bus where id = "+data['id_'+i]+") order by devicetime ASC";
         con.query(query, function (err,results) {
@@ -34,7 +34,7 @@ exports.getBusPosition = function (data,cb) {
                 }else{
                     var id = data['id_'+count];
                     var qry = "select "+id+" as bus_id,latitude as lat,longitude as lng,date(devicetime) ";
-                    qry += "as date,DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid,altitude ";
+                    qry += "as date,DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid,course,speed ";
                     qry += " from positions where date(devicetime) =(select MAX(date(devicetime)) from positions where deviceid =";
                     qry += " (select gpsUnit from bus where id = "+id+"))";
                     qry += " and deviceid = (select gpsUnit from bus where id = "+id+") order by devicetime ASC";
@@ -88,7 +88,8 @@ exports.getBusPosition = function (data,cb) {
 
 exports.getLastPosition = function (id,cb) {
 
-    var query = "Select date(devicetime) as data,DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid, latitude as lat, longitude as lng,altitude from positions";
+    var query = "Select date(devicetime) as data,DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid,";
+    query += " latitude as lat, longitude as lng,course,speed from positions";
     query += " where devicetime = (Select MAX(devicetime) from positions where deviceid = "+id+") and deviceid = "+id;
 
     con.query(query,function (err,result) {
@@ -101,7 +102,8 @@ exports.getMapPositionByApp = function (id,fromTime,toTime,cb)
 {
     var query = '';
     if(fromTime == 'null' && toTime == 'null'){
-        query = "select date(devicetime) as date,DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid,latitude as lat,longitude as lng,altitude from positions ";
+        query = "select date(devicetime) as date,DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s')";
+        query += " as devicetime,deviceid,latitude as lat,longitude as lng,course,speed from positions ";
         query += " where date(devicetime) = (select MAX(date(devicetime)) from positions where deviceid =";
         query += " (select gpsUnit from bus where id = "+id+")) and deviceid = (select gpsUnit from bus where id = "+id+")";
         query += " order by devicetime ASC";
@@ -114,7 +116,7 @@ exports.getMapPositionByApp = function (id,fromTime,toTime,cb)
         // query += " and deviceid = "+id+"";
 
         query = "select latitude as lat,longitude as lng,date(devicetime) as date,";
-        query += " DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid,altitude ";
+        query += " DATE_FORMAT(devicetime,'%X-%m-%d %H:%i:%s') as devicetime,deviceid,course,speed ";
         query += " from positions where";
         // query += "  date(devicetime) ='"+date+"'  and";
         query += " devicetime between '"+fromTime+"' and '"+toTime+"'";

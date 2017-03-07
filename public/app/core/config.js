@@ -97,6 +97,10 @@
             .when('/chartReport', {
                 controller: 'chartReportController',
                 templateUrl: '../app/chartReport/chartReport.html'
+            })
+            .when('/configuration', {
+                controller: 'configController',
+                templateUrl: '../app/configuration/configuration.html'
             });
 
         $locationProvider.html5Mode(true);

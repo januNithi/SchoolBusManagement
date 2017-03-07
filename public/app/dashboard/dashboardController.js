@@ -79,6 +79,8 @@
 
             if(!result.data.id){
                 loginService.goToLogin()
+            }else{
+                $scope.getBusDetails();
             }
 
         });
@@ -572,7 +574,7 @@
 
         // $scope.getBusPositions(null,null);
 
-        $scope.getBusDetails();
+
 
     }
 })();

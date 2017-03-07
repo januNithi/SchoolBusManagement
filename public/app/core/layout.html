@@ -24,7 +24,9 @@
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css"/>
     <!--<link rel="stylesheet" href="css/dark-bootstrap.all.min.css">-->
     <!--<link rel="stylesheet" href="css/light-bootstrap.all.min.css">s-->
-
+    <link rel="stylesheet" href="bower_components/angular-color-picker/dist/angularjs-color-picker.min.css" />
+    <!-- only include if you use bootstrap -->
+    <link rel="stylesheet" href="bower_components/angular-color-picker/dist/themes/angularjs-color-picker-bootstrap.min.css" />
 
     <link rel="stylesheet" type="text/css" href="css/local.css">
     <link rel="stylesheet" type="text/css" href="css/closable.css">
@@ -59,7 +61,8 @@
     <script src="bower_components/leaflet-plugins/layer/Marker.Rotate.js"></script>
 
     <script src="bower_components/jquery-ui/jquery-ui.js"></script>
-
+    <script src="bower_components/tinycolor/dist/tinycolor-min.js"></script>
+    <script src="bower_components/angular-color-picker/dist/angularjs-color-picker.min.js"></script>
 
 
     <script src="bower_components/leaflet-slider/SliderControl.js"></script>
@@ -184,6 +187,9 @@
     <script src="app/dashboard/dashboardService.js"></script>
     <script src="app/dashboard/dashboardController.js"></script>
 
+    <!--Configuration-->
+    <script src="app/configuration/configService.js"></script>
+    <script src="app/configuration/configController.js"></script>
 
 <!--common directives-->
     <script src="app/directives/onlyDigits.js"></script>

@@ -58,7 +58,7 @@ module.exports=function(){
     //     cookie: { secure: true }
     // }))
 
-
+    require('../route/configuration.server.route')(app);
     require('../route/register.server.route.js')(app);
     require('../route/mapPostion.server.route.js')(app);
     require('../route/geofence.server.route.js')(app);

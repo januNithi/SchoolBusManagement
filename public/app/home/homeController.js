@@ -16,11 +16,12 @@
         'busRegistrationService',
         '$timeout',
         'leafletData',
-        'loginService'
+        'loginService',
+        'configService'
 
     ];
 
-    function homeController($scope,$window,$filter,homeService,busRegistrationService,$timeout,leafletData,loginService){
+    function homeController($scope,$window,$filter,homeService,busRegistrationService,$timeout,leafletData,loginService,configService){
 
 
         // var socket = io.connect();
@@ -33,7 +34,31 @@
         $scope.fromTime = '----SELECT----';
         $scope.toTime = '----SELECT----';
         $scope.busPosition = [];
+        $scope.config = {};
+        $scope.legend = {};
         var data=null;
+
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin()
+            }else{
+                $scope.getBusDetails();
+                configService.getConfiguration().then(function (result) {
+                    $scope.config = result.data;
+                    $scope.legend = {
+                            position: 'topright',
+                            colors: [ $scope.config.overSpeedColor, $scope.config.rashTurnColor, '#478bf7'],
+                            labels: [ 'Over Speed', 'Rash Turn', 'Route Path' ]
+                    }
+                },function (error) {
+                    console.log(error);
+                });
+
+            }
+
+        });
+
 
         angular.extend($scope, {
             centerProperty: {
@@ -47,6 +72,9 @@
                 map: {
                     enable: ['click', 'drag', 'blur', 'touchstart'],
                     logic: 'emit'
+                },
+                path: {
+                    enable: [ 'click', 'mouseover' ]
                 }
             },
             layercontrol: {
@@ -87,7 +115,8 @@
                 overlays: {
 
                 }
-            }
+            },
+
         });
 
         $scope.showSelectable = function (value) {
@@ -98,13 +127,6 @@
 
         };
 
-        loginService.isLoggedIn().then(function (result) {
-
-            if(!result.data.id){
-                loginService.goToLogin()
-            }
-
-        });
 
         $scope.onLogout = function () {
             loginService.onLogout().then(function () {
@@ -119,6 +141,10 @@
             minDate: new Date(),
             startingDay: 1
         };
+
+        $scope.$on('leafletDirectivePath.click', function (event) {
+            console.log(event);
+        });
 
         $scope.getBusDetails = function () {
             busRegistrationService.getBusRegData().then(function (result) {
@@ -137,54 +163,11 @@
             $scope.point=[];
 
             homeService.getBusPosition(id,fromTime,toTime).then(function (result) {
-
-
-
-                // angular.forEach(result.data,function(value,index){
-                //
-                //     if ((index+1) != result.data.length) {
-                //         var num = value.lat;
-                //         var slat = num.toFixed(8);
-                //         var num = value.lng;
-                //         var slng = num.toFixed(8);
-                //         var num = result.data[index + 1].lat;
-                //         var bl_lat= num.toFixed(8);
-                //         var num = result.data[index + 1].lng;
-                //         var bl_lng =num.toFixed(8);
-                //         var lats = (slat - bl_lat) * 10000;
-                //         var lngs = (slng - bl_lng) * 10000;
-                //         var latitude = lats.toFixed(4);
-                //         var lngitude=lngs.toFixed(4);
-                //         var lat=Math.abs(latitude);
-                //         var lng=Math.abs(lngitude);
-                //         // console.log(lat);
-                //         // console.log(lng);
-                //         if ((lat<4.5) && (lng<4.5)) {
-                //             if((lat>0)&& (lng>0)) {
-                //                 $scope.busPosition.push(value);
-                //                 // console.log($scope.busPosition);
-                //             }
-                //
-                //         }
-                //
-                //         // var lat1 = slat * Math.PI / 180;
-                //         // var lat2 = bl_lat * Math.PI / 180;
-                //         // var lat = (bl_lat - slat) * Math.PI / 180;
-                //         // var lng = (bl_lng - slng) * Math.PI / 180;
-                //         // var a = Math.sin(lat / 2) * Math.sin(lat / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(lng / 2) * Math.sin(lng / 2);
-                //         // var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                //        // var dis = (R * c);
-                //     //     if (dis > 20
-                //     //     ) {
-                //     //         $scope.busPosition.push(value);
-                //     //         console.log($scope.busPosition);
-                //     //
-                //      }
-                // });
-
                 if(result.data.length > 0) {
                     $scope.busPosition = result.data;
                     $scope.updateMap();
+                    // $scope.updateOverSpeed();
+                    // $scope.rashSpeed();
                     $scope.center = {
                         lat: $scope.busPosition[$scope.busPosition.length - 1].lat,
                         lng: $scope.busPosition[$scope.busPosition.length - 1].lng,
@@ -252,16 +235,9 @@
                     $scope.paths['p'+i] = {
                         color : '#478bf7',
                         weight : 4,
-                        latlngs : latLng
+                        latlngs : latLng,
+                        clickable : true
                     };
-                    // $scope.paths = {
-                    //     p1: {
-                    //         color:'#478bf7',
-                    //         weight: 4,
-                    //         latlngs: $scope.busPosition
-                    //     }
-                    //
-                    // };
                     $scope.center = {
                         lat: value.lat,
                         lng: value.lng,
@@ -278,8 +254,8 @@
                             });
                         });
                         pointList.push(marker1);
-                        if(map._controlContainer.children[1].children[1]){
-                            map._controlContainer.children[1].children[1].remove();
+                        if(map._controlContainer.children[1].children[2]){
+                            map._controlContainer.children[1].children[2].remove();
                             $scope.clearMap(map);
                         }
                         var layerGroup = L.layerGroup(pointList);
@@ -294,6 +270,8 @@
                         $scope.fromTime = value.devicetime;
                         $scope.toTime = value.devicetime;
                     }
+
+                    $scope.updateOverSpeed();
 
                 } else {
                     var points = {
@@ -312,7 +290,8 @@
                         $scope.paths['p'+i] = {
                             color : '#478bf7',
                             weight : 4,
-                            latlngs : latLng
+                            latlngs : latLng,
+                            clickable : true
                         };
                         var delayTime = Math.abs(new Date(value.devicetime).getTime() - new Date($scope.busPosition[index+1].devicetime).getTime());
                         var diff=delayTime,milliseconds,seconds,minutes,hours,days;
@@ -343,7 +322,11 @@
                         latLng.push(points);
                     }
                     var marker1 = L.marker([value.lat, value.lng], {time: value.devicetime,icon:greenIcon,clickable:true, riseOnHover:true})
-                        .bindPopup('<strong>'+value.devicetime+'</strong>');
+                        .bindPopup(
+                            '<strong>Time :' + value.devicetime+'</strong><br>'+
+                            '<strong>Speed :' + (value.speed*1.852)+'</strong>'+
+                            '<strong>Course :' + (value.course)+'</strong>'
+                        );
                     marker1.on('add',function (event) {
                         leafletData.getMap('map').then(function (map) {
                             map.setView(marker1._latlng);
@@ -354,6 +337,79 @@
                 }
 
             });
+        };
+
+        $scope.updateOverSpeed = function () {
+
+            var latLng = [];
+            var i = 0;
+
+            angular.forEach($scope.busPosition, function (value, index) {
+
+                if((value.speed*1.852) > $scope.config.maxSpeed){
+                    latLng.push(value);
+                }else{
+                    $scope.paths['OS'+i] = {
+                        color : $scope.config.overSpeedColor,
+                        weight : 4,
+                        latlngs : latLng,
+                        clickable : true
+                    };
+                    i++;
+                    latLng = [];
+                }
+
+                if((index+1) == $scope.busPosition.length){
+                    $scope.rashSpeed();
+                }
+
+            });
+
+        };
+
+        $scope.rashSpeed = function () {
+
+            var latLng = [];
+            var i = 0;
+            var j = 0;
+
+            angular.forEach($scope.busPosition, function (value, index) {
+
+                if($scope.busPosition.length != (index+1) && index!=0 && value.speed != 0) {
+
+                    if (latLng.length > 0) {
+                        $scope.paths['rS' + j] = {
+                            color: $scope.config.rashTurnColor,
+                            weight: 4,
+                            latlngs: latLng,
+                            clickable: true
+                        };
+                        j++;
+                        latLng = [];
+                    }
+
+                    if($scope.busPosition[index - 1].speed > 0 && $scope.busPosition[index + 1].speed > 0){
+                        var courseAverage = (Math.abs($scope.busPosition[index - 1].course - (value.course)) + Math.abs(($scope.busPosition[index + 1].course)-value.course))/2;
+
+                        // var courseAverage = Math.abs((($scope.busPosition[index - 1].course) + (value.course) + ($scope.busPosition[index + 1].course))/3);
+                        // && ((value.speed*1.852) > Number($scope.config.rashTurnSpeed))
+                        if (courseAverage >= 50 && courseAverage <= 90) {
+
+                            var average = Math.abs((($scope.busPosition[index - 1].speed*1.852) + (value.speed*1.852) + ($scope.busPosition[index + 1].speed*1.852))/3);
+
+                            if(average > Number($scope.config.rashTurnSpeed)){
+                                if(index!=0){
+                                    latLng.push($scope.busPosition[index - 1]);
+                                }
+                                latLng.push(value);
+                                latLng.push($scope.busPosition[index + 1]);
+                            }
+                        }
+                    }
+
+                }
+            });
+            // rashTurnColor
         };
 
         $scope.clearMap=function(map) {
@@ -371,6 +427,11 @@
                 }else{
                     k++;
                 }
+            }
+            $scope.legend = {
+                position: 'topright',
+                colors: [ $scope.config.overSpeedColor, $scope.config.rashTurnColor, '#478bf7'],
+                labels: [ 'Over Speed', 'Rash Turn', 'Route Path' ]
             }
         };
 
@@ -469,7 +530,6 @@
 
         // $scope.getBusPositions(null,null);
 
-        $scope.getBusDetails();
 
     }
     

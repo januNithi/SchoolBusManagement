@@ -7,5 +7,6 @@ angular.module('myApp',[
     'ui-leaflet',
     'FBAngular',
     'chart.js',
-    'angular-google-maps-geocoder'
+    'angular-google-maps-geocoder',
+    'color.picker'
 ]);

@@ -1,0 +1,133 @@
+<script src="../template/navbar.js"></script>
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+
+        <div class="container-fluid">
+
+            <div class="panel panel-primary">
+
+                <div class="panel-heading">
+
+                    <h1 class="panel-title">Configuration</h1>
+
+
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="form">
+
+                        <div class="form-group">
+
+                            <span class="pull-right"><button type="button" class="btn btn-primary" ng-click="updateConfiguration()"><i class="fa fa-floppy-o" aria-hidden="true"></i></button></span>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <h4>Vehicle Configuration</h4>
+
+                            <hr/>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="control-label col-sm-4">Max Speed</label>
+
+                            <input class="form-control" type="text" ng-model="config.maxSpeed">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="control-label col-sm-4">Max Speed in Turning</label>
+
+                            <input class="form-control" type="text" ng-model="config.rashTurnSpeed">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="control-label col-sm-4">Maximum Delay Time</label>
+
+                            <input class="form-control" type="text" ng-model="config.maxDelayTime">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="control-label col-sm-4">Radius of Stops</label>
+
+                            <input class="form-control" type="text" ng-model="config.stopLocationMetre">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <h4>Web Configuration</h4>
+
+                            <hr/>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="control-label col-sm-4">Default Latitude</label>
+
+                             <input class="form-control" type="text" only-digits ng-model="config.defaultCoordinates.lat">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="control-label col-sm-4">Default Longitude</label>
+
+                            <input class="form-control" type="text" only-digits ng-model="config.defaultCoordinates.lng">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label class="control-label col-sm-4">Max Zoom Level</label>
+
+                            <input class="form-control" type="text" ng-model="config.maxZoom">
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-xs-6">
+
+                                <label class="control-label col-sm-4">Over Speed Color</label>
+
+                                <color-picker ng-model="config.overSpeedColor" options="options"></color-picker>
+
+                            </div>
+
+                            <div class="col-xs-6">
+
+                                <label class="control-label col-sm-4">Rash Turn Color</label>
+
+                                <color-picker ng-model="config.rashTurnColor" options="options"></color-picker>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
