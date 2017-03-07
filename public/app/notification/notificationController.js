@@ -47,6 +47,12 @@
 
         });
 
+        $scope.onLogout = function () {
+            loginService.onLogout().then(function () {
+                loginService.goToLogin();
+            });
+        };
+
         $scope.showNotificationMenu = function () {
 
             return true;
