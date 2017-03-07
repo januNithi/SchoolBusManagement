@@ -150,7 +150,7 @@ function updateNotification(data,cb) {
 
 function getAdminNotification(cb) {
     var query = "Select id,message,gps,gpsUnit,bus_id,(Select busCode from bus where id=bus_id) as busCode";
-    query += " ,dataRead,date,trip_id from notification";
+    query += " ,dataRead,date,trip_id from notification order by date DESC";
 
     con.query(query,function (err,result) {
         cb(err,result);
@@ -178,7 +178,7 @@ function updateParentNotification(data,cb) {
 
 function getParentNotification(cb) {
     var query = "Select studId,message,date,(Select Name from Student where id = studId) as studentName";
-    query += " from parent_notification order by date";
+    query += " from parent_notification order by date DESC";
 
     con.query(query,function (err,result) {
         cb(err,result);

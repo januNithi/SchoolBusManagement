@@ -7,10 +7,11 @@
 
     parentNotificationController.$inject = [
         '$scope',
-        'parentNotificationService'
+        'parentNotificationService',
+        'loginService'
     ];
 
-    function parentNotificationController($scope,parentNotificationService) {
+    function parentNotificationController($scope,parentNotificationService,loginService) {
 
         $scope.curpage = 1;
         $scope.itemspage = 15;
@@ -25,6 +26,17 @@
             }
 
         };
+
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin()
+            }else{
+                getParentNotification();
+            }
+
+        });
+
 
         $scope.showNotificationMenu = function () {
 
@@ -58,7 +70,6 @@
 
         };
 
-        getParentNotification();
         
     }
 

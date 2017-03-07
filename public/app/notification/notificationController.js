@@ -7,10 +7,11 @@
 
     notificationController.$inject = [
         '$scope',
-        'notificationService'
+        'notificationService',
+        'loginService'
     ];
 
-    function notificationController($scope,notificationService) {
+    function notificationController($scope,notificationService,loginService) {
 
         $scope.events = [];
         $scope.onlineEvents = [];
@@ -35,6 +36,16 @@
             }
 
         };
+
+        loginService.isLoggedIn().then(function (result) {
+
+            if(!result.data.id){
+                loginService.goToLogin()
+            }else{
+                getAdminNotification();
+            }
+
+        });
 
         $scope.showNotificationMenu = function () {
 
@@ -115,7 +126,7 @@
             $scope.selectedNotify = null;
         };
 
-        getAdminNotification();
+
         
     }
 
