@@ -77,7 +77,7 @@ function getAppStartData(data,cb) {
     // var query = "(Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId";
     // query += " from student as s where MobileNo = '"+data.userid+"'";
 
-    var query = "Select s.id as studId, GROUP_CONCAT(student_trip.trip_id SEPARATOR ', ') as trip,";
+    var query = "Select s.id as studId, GROUP_CONCAT(CONVERT(student_trip.trip_id,char(50)) SEPARATOR ', ') as trip,";
     query += " GROUP_CONCAT(CONVERT(student_trip.stop_id,char(50)) SEPARATOR ', ') as stop,";
     query += " GROUP_CONCAT(CONVERT(stops.stpName,char(50)) SEPARATOR ', ') as stopName,";
     query += " (Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId,";
