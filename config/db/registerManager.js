@@ -401,11 +401,12 @@ function getStudentRegData(cb)
     // query += " from student as s left join trips as t on t.id = s.trip";
 
     var query = "SELECT student.id,student.Name,student.Gender,student.MobileNo,";
-    query += " GROUP_CONCAT(student_trip.id SEPARATOR ', '";
+    query += " GROUP_CONCAT(CONVERT(student_trip.id,char(50)) SEPARATOR ', '";
     query += " ) AS tripsId,";
-    query += " GROUP_CONCAT(student_trip.trip_id SEPARATOR ', '";
+    query += " GROUP_CONCAT(CONVERT(student_trip.trip_id,char(50)) SEPARATOR ', '";
     query += " ) AS tripId, GROUP_CONCAT(t.trpName SEPARATOR ', ') AS trpName,";
-    query += " GROUP_CONCAT(student_trip.stop_id SEPARATOR ', ') AS stopId, GROUP_CONCAT(stops.stpName";
+    query += " GROUP_CONCAT(CONVERT(student_trip.stop_id,char(50)) SEPARATOR ', ') AS stopId,";
+    query += " GROUP_CONCAT(CONVERT(stops.stpName,char(50))";
     query += " SEPARATOR ', ') AS stpName FROM student LEFT JOIN student_trip ON student_trip.stud_id = student.id";
     query += " left join trips as t on t.id = student_trip.trip_id left join stops on";
     query += " stops.id = student_trip.stop_id GROUP BY student.id";
