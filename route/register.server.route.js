@@ -45,6 +45,7 @@ module.exports=function(app){
     app.post('/get/studentData',config.getStudentDetails);
     app.post('/post/studentData',config.postStudentData);
     app.post('/delete/studentData',config.deleteStudentData);
+    app.post('/update/studentTrip',config.updateStudentTrip);
 
     //------------- StudentRegDetails--------------------//
 

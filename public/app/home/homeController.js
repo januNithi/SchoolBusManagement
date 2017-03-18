@@ -50,7 +50,10 @@
                             position: 'bottomright',
                             colors: [ $scope.config.overSpeedColor, $scope.config.rashTurnColor, '#478bf7'],
                             labels: [ 'Over Speed', 'Rash Turn', 'Route Path' ]
-                    }
+                    };
+                    $scope.center.lat =  Number($scope.config.defaultCoordinates.lat);
+                    $scope.center.lng =  Number($scope.config.defaultCoordinates.lat);
+                    $scope.center.zoom = 5;
                 },function (error) {
                     console.log(error);
                 });

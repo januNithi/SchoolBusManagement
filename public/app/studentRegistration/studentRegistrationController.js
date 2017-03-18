@@ -19,7 +19,7 @@
         $scope.tripData=[];
         $scope.stops = [];
         $scope.curpage = 1;
-        $scope.itemspage = 10;
+        $scope.itemspage = 5;
         $scope.filteredDoc = [];
         $scope.maxSize = 4;
         $scope.totalItems = 0;
@@ -27,7 +27,10 @@
             tripId:0,
             stopId:0
         };
-
+        $scope.trip = {
+            trip_id : 0,
+            stop_id : 0
+        };
 
         $scope.showSelectable = function (value) {
 
@@ -74,8 +77,32 @@
         {
             studentRegistrationService.getStudentData().then(function (result) {
                 $scope.studentRegData=result.data;
+
+                angular.forEach($scope.studentRegData,function (value,index) {
+                    value.trip = [];
+                    if(value.tripId){
+                        var trip = value.tripId.split(',');
+                        var tripName = value.trpName.split(',');
+                        var stop = value.stopId.split(',');
+                        var stopName = value.stpName.split(',');
+                        var trips = value.tripsId.split(',');
+                        angular.forEach(trip,function (value1,index1) {
+
+                            value.trip.push({
+                                trip_id : Number(value1),
+                                stop_id : Number(stop[index1]),
+                                tripName : tripName[index1],
+                                stopName : stopName[index1],
+                                id : Number(trips[index1])
+                            });
+                        })
+                    }
+
+
+                });
+
                 $scope.totalItems = $scope.studentRegData.length;
-                $scope.$watch('curpage + itemspage', function() {
+                $scope.$watch('curpage + it1emspage', function() {
                     var begin = (($scope.curpage - 1) * $scope.itemspage),
                         end = begin + $scope.itemspage;
                     $scope.filteredDoc = $scope.studentRegData.slice(begin, end);
@@ -84,7 +111,40 @@
             });
 
         };
+
+        $scope.addTrip = function (student) {
+
+            $scope.trip.stud_id = student.id;
+
+        };
+        
+        $scope.updateTrip = function () {
+            studentRegistrationService.updateStudentTrip($scope.trip).then(function (result) {
+                alert("Successfully Updated");
+                $scope.trip = {
+                    trip_id : 0,
+                    stop_id : 0
+                };
+                $scope.getStudentRegData();
+            },function (error) {
+               console.log(error);
+            });
+        };
+        
         $scope.getStudentRegData();
+
+        $scope.editTrip = function (student,trip) {
+
+            $scope.getStops(trip.trip_id);
+            $scope.trip = {
+                trip_id : trip.trip_id,
+                stop_id : trip.stop_id,
+                stud_id : student.id,
+                id : trip.id
+            };
+
+
+        };
 
         $scope.Edit=function(data){
 
@@ -98,7 +158,15 @@
         };
         $scope.close=function()
         {
-            $scope.stdentData='';
+            $scope.stdentData={
+                tripId:0,
+                stopId:0
+            };
+
+            $scope.trip = {
+                trip_id : 0,
+                stop_id : 0
+            };
 
         };
 
@@ -111,7 +179,7 @@
 
         };
         
-        $scope.save=function(data)
+        $scope.save=function(data,trip)
         {
 
            var studentRegData={
@@ -148,7 +216,7 @@
         }
 
 
-        $scope.getStops = function () {
+        $scope.getStops = function (tripId) {
 
             var cont = true;
 
@@ -156,7 +224,7 @@
 
                 if(cont){
 
-                    if(value.id == $scope.stdentData.tripId){
+                    if(value.id == tripId){
 
                         cont = false;
 

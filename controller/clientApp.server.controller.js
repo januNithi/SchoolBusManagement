@@ -129,6 +129,18 @@ exports.updateNotificationRead = function (req,res) {
 
 };
 
+exports.updateParentNotificationRead = function (req,res) {
+
+    manager.updateReadParentNotification(req.query.id,function (err,result) {
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
+    });
+
+};
+
 exports.updateParentNotification = function (data,cb) {
 
     manager.updateParentNotification(data,function (err,result) {
@@ -139,7 +151,7 @@ exports.updateParentNotification = function (data,cb) {
 
 exports.getParentNotification = function (req,res) {
 
-    manager.getParentNotification(function (err,result) {
+    manager.getParentNotification(req.query.id,function (err,result) {
         if(err){
             res.send(500,{error:err});
         }else{

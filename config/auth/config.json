@@ -1,12 +1,12 @@
 {
   "database": {
       "host" : "localhost",
-      "user" : "demo",
-      "password" : "demoschoolbus",
-      "database" : "demobustracking"
+      "user" : "root",
+      "password" : "schoolbus",
+      "database" : "bustracking"
   },
   "server": {
-      "port" : 30001
+      "port" : 3000
   },
   "fcm": {
       "serverKey": "AAAAwDLf34Y:APA91bFPj38UR2AbkpqhblOOWg-vxkrfY2r5j2pEbg_OwjemLCWU5Iw-O1jYBaap-ZO3-wjx73vFMDaHQ6tbwpGu9lXmmDL0hQnl7_mLgkEbz2l0vHczXwdIIemtxl5kd0ftmN6NbNOOSmx3YLRNd8QD5lJaupqsMQ"

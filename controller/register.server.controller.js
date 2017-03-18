@@ -252,9 +252,13 @@ exports.deleteDriverDetails=function (req,res) {
 
 
 exports.getStudentDetails=function (req,res) {
-    config.getStudentRegData().then(function(result){
-
-        res.send(result);
+    config.getStudentRegData(function(err,result){
+        if(err){
+            console.log(err);
+            res.send(500,{error:err});
+        }else{
+            res.send(result);
+        }
     });
 };
 
@@ -268,6 +272,18 @@ exports.deleteStudentData=function (req,res) {
     var data=req.body;
     config.deleteStudentRegData(data).then(function(result){
         res.send(result);
+    });
+};
+
+exports.updateStudentTrip = function (req,res) {
+    config.updateStudentTrip(req.body,function (err,results) {
+
+        if(err){
+            res.send(500,{error:err});
+        }else{
+            res.send(results);
+        }
+
     });
 };
 

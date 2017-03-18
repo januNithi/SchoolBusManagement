@@ -391,26 +391,35 @@ function deleteDriverRegData(data){
 
 };
 
-function getStudentRegData()
+function getStudentRegData(cb)
 {
-    var deferred = q.defer();
     // var RegInfo = "select s.id,s.Name,s.Gender,s.MobileNo,s.trip,t.id AS tripId,t.trpName";
     // RegInfo += " from student as s left join trips as t on t.id = s.trip";
 
-    var query = "select s.id,s.Name,s.Gender,s.MobileNo,s.trip,s.stop as stopId,t.id AS tripId,t.trpName,";
-    query += " (select stpName from stops where id = s.stop) as stopName";
-    query += " from student as s left join trips as t on t.id = s.trip";
+    // var query = "select s.id,s.Name,s.Gender,s.MobileNo,s.trip,s.stop as stopId,t.id AS tripId,t.trpName,";
+    // query += " (select stpName from stops where id = s.stop) as stopName";
+    // query += " from student as s left join trips as t on t.id = s.trip";
+
+    var query = "SELECT student.id,student.Name,student.Gender,student.MobileNo,";
+    query += " GROUP_CONCAT(student_trip.id SEPARATOR ', '";
+    query += " ) AS tripsId,";
+    query += " GROUP_CONCAT(student_trip.trip_id SEPARATOR ', '";
+    query += " ) AS tripId, GROUP_CONCAT(t.trpName SEPARATOR ', ') AS trpName,";
+    query += " GROUP_CONCAT(student_trip.stop_id SEPARATOR ', ') AS stopId, GROUP_CONCAT(stops.stpName";
+    query += " SEPARATOR ', ') AS stpName FROM student LEFT JOIN student_trip ON student_trip.stud_id = student.id";
+    query += " left join trips as t on t.id = student_trip.trip_id left join stops on";
+    query += " stops.id = student_trip.stop_id GROUP BY student.id";
 
     con.query(query, function (err,results) {
         if (err) {
             console.log(err);
-            deferred.reject(err);
+            cb(err,results);
         } else {
 
-            deferred.resolve(results);
+            cb(err,results);
         }
     });
-    return deferred.promise;
+
 
 }
 
@@ -420,14 +429,14 @@ function postStudentRegData(data)
     var deferred = q.defer();
     if(data.id==undefined)
     {
-         RegInfo = "INSERT INTO student(Name,Gender,MobileNo,trip,stop) VALUES ('"+data.Name;
-         RegInfo += "','"+data.Gender+"','"+data.MobileNo+"','"+data.tripId+"','"+data.stopId+"')";
+         RegInfo = "INSERT INTO student(Name,Gender,MobileNo) VALUES ('"+data.Name;
+         RegInfo += "','"+data.Gender+"','"+data.MobileNo+"')";
     }
     else
     {
 
          RegInfo = "update student set Name='"+data.Name+"',Gender='"+data.Gender;
-         RegInfo +="',MobileNo='"+data.MobileNo+"',trip='"+data.tripId+"',stop='"+data.stopId+"' where id='"+data.id+"'";
+         RegInfo +="',MobileNo='"+data.MobileNo+"' where id='"+data.id+"'";
 
     }
 
@@ -461,6 +470,22 @@ function deleteStudentRegData(data){
 
 
 };
+
+function updateStudentTrip(trip,cb) {
+    var query = '';
+    if(trip.id) {
+        query = "Update student_trip set stud_id = " + trip.stud_id + ", trip_id = " + trip.trip_id + "";
+        query += ",stop_id = " + trip.stop_id+" where id = "+trip.id;
+    }else{
+        query = "Insert into student_trip(stud_id,trip_id,stop_id) values("+trip.stud_id+","+trip.trip_id+",";
+        query += trip.stop_id+")";
+    }
+
+    con.query(query,function (err,result) {
+        cb(err,result);
+    })
+
+}
 
 function getRoutes(routeId,cb) {
 
@@ -648,6 +673,7 @@ module.exports= {
     getRoutes:getRoutes,
     updateRoutes:updateRoutes,
     deleteRoutes:deleteRoutes,
-    deleteStops:deleteStops
+    deleteStops:deleteStops,
+    updateStudentTrip:updateStudentTrip
 
 };

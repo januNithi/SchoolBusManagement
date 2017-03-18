@@ -46,6 +46,9 @@
             },
             getRoutes : function (id) {
                 return $http.get('/dao/getRoutes?route='+id);
+            },
+            updateStudentTrip : function (trip) {
+                return $http.post('/update/studentTrip',trip);
             }
             
 

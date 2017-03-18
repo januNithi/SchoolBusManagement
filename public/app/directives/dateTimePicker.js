@@ -13,7 +13,7 @@
                 console.log(ngModel);
                 element = $(element);
                 element.datetimepicker({
-                    format: 'YYYY-MM-DD HH:mm',
+                    format: 'YYYY-MM-DD HH:mm:ss',
                     defaultDate: ngModel.$viewValue
                 });
                 element.on('dp.change', function(event) {

@@ -13,5 +13,6 @@ module.exports=function(app) {
     app.get('/dao/appStart',config.getAppStartData);
     
     app.get('/dao/getParentNotification',config.getParentNotification);
+    app.get('/dao/updateParentNotificationRead',config.updateParentNotificationRead);
     
 };
