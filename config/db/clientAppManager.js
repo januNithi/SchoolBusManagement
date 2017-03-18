@@ -78,8 +78,8 @@ function getAppStartData(data,cb) {
     // query += " from student as s where MobileNo = '"+data.userid+"'";
 
     var query = "Select s.id as studId, GROUP_CONCAT(student_trip.trip_id SEPARATOR ', ') as trip,";
-    query += " GROUP_CONCAT(student_trip.stop_id SEPARATOR ', ') as stop,";
-    query += " GROUP_CONCAT(stops.stpName SEPARATOR ', ') as stopName,";
+    query += " GROUP_CONCAT(CONVERT(student_trip.stop_id,char(50)) SEPARATOR ', ') as stop,";
+    query += " GROUP_CONCAT(CONVERT(stops.stpName,char(50)) SEPARATOR ', ') as stopName,";
     query += " (Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId,";
     query += " (Select gpsUnit from bus where id = (Select busId from trips where id = student_trip.trip_id)) as gpsUnit,";
     query += " (Select group_concat(CONVERT(stopId,char(8))) from stop_notification where studId = student_trip.stud_id) as stop_notifyId";
