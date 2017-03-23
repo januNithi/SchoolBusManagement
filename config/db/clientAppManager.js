@@ -43,8 +43,9 @@ function updateNotificationStopdup(stops,studId,cb) {
         if(err){
             cb(err,result);
         }else{
-            var stopsString = stops.substr(1,stops.length-2);
-            var stopsArr = stopsString.split(',');
+            var stopsArr = JSON.parse(stops);
+            // var stopsString = stops.substr(1,stops.length-2);
+            // var stopsArr = stopsString.split(',');
             if(stopsArr.length != 0) {
                 var query = "Insert into stop_notification(stopId,studId) VALUES ?";
                 var values = [];
@@ -57,7 +58,7 @@ function updateNotificationStopdup(stops,studId,cb) {
                     }
                 });
             }else{
-                cb(err,"No Stops Found");
+                cb(err,{status : "No Stops Found"});
             }
         }
 
@@ -77,14 +78,27 @@ function getAppStartData(data,cb) {
     // var query = "(Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId";
     // query += " from student as s where MobileNo = '"+data.userid+"'";
 
-    var query = "Select s.id as studId, GROUP_CONCAT(CONVERT(student_trip.trip_id,char(50)) SEPARATOR ', ') as trip,";
-    query += " GROUP_CONCAT(CONVERT(student_trip.stop_id,char(50)) SEPARATOR ', ') as stop,";
-    query += " GROUP_CONCAT(CONVERT(stops.stpName,char(50)) SEPARATOR ', ') as stopName,";
+    // var query = "Select s.id as studId, GROUP_CONCAT(CONVERT(student_trip.trip_id,char(50)) SEPARATOR ', ') as trip,";
+    // query += " GROUP_CONCAT(CONVERT(student_trip.stop_id,char(50)) SEPARATOR ', ') as stop,";
+    // query += " GROUP_CONCAT(CONVERT(stops.stpName,char(50)) SEPARATOR ', ') as stopName,";
+    // query += " (Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId,";
+    // query += " (Select gpsUnit from bus where id = (Select busId from trips where id = student_trip.trip_id)) as gpsUnit,";
+    // query += " (Select group_concat(CONVERT(stopId,char(8))) from stop_notification where studId = student_trip.stud_id) as stop_notifyId";
+    // query += " from student as s left join student_trip on s.id = student_trip.stud_id";
+    // query += " left join stops on stops.id = student_trip.stop_id where s.MobileNo = '"+data.userid+"' "
+
+    var query = "Select s.id as studId, GROUP_CONCAT(CONVERT(student_trip.trip_id,char(50)) SEPARATOR ',') as trip,";
+    query += " GROUP_CONCAT(CONVERT(student_trip.stop_id,char(50)) SEPARATOR ',') as stop,";
+    query += " GROUP_CONCAT(CONVERT(stops.stpName,char(50)) SEPARATOR ',') as stopName,";
+    query += " GROUP_CONCAT(CONVERT(trips.busId,char(50)) SEPARATOR ',') as busId,";
+    query += " GROUP_CONCAT(CONVERT(bus.gpsUnit,char(50)) SEPARATOR ',') as  gpsUnit,";
     query += " (Select id from users where usrType = 'parent' and userid = s.MobileNo) as userId,";
-    query += " (Select gpsUnit from bus where id = (Select busId from trips where id = student_trip.trip_id)) as gpsUnit,";
-    query += " (Select group_concat(CONVERT(stopId,char(8))) from stop_notification where studId = student_trip.stud_id) as stop_notifyId";
+    query += " (Select group_concat(CONVERT(stopId,char(8))) from stop_notification";
+    query += " where studId = student_trip.stud_id) as stop_notifyId";
     query += " from student as s left join student_trip on s.id = student_trip.stud_id";
-    query += " left join stops on stops.id = student_trip.stop_id where s.MobileNo = '"+data.userid+"' "
+    query += " left join stops on stops.id = student_trip.stop_id left join trips on trips.id = student_trip.trip_id";
+    query += " left join bus on bus.id = trips.busId";
+    query += " where s.MobileNo = '"+data.userid+"' ";
 
     console.log(query);
 
