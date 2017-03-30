@@ -6,7 +6,9 @@
         .constant('deviceOnline','images/Circle_Green_small.png')
         .constant('deviceMoving','images/greendot.gif')
         .constant('deviceStopped','images/Circle_Orange_small.png')
-        .constant('unknown','images/Circle_Yellow_small.png');
+        .constant('unknown','images/Circle_Yellow_small.png')
+        .constant('googleUrl','https://maps.googleapis.com/maps/api/js?key=AIzaSyCbYbYdY9Z9I4BtzkShRBxbmYvDsmtWjaI&sensor=false');
+
 
     config.$inject = ['$routeProvider', '$locationProvider'];
 
@@ -101,6 +103,14 @@
             .when('/configuration', {
                 controller: 'configController',
                 templateUrl: '../app/configuration/configuration.html'
+            })
+            .when('/googleMap', {
+                controller: 'googleMapController',
+                templateUrl: '../app/googleView/googleRoute/googleRoute.html'
+            })
+            .when('/googleTrack', {
+                controller: 'googleTrackController',
+                templateUrl: '../app/googleView/googleTrackHistory/googleTrack.html'
             });
 
         $locationProvider.html5Mode(true);

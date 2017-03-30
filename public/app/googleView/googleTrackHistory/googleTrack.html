@@ -1,0 +1,360 @@
+
+<script src="'../../js/navbar.js'"></script>
+
+
+<!--Date Picker-->
+<!--<script>
+    $("input").on("change", function() {
+        this.setAttribute(
+                "data-date",
+                moment(this.value, "YYYY-MM-DD")
+                        .format( this.getAttribute("data-date-format") )
+        )
+    }).trigger("change")
+    $('#slider-timestamp').html(options.markers[ui.value].feature.properties.time.substr(0, 19));
+
+</script>-->
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
+        $('#datetimepicker2').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm:ss'
+        });
+
+        $("#datetimepicker1").on("dp.change", function() {
+
+            angular.element(document.getElementById('wrapper')).scope().fromTime = $("#datetimepicker1").find("input").val();
+
+        });
+
+        $("#datetimepicker2").on("dp.change", function() {
+
+            angular.element(document.getElementById('wrapper')).scope().toTime = $("#datetimepicker2").find("input").val();
+
+        });
+
+
+    });
+</script>
+<style>
+    .angular-google-map {
+        display: block;
+    }
+</style>
+
+
+
+<style>
+    .angular-google-map {
+        display: block;
+    }
+    .bindPopup{
+
+        background-color: #00A707;
+    }
+    .legend {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        background: rgba(255,255,255, 0.9);
+        line-height: 20px;
+        width: 125px;
+        border-radius: 5px;
+        color: #555;
+    }
+
+    .legend i {
+        color: #777;
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+
+</style>
+
+<div id="wrapper">
+
+    <div ng-include="'../../template/menu.html'"></div>
+
+    <div id="page-wrapper">
+        <div class="row">
+            <!--<div>-->
+            <!--<div class="panel panel-primary">-->
+            <!--<div class="panel-heading">-->
+            <!--<h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Today's Bus Report </h3>-->
+            <!--</div>-->
+            <!--<div class="panel-body">-->
+            <!--<div google-chart chart="myChartObject"></div>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="col-xs-4">-->
+
+            <!--<div class="panel panel-primary">-->
+
+            <!--<div class="panel-heading">-->
+
+            <!--<h3 class="panel-title"><i class="fa fa-rss"></i> Recent Views </h3>-->
+
+            <!--</div>-->
+
+            <!--<div class="panel-body">-->
+
+            <!--<ul><a href="#"> Charts </a></ul>-->
+
+            <!--<ul><a href="#"> Notifications </a></ul>-->
+
+            <!--<ul><a href="#"> Bus Status </a></ul>-->
+
+            <!--<ul><a href="#"> Student Details </a></ul>-->
+
+            <!--<ul><a href="#"> Settings Changes </a></ul>-->
+
+            <!--<ul><a href="#"> Password Changes </a></ul>-->
+
+            <!--<ul><a href="#"> View More </a></ul>-->
+
+            <!--</div>-->
+
+            <!--</div>-->
+
+            <!--</div>-->
+
+            <!--</div>-->
+
+            <div ng-show="notify" class="alert alert-info">
+                <!--<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>-->
+                <strong>Notification!</strong>
+                <label>Event : </label> <label>{{notifyObj.event.deviceOnline}}</label>
+                <label>Device : </label> <label>{{notifyObj.device.name}}</label>
+                <label ng-if="notifyObj.device.status != 'unknown'">Status : </label> <label ng-if="notifyObj.device.status != 'unknown'">{{notifyObj.device.status}}</label>
+                <label>Unique ID : </label> <label>{{notifyObj.device.uniqueId}}</label>
+            </div>
+
+            <div class="modal fade" id="Warning" role="dialog">
+                <div class="modal-dialog">
+                    <div class="alert alert-warning">
+                        <strong>Warning!</strong> No Results found On Your Search!
+                        Current Position of the Vehicle dated on {{fromTime}} is provided.
+                        <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <span ng-hide="true" id="triggerWarning" class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#Warning" aria-hidden="true"></span>
+
+            <div class="row" style="height: 76vh;">
+                <div class="col-lg-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Track History </h3>
+                        </div>
+                        <div class="panel-body">
+
+                            <div class="form form-horizontal" name="homeForm">
+
+                                <div class="form-group">
+
+                                    <div class="col-xs-3">
+
+                                        <select ng-model="currentBus" class="form-control">
+
+                                            <option value="0">----SELECT BUS----</option>
+
+                                            <option value="{{bus.id}}" ng-repeat="bus in busData">
+
+                                                {{bus.regNo + ' - ' + bus.busCode}}
+
+                                            </option>
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class='input-group date' id='datetimepicker1' >
+                                                <input type='text' ng-value="fromTime" class="form-control"/>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class='input-group date' id='datetimepicker2'>
+                                                <input type='text' ng-value="toTime" class="form-control"/>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--  <div class="col-xs-5">
+
+                                          <input type="date" data-date="" class="form-control" ng-model="selectedDate" data-date-format="YYYY-MM-DD" value="{{selectedDate}}">
+
+
+                                          &lt;!&ndash;<datepicker date-format="yyyy-MM-dd">&ndash;&gt;
+                                              &lt;!&ndash;<input ng-model="selectedDate" class="form-control" type="text"/>&ndash;&gt;
+                                          &lt;!&ndash;</datepicker>&ndash;&gt;
+
+                                          &lt;!&ndash;<p class="input-group">&ndash;&gt;
+                                              &lt;!&ndash;<input type="text" class="form-control" uib-datepicker-popup ng-model="selectedDate" is-open="popup2.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" />&ndash;&gt;
+                                              &lt;!&ndash;<span class="input-group-btn">&ndash;&gt;
+                                                  &lt;!&ndash;<button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>&ndash;&gt;
+                                              &lt;!&ndash;</span>&ndash;&gt;
+                                          &lt;!&ndash;</p>&ndash;&gt;
+
+                                      </div>-->
+
+                                    <div class="col-xs-1">
+
+                                        <button class="btn btn-success" ng-click="searchForBusPosition()"><i class="fa fa-search" aria-hidden="true"></i></button>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <div map-lazy-load="googleUrl">
+                                        <ng-map center="{{center}}" zoom="{{zoom}}" style="height: 550px">
+
+                                            <div ng-repeat="p in points">
+                                                <marker icon="{{customIcon}}"  position="{{p.latitude}}, {{p.longitude}}" on-click="map.showInfoWindow('{{p.time}}')"></marker>
+
+                                                <info-window id="{{p.time}}">
+                                                    <div class="container-fluid">
+                                                        <div class="form-group">
+                                                            <h4>{{p.message}}</h4>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Time:</label>
+                                                            <label>{{p.time}}</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Latitude:</label>
+                                                            <label>{{p.latitude}}</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Longitude:</label>
+                                                            <label>{{p.longitude}}</label>
+                                                        </div>
+                                                    </div>
+                                                </info-window>
+
+                                            </div>
+
+                                            <div >
+
+                                                <marker icon="{{sliderData.icon}}" position="{{sliderData.latitude}},{{sliderData.longitude}}" on-click="map.showInfoWindow('slideMar')"></marker>
+
+                                                <info-window id="slideMar">
+                                                    <div class="container-fluid">
+                                                        <div class="form-group">
+                                                            <label>Time:</label>
+                                                            <h4>{{sliderData.time}}</h4>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Speed:</label>
+                                                            <h4>{{sliderData.speed}}</h4>
+                                                        </div>
+                                                    </div>
+                                                </info-window>
+
+                                            </div>
+                                            <div ng-repeat="pat in paths">
+
+                                                <shape name="polyline" path="{{pat.latlngs}}" geodesic="true" stroke-color="{{pathColor.routeColor}}" stroke-opacity="1.0" stroke-weight="5">
+                                                </shape>
+
+                                            </div>
+                                            <div ng-repeat="pat in pathOverspeed">
+
+                                                <shape name="polyline" path="{{pat.latlngs}}" geodesic="true" stroke-color="{{pathColor.overSpeed}}" stroke-opacity="1.0" stroke-weight="5">
+                                                </shape>
+
+                                            </div>
+                                            <div ng-repeat="pat in pathRashSpeed">
+
+                                                <shape name="polyline" path="{{pat.latlngs}}" geodesic="true" stroke-color="{{pathColor.rashTurn}}" stroke-opacity="1.0" stroke-weight="5">
+                                                </shape>
+
+                                            </div>
+                                            <custom-control id="legend" position="TOP_RIGHT" index="1" style="width:120px;">
+                                                <div class="container-fluid" style="background-color:white;cursor:pointer">
+                                                    <div class="row">
+                                                        <div class="col-md-6" style="width: 20px;height: 20px;background-color: {{pathColor.routeColor}}"></div>
+                                                        <div class="col-md-6"> <strong>RoutePath</strong></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6" style="width: 20px;height: 20px;background-color: {{pathColor.overSpeed}}"></div>
+                                                        <div class="col-md-6"> <strong>OverSpeed</strong></div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-6" style="width: 20px;height: 20px;background-color: {{pathColor.rashTurn}}"></div>
+                                                        <div class="col-md-6"> <strong>RashTurn</strong></div>
+                                                    </div>
+
+                                                </div>
+                                            </custom-control>
+
+                                            <custom-control id="slider" position="BOTTOM" index="2" style="width:700px">
+
+                                                <div id="sliderContainer" ng-cloak>
+
+                                                    <div class="form-group">
+
+                                                        <label flex type="text" class="control-label"  aria-label="blue" aria-controls="blue-slider" style="font-size:medium;background-color: inherit"><strong>{{sliderData.time}}</strong></label>
+
+                                                    </div>
+
+                                                    <md-slider class="md-danger" flex min="{{sliderData.min}}" max="{{sliderData.max}}" ng-model="bass"
+                                                               aria-label="blue" id="blue-slider" ng-change="sliderDataChange(bass)"></md-slider>
+
+
+                                                </div>
+
+                                                <!--<md-slider-container flex>-->
+                                                    <!--<md-slider flex md-discrete ng-model="bass" step="1" min="1" max="100"-->
+                                                               <!--aria-label="rating" ng-change="sliderDataChange()">-->
+                                                    <!--</md-slider>-->
+                                                <!--</md-slider-container>-->
+                                                <!--<md-slider-container flex>-->
+                                                    <!--<md-input-container>-->
+                                                        <!--<input flex type="number" ng-model="bass" aria-label="bass" aria-controls="bass-slider">-->
+                                                    <!--</md-input-container>-->
+                                                    <!--<md-slider md-discrete ng-model="bass" min="0" max="100" step="1" aria-label="bass" class="md-danger"-->
+                                                               <!--md-vertical></md-slider>-->
+                                                    <!--</md-slider>-->
+                                                    <!--<h5>Bass</h5>-->
+                                                <!--</md-slider-container>-->
+
+                                            </custom-control>
+
+                                        </ng-map>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

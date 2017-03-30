@@ -21,8 +21,8 @@
 
 
             <!--<li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Dashboard</a></li>-->
-            <li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-bell-o"></i> Dashboard</a></li>
-            <li ng-class="showSelectable('home')"><a href="/home"><i class="fa fa-home"></i> Route Map </a></li>
+            <li ng-class="showSelectable('routeMap')"><a href="/mappedRoute"><i class="fa fa-car" aria-hidden="true"></i> Dashboard</a></li>
+            <li ng-class="showSelectable('home')"><a href="/home"><i class="fa fa-road" aria-hidden="true"></i>Route Map </a></li>
 
             <div class="panel-group">
                 <div class="panel panel-default">
@@ -60,9 +60,6 @@
                     </div>
                 </div>
             </div>
-
-
-
             <div class="panel-group">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -81,7 +78,22 @@
                     </div>
                 </div>
             </div>
-            <li ng-class="showSelectable('config')"><a href="/configuration"><i class="fa fa-home"></i> Configuration </a></li>
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a  data-target="#collapse" data-toggle="collapse" style="text-decoration: none"><i class="fa fa-google" aria-hidden="true"></i> Google View</a>
+                        </h4>
+                    </div>
+                    <div ng-class="(showGoogleView())?'': 'collapse'" class="panel-collapse" id="collapse" >
+                        <ul class="nav ">
+                            <li ng-class="showSelectable('googleMap')"><a href="/googleMap"><i class="fa fa-car" aria-hidden="true"></i> Google Map </a></li>
+                            <li ng-class="showSelectable('googleTrack')"><a href="/googleTrack"><i class="fa fa-road" aria-hidden="true"></i> Google Track</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <li ng-class="showSelectable('config')"><a href="/configuration"><i class="fa fa-wrench" aria-hidden="true"></i> Configuration </a></li>
 
         </ul>
         <ul class="nav navbar-nav navbar-right navbar-user">

@@ -1,0 +1,212 @@
+
+<!--Date Picker-->
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+
+        $("#datetimepicker1").on("dp.change", function() {
+
+            angular.element(document.getElementById('page-wrapper')).scope().selectedDate = $("#datetimepicker1").find("input").val();
+
+        });
+
+    });
+</script>
+
+<!--<div spinner="spinner" id="loadingSpinner" ng-model="spinnerShow">-->
+<div class="wrapper">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/home">Admin Panel</a>
+        </div>
+
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav navbar-right navbar-user">
+                <li>
+                    <a><img src="images/Circle_Orange_small.png">Stand By<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a><img src="images/redSpecial.png">Offline<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a><img src="images/Circle_Yellow_small.png">Unknown<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a><img src="images/greendot.gif">Moving<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a><img src="images/Circle_Green_small.png">Online<span class="badge"></span></a>
+                </li>
+                <li>
+                    <a href="/home">Menu<span class="badge"></span></a>
+                </li>
+                <li class="dropdown messages-dropdown" ng-if="unReadNotifyObj">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell-o"></i> Notification <span ng-if="unReadNotifyObj.length" class="badge">{{unReadNotifyObj.length}}</span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li ng-if="unReadNotifyObj.length" class="dropdown-header">{{unReadNotifyObj.length}} New Notifications</li>
+                        <li ng-if="unReadNotifyObj.length" class="message-preview">
+                            <a href="/notification">
+                                <span class="avatar"><i class="fa fa-bell"></i></span>
+                                <span class="message">{{unReadNotifyObj[0].message}}</span>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+
+                        <li ng-if="unReadNotifyObj.length > 1"><a href="/notification">View More <span class="badge">{{unReadNotifyObj.length-1}}</span></a></li>
+
+                    </ul>
+                </li>
+                <li class="dropdown user-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> Admin <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <!--<li><a href="#"><i class="fa fa-user"></i> Profile</a></li>-->
+                        <!--<li><a href="/settings"><i class="fa fa-gear"></i> Settings</a></li>-->
+                        <!--<li class="divider"></li>-->
+                        <li><a ng-click="onLogout()"><i class="fa fa-power-off"></i> Log Out</a></li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="Warning" role="dialog">
+        <div class="modal-dialog">
+            <div class="alert alert-warning">
+                <strong>Warning!</strong> No Results found On Current Date!
+                Current Position of the Vehicle dated on {{selectedDate}} is provided.
+                <button type="button" class="close pull-right" data-dismiss="modal">&times;</button>
+            </div>
+
+        </div>
+    </div>
+
+    <span ng-hide="true" id="triggerWarning" class="fa fa-pencil-square fa-1x" style="color: red" data-toggle="modal" data-target="#Warning" aria-hidden="true"></span>
+
+    <div id="page-wrapper">
+        <div class="row">
+
+            <!--<div ng-show="notify" class="alert alert-info">-->
+            <!--&lt;!&ndash;<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>&ndash;&gt;-->
+            <!--<strong>Notification!</strong>-->
+            <!--<label>Event : </label> <label>{{notifyObj.event.deviceOnline}}</label>-->
+            <!--<label>Device : </label> <label>{{notifyObj.device.name}}</label>-->
+            <!--<label ng-if="notifyObj.device.status != 'unknown'">Status : </label> <label ng-if="notifyObj.device.status != 'unknown'">{{notifyObj.device.status}}</label>-->
+            <!--<label>Unique ID : </label> <label>{{notifyObj.device.uniqueId}}</label>-->
+            <!--</div>-->
+
+            <div class="col-md-3" style="height: 86vh;">
+
+                <div class="panel panel-primary" style="height: 100%;">
+
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Bus Status </h3>
+                    </div>
+
+                    <div class="panel-body">
+
+                        <table class="table table-bordered" style="cursor: pointer;">
+
+                            <thead>
+
+                            <th>#</th>
+                            <th>Bus</th>
+                            <th>Status</th>
+
+                            </thead>
+
+                            <tbody>
+
+                            <tr ng-repeat="bus in busData" ng-click="busChosen(bus,$index)" ng-class="{'selectedRow':$index == selectedRow}">
+
+                                <td>{{bus.id}}</td>
+                                <td>{{bus.regNo + ' - ' + bus.busCode}}</td>
+                                <td><img src="{{deviceStatus[bus.status]}}"></td>
+
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+                        <div layout="row" layout-sm="column" layout-align="space-around">
+                            <md-progress-circular ng-if="busData.length == 0" md-diameter="60"></md-progress-circular>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-9" style="height: 86vh;">
+
+                <div class="panel panel-primary"  style="height: 100%;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Live Tracking </h3>
+                    </div>
+                    <div class="panel-body">
+
+                        <div class="form form-horizontal">
+
+                            <div class="form-group" style="height: 650px">
+
+
+                                <div map-lazy-load="googleUrl">
+                                    <ng-map center="{{center}}" zoom="{{zoom}}" style="height: 650px">
+
+                                        <div ng-repeat="p in points">
+                                            <marker icon="{{customIcon}}"  position="{{p.latitude}}, {{p.longitude}}" on-click="map.showInfoWindow('{{p.busNum}}')"></marker>
+
+                                            <info-window id="{{p.busNum}}">
+                                                <div class="container-fluid">
+                                                    <div class="form-group">
+                                                        <h4>{{p.busNum}}</h4>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>UniqueID:</label>
+                                                        <label>{{p.uniqueId}}</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Time:</label>
+                                                        <label>{{p.time}}</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Latitude:</label>
+                                                        <label>{{p.latitude}}</label>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Longitude:</label>
+                                                        <label>{{p.longitude}}</label>
+                                                    </div>
+                                                </div>
+                                            </info-window>
+
+                                        </div>
+
+                                    </ng-map>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+

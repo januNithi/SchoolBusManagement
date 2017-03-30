@@ -13,11 +13,11 @@
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="bower_components/select2/dist/css/select2.css">
-    <link rel="stylesheet" href="bower_components/angularjs-datepicker/dist/angular-datepicker.min.css">
+    <!--<link rel="stylesheet" href="bower_components/angularjs-datepicker/dist/angular-datepicker.min.css">-->
     <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css">
     <!--<link rel="stylesheet" href="bower_components/leaflet/dist/leaflet-draw.css">-->
     <link rel="stylesheet" href="bower_components/leaflet-draw/dist/leaflet.draw.css" />
-    <link rel="stylesheet" href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <!--<link rel="stylesheet" href="bower_components/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" />-->
     <link rel="stylesheet" href="bower_components/leaflet-timedimension/dist/leaflet.timedimension.control.css">
     <link rel="stylesheet" href="bower_components/leaflet-fullscreen/dist/leaflet.fullscreen.css" />
@@ -28,12 +28,11 @@
     <!-- only include if you use bootstrap -->
     <link rel="stylesheet" href="bower_components/angular-color-picker/dist/themes/angularjs-color-picker-bootstrap.min.css" />
 
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css"/>
+
     <link rel="stylesheet" type="text/css" href="css/local.css">
     <link rel="stylesheet" type="text/css" href="css/closable.css">
-
-
-
-
+    <link rel="stylesheet" type="text/css" href="css/angularMaterialStyles.css">
 
     <base href="/">
 
@@ -63,7 +62,11 @@
     <script src="bower_components/jquery-ui/jquery-ui.js"></script>
     <script src="bower_components/tinycolor/dist/tinycolor-min.js"></script>
     <script src="bower_components/angular-color-picker/dist/angularjs-color-picker.min.js"></script>
-
+    <script src="bower_components/ngmap/build/scripts/ng-map.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.min.js"></script>
+    <script src="bower_components/angular-material/angular-material.min.js"></script>
 
     <script src="bower_components/leaflet-slider/SliderControl.js"></script>
 
@@ -78,7 +81,7 @@
 
 
     <script src="bower_components/moment/moment.js"></script>
-    <script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
 
     <!--<script src="bower_components/file-saver/FileSaver.js"></script>-->
 
@@ -187,6 +190,13 @@
     <script src="app/dashboard/dashboardService.js"></script>
     <script src="app/dashboard/dashboardController.js"></script>
 
+    <!--Google Map-->
+    <script src="app/googleView/googleRoute/googleRouteService.js"></script>
+    <script src="app/googleView/googleRoute/googleRouteController.js"></script>
+
+    <!--Google Track-->
+    <script src="app/googleView/googleTrackHistory/googleTrackController.js"></script>
+
     <!--Configuration-->
     <script src="app/configuration/configService.js"></script>
     <script src="app/configuration/configController.js"></script>
@@ -195,6 +205,8 @@
     <script src="app/directives/onlyDigits.js"></script>
     <script src="app/directives/helpDirective.js"></script>
     <script src="app/directives/mandatory.js"></script>
+    <script src="app/directives/datepicker.js"></script>
+    <script src="app/directives/spinner.js"></script>
 
 </body>
 </html>

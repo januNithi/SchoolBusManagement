@@ -8,5 +8,11 @@ angular.module('myApp',[
     'FBAngular',
     'chart.js',
     'angular-google-maps-geocoder',
-    'color.picker'
-]);
+    'color.picker',
+    'ngMap',
+    'ngMaterial'
+],function($mdThemingProvider) {
+    $mdThemingProvider.theme('docs-dark', 'default')
+        .primaryPalette('yellow')
+        .dark();
+});
