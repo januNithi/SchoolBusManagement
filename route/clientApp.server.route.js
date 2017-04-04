@@ -14,5 +14,13 @@ module.exports=function(app) {
     
     app.get('/dao/getParentNotification',config.getParentNotification);
     app.get('/dao/updateParentNotificationRead',config.updateParentNotificationRead);
-    
+
+
+    app.post('/data',function(req,res,next){
+
+        console.log("Entered in");
+
+    });
+
+
 };
